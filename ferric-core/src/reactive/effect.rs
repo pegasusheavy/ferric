@@ -53,8 +53,6 @@ struct EffectState {
     cleanup_fn: Option<Box<dyn Fn()>>,
     /// Whether the effect is active.
     active: bool,
-    /// Legacy subscriptions.
-    subscriptions: Vec<SubscriptionId>,
     /// Is currently running (to prevent infinite loops).
     running: bool,
 }
@@ -74,7 +72,6 @@ impl Effect {
                 effect_fn: Box::new(effect_fn),
                 cleanup_fn: None,
                 active: true,
-                subscriptions: Vec::new(),
                 running: false,
             }),
         });
@@ -122,7 +119,6 @@ impl Effect {
                 effect_fn: Box::new(effect_fn),
                 cleanup_fn: Some(Box::new(cleanup_fn)),
                 active: true,
-                subscriptions: Vec::new(),
                 running: false,
             }),
         });

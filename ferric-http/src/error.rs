@@ -117,23 +117,3 @@ impl From<reqwest::Error> for Error {
     }
 }
 
-
-#[cfg(not(target_arch = "wasm32"))]
-impl From<reqwest::Error> for Error {
-    fn from(err: reqwest::Error) -> Self {
-        if err.is_timeout() {
-            Error::Timeout
-        } else if err.is_connect() {
-            Error::Network(err.to_string())
-        } else if err.is_status() {
-            let status = err.status().unwrap();
-            Error::Status {
-                code: status.as_u16(),
-                message: status.canonical_reason().unwrap_or("Unknown").to_string(),
-            }
-        } else {
-            Error::Request(err.to_string())
-        }
-    }
-}
-

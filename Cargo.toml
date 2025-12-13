@@ -39,3 +39,8 @@ quote = "1.0"
 proc-macro2 = "1.0"
 darling = "0.20"
 
+[workspace.dependencies.cargo-husky]
+version = "1"
+default-features = false
+features = ["user-hooks"]
+

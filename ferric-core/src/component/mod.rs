@@ -23,11 +23,13 @@
 
 mod context;
 mod encapsulation;
+mod factory;
 mod metadata;
 mod registry;
 
 pub use context::*;
 pub use encapsulation::*;
+pub use factory::*;
 pub use metadata::*;
 pub use registry::*;
 

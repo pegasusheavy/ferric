@@ -1,23 +1,10 @@
 //! View query macro implementations.
 
-use darling::FromMeta;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::LitStr;
 
 use crate::utils;
-
-/// Arguments for #[view_child] and #[content_child].
-#[derive(Debug, Default, FromMeta)]
-pub struct ViewChildArgs {
-    /// What to read from the element.
-    #[darling(default)]
-    read: Option<String>,
-
-    /// Whether to query static content (before change detection).
-    #[darling(default)]
-    static_query: bool,
-}
 
 /// Implement the #[view_child] attribute macro.
 pub fn view_child_impl(args: TokenStream, input: TokenStream) -> syn::Result<TokenStream> {
@@ -100,4 +87,3 @@ pub fn content_children_impl(args: TokenStream, input: TokenStream) -> syn::Resu
 
     Ok(expanded)
 }
-

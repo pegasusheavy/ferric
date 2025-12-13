@@ -10,8 +10,8 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, DeriveInput, Expr, ExprArray, ExprCall, Ident, Token};
-use darling::{FromDeriveInput, FromField, FromMeta};
+use syn::{parse_macro_input, DeriveInput, ExprArray};
+// darling is used in submodules
 
 mod form_group;
 mod form_control;

@@ -62,9 +62,28 @@ pub fn component_impl(args: TokenStream, input: TokenStream) -> syn::Result<Toke
     let template = args.template.as_deref().unwrap_or("");
     let template_lit = utils::lit_str(template);
 
-    // Get styles
-    let styles = args.styles.as_deref().unwrap_or("");
-    let styles_lit = utils::lit_str(styles);
+    // Get styles - combine inline styles with style_urls content
+    let mut combined_styles = args.styles.clone().unwrap_or_default();
+
+    // Load external stylesheets
+    for style_url in &args.style_urls {
+        match std::fs::read_to_string(style_url) {
+            Ok(content) => {
+                if !combined_styles.is_empty() {
+                    combined_styles.push_str("\n\n");
+                }
+                combined_styles.push_str(&content);
+            }
+            Err(e) => {
+                return Err(syn::Error::new_spanned(
+                    &item.ident,
+                    format!("Failed to read style file '{}': {}", style_url, e),
+                ));
+            }
+        }
+    }
+
+    let styles_lit = utils::lit_str(&combined_styles);
 
     // Determine encapsulation
     let encapsulation = match args.encapsulation.as_deref() {
@@ -85,6 +104,9 @@ pub fn component_impl(args: TokenStream, input: TokenStream) -> syn::Result<Toke
     // Generate the input names
     let input_names: Vec<_> = inputs.iter().map(|(name, _, _)| utils::lit_str(name)).collect();
     let output_names: Vec<_> = outputs.iter().map(|(name, _)| utils::lit_str(name)).collect();
+
+    // Generate style_urls literals
+    let style_url_lits: Vec<_> = args.style_urls.iter().map(|url| utils::lit_str(url)).collect();
 
     // Add a hidden field to store component metadata
     let metadata_field = quote! {
@@ -138,7 +160,7 @@ pub fn component_impl(args: TokenStream, input: TokenStream) -> syn::Result<Toke
                     template: Some(#template_lit.to_string()),
                     template_url: None,
                     styles: vec![#styles_lit.to_string()],
-                    style_urls: vec![],
+                    style_urls: vec![#(#style_url_lits.to_string()),*],
                     inputs: vec![#(#input_names.to_string()),*],
                     outputs: vec![#(#output_names.to_string()),*],
                     providers: vec![],

@@ -44,6 +44,7 @@ pub mod devtools;
 pub mod di;
 pub mod directives;
 pub mod dom;
+pub mod hydration;
 pub mod i18n;
 pub mod lifecycle;
 pub mod logging;
@@ -99,6 +100,10 @@ pub use directives::{
     parse_switch_template, transform_switch_template,
 };
 pub use dom::{EventEmitter, EventListener};
+pub use hydration::{
+    FerricHydration, Hydratable, HydrationContext, HydrationManager,
+    init_hydration_api,
+};
 pub use pipes::{
     // Core types
     Pipe, PipeArgs, PipeValue, ParsedPipe,
@@ -272,6 +277,11 @@ pub mod prelude {
 
     // DOM utilities
     pub use crate::dom::{EventEmitter, EventListener, document, window};
+
+    // Hydration
+    pub use crate::hydration::{
+        Hydratable, HydrationContext, HydrationManager, init_hydration_api,
+    };
 
     // Router
     pub use crate::router::{Router, Route, Routes, ActivatedRoute};

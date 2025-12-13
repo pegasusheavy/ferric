@@ -111,6 +111,33 @@ impl KeyRange {
 }
 
 /// Builder for creating key ranges with a fluent API.
+///
+/// This builder provides an alternative to the static methods on [`KeyRange`]
+/// for constructing ranges with a more descriptive syntax.
+///
+/// # Examples
+///
+/// ```ignore
+/// use ferric_idb::KeyRangeBuilder;
+///
+/// // Create a range from 10 to 100 (inclusive)
+/// let range = KeyRangeBuilder::new()
+///     .from(10)
+///     .to(100)
+///     .build()?;
+///
+/// // Create a range after 5 and before 50 (exclusive)
+/// let range = KeyRangeBuilder::new()
+///     .after(5)
+///     .before(50)
+///     .build()?;
+///
+/// // Only lower bound
+/// let range = KeyRangeBuilder::new()
+///     .from("A")
+///     .build()?;
+/// ```
+#[allow(dead_code)] // Useful public API not yet used in examples
 pub struct KeyRangeBuilder {
     lower: Option<JsValue>,
     upper: Option<JsValue>,
@@ -118,8 +145,18 @@ pub struct KeyRangeBuilder {
     upper_open: bool,
 }
 
+#[allow(dead_code)] // Useful public API not yet used in examples
 impl KeyRangeBuilder {
     /// Create a new key range builder.
+    ///
+    /// # Examples
+    ///
+    /// ```ignore
+    /// let range = KeyRangeBuilder::new()
+    ///     .from(1)
+    ///     .to(100)
+    ///     .build()?;
+    /// ```
     pub fn new() -> Self {
         Self {
             lower: None,

@@ -2,13 +2,16 @@
 
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::{DeriveInput, Data, Fields, Ident, Result, Type, Meta, Expr, Lit};
+use syn::{DeriveInput, Data, Fields, Ident, Result, Type};
 use darling::FromField;
 
 #[derive(Debug, FromField)]
 #[darling(attributes(validate))]
 struct ValidateField {
     ident: Option<Ident>,
+    // Type is available but not currently used for validation
+    // Could be used for type-specific validators in the future
+    #[allow(dead_code)]
     ty: Type,
 
     #[darling(default)]
@@ -32,6 +35,7 @@ struct ValidateField {
     #[darling(default)]
     pattern: Option<String>,
 
+    /// Custom validation function name
     #[darling(default)]
     custom: Option<String>,
 }
@@ -167,6 +171,25 @@ pub fn expand(input: DeriveInput) -> Result<TokenStream> {
                             ::ferric_forms::validators::ValidationError::new(
                                 "Value does not match the required pattern"
                             )
+                        );
+                    }
+                }
+            });
+        }
+
+        // Custom validation function
+        if let Some(custom_fn) = &field_info.custom {
+            let custom_fn_ident = syn::parse_str::<Ident>(custom_fn)
+                .unwrap_or_else(|_| panic!("Invalid custom validator function name: {}", custom_fn));
+
+            validators.push(quote! {
+                {
+                    // Call the custom validation function
+                    // Function should have signature: fn(&FieldType) -> Result<(), String>
+                    if let Err(msg) = self.#custom_fn_ident(&self.#field_name) {
+                        errors.insert(
+                            #field_name_str.to_string(),
+                            ::ferric_forms::validators::ValidationError::new(&msg)
                         );
                     }
                 }

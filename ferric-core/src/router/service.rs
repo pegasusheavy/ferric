@@ -35,10 +35,10 @@
 //! ```
 
 use super::events::*;
-use super::guard::{CanActivate, CanDeactivate, CanLoad, GuardResult};
+use super::guard::{CanActivate, CanDeactivate, CanLoad, GuardResult, GuardRegistry, RouterStateSnapshot};
 use super::lazy::{LazyModuleRegistry, LazyLoadError, LazyRouteModule, PreloadConfig};
 use super::params::{Params, QueryParams, ParsedUrl, extract_params};
-use super::resolver::{ResolverRegistry, ResolveResult};
+use super::resolver::{Resolve, ResolverRegistry, ResolveResult};
 use super::{Route, Routes, PathMatch};
 use crate::di::{Injectable, Injector};
 use crate::reactive::{signal, Signal, computed, Computed};
@@ -62,6 +62,8 @@ pub struct Router {
     inner: Rc<RefCell<RouterInner>>,
     /// Event emitter for router events.
     events: Rc<RouterEvents>,
+    /// Guard registry for route protection.
+    guards: Rc<GuardRegistry>,
     /// Resolver registry.
     resolvers: Rc<ResolverRegistry>,
     /// URL serializer.
@@ -104,6 +106,7 @@ impl Router {
                 outlets: HashMap::new(),
             })),
             events: Rc::new(RouterEvents::new()),
+            guards: Rc::new(GuardRegistry::new()),
             resolvers: Rc::new(ResolverRegistry::new()),
             url_serializer: Rc::new(DefaultUrlSerializer),
             lazy_modules: Rc::new(LazyModuleRegistry::new()),
@@ -135,6 +138,53 @@ impl Router {
     /// Get the base href.
     pub fn base_href(&self) -> String {
         self.inner.borrow().base_href.clone()
+    }
+
+    /// Prepend base href to a URL path if needed.
+    fn prepend_base_href(&self, path: &str) -> String {
+        let base = self.inner.borrow().base_href.clone();
+
+        // If base is just "/", return path as-is
+        if base == "/" {
+            return path.to_string();
+        }
+
+        // Remove trailing slash from base
+        let base = base.trim_end_matches('/');
+
+        // Ensure path starts with /
+        let path = if path.starts_with('/') {
+            path
+        } else {
+            &format!("/{}", path)
+        };
+
+        format!("{}{}", base, path)
+    }
+
+    /// Remove base href from a URL path.
+    fn remove_base_href(&self, url: &str) -> String {
+        let base = self.inner.borrow().base_href.clone();
+
+        // If base is just "/", return url as-is
+        if base == "/" {
+            return url.to_string();
+        }
+
+        // Remove trailing slash from base
+        let base = base.trim_end_matches('/');
+
+        // If url starts with base, remove it
+        if url.starts_with(&base) {
+            let without_base = &url[base.len()..];
+            if without_base.is_empty() {
+                "/".to_string()
+            } else {
+                without_base.to_string()
+            }
+        } else {
+            url.to_string()
+        }
     }
 
     /// Get the event emitter.
@@ -173,6 +223,12 @@ impl Router {
         self.navigate(&url)
     }
 
+    /// Create a URL with the base href prepended.
+    /// Use this when generating links or hrefs in templates.
+    pub fn create_url_with_base(&self, path: &str) -> String {
+        self.prepend_base_href(path)
+    }
+
     /// Navigate with query parameters.
     pub fn navigate_with_params(
         &self,
@@ -202,7 +258,10 @@ impl Router {
         extras: Option<NavigationExtras>,
     ) -> Result<bool, JsValue> {
         let nav_id = next_navigation_id();
-        let parsed = self.url_serializer.parse(url);
+
+        // Remove base href from URL for internal routing
+        let normalized_url = self.remove_base_href(url);
+        let parsed = self.url_serializer.parse(&normalized_url);
         let full_url = url.to_string();
 
         // Mark as navigating
@@ -254,8 +313,30 @@ impl Router {
             },
         }));
 
-        // TODO: Actually run guards here
-        let guards_passed = true;
+        // Run all guards for the route
+        let guard_result = if !route.can_activate.is_empty() {
+            let state = RouterStateSnapshot {
+                url: full_url.clone(),
+                root: Some(snapshot.clone()),
+            };
+            self.guards.run_guards(&route.can_activate, &route, &state)
+        } else {
+            GuardResult::Allow
+        };
+
+        let guards_passed = guard_result.is_allowed();
+
+        // Handle guard redirect
+        if let Some(redirect_url) = guard_result.redirect_url() {
+            self.events.emit(Event::NavigationCancel(NavigationCancel {
+                id: nav_id,
+                url: full_url.clone(),
+                reason: CancelReason::GuardRejected,
+            }));
+            self.inner.borrow().navigating.set(false);
+            // Trigger redirect
+            return self.navigate(redirect_url);
+        }
 
         self.events.emit(Event::GuardsCheckEnd(GuardsCheckEnd {
             id: nav_id,
@@ -283,7 +364,27 @@ impl Router {
             },
         }));
 
-        // TODO: Actually run resolvers here
+        // Run all resolvers for the route
+        let resolver_names: Vec<String> = route.resolve.values().cloned().collect();
+        let resolved_data = if !resolver_names.is_empty() {
+            self.resolvers.resolve_all(&resolver_names, &snapshot)
+        } else {
+            HashMap::new()
+        };
+
+        // Check for resolver errors
+        if ResolverRegistry::has_errors(&resolved_data) {
+            self.events.emit(Event::NavigationError(NavigationError {
+                id: nav_id,
+                url: full_url.clone(),
+                error: "Resolver failed".to_string(),
+            }));
+            self.inner.borrow().navigating.set(false);
+            return Ok(false);
+        }
+
+        // TODO: Store resolved data in the activated route
+        // For now, resolvers run but data isn't persisted to the route
 
         self.events.emit(Event::ResolveEnd(ResolveEnd {
             id: nav_id,
@@ -504,8 +605,30 @@ impl Router {
             },
         }));
 
-        // TODO: Actually run guards here
-        let guards_passed = true;
+        // Run all guards for the route
+        let guard_result = if !route.can_activate.is_empty() {
+            let state = RouterStateSnapshot {
+                url: full_url.to_string(),
+                root: Some(snapshot.clone()),
+            };
+            self.guards.run_guards(&route.can_activate, route, &state)
+        } else {
+            GuardResult::Allow
+        };
+
+        let guards_passed = guard_result.is_allowed();
+
+        // Handle guard redirect
+        if let Some(redirect_url) = guard_result.redirect_url() {
+            self.events.emit(Event::NavigationCancel(NavigationCancel {
+                id: nav_id,
+                url: full_url.to_string(),
+                reason: CancelReason::GuardRejected,
+            }));
+            self.inner.borrow().navigating.set(false);
+            // Trigger redirect
+            return self.navigate(redirect_url);
+        }
 
         self.events.emit(Event::GuardsCheckEnd(GuardsCheckEnd {
             id: nav_id,
@@ -533,7 +656,24 @@ impl Router {
             },
         }));
 
-        // TODO: Actually run resolvers here
+        // Run all resolvers for the route
+        let resolver_names: Vec<String> = route.resolve.values().cloned().collect();
+        let resolved_data = if !resolver_names.is_empty() {
+            self.resolvers.resolve_all(&resolver_names, &snapshot)
+        } else {
+            HashMap::new()
+        };
+
+        // Check for resolver errors
+        if ResolverRegistry::has_errors(&resolved_data) {
+            self.events.emit(Event::NavigationError(NavigationError {
+                id: nav_id,
+                url: full_url.to_string(),
+                error: "Resolver failed".to_string(),
+            }));
+            self.inner.borrow().navigating.set(false);
+            return Ok(false);
+        }
 
         self.events.emit(Event::ResolveEnd(ResolveEnd {
             id: nav_id,
@@ -765,6 +905,60 @@ impl Router {
             .borrow_mut()
             .outlets
             .insert(name.to_string(), Rc::new(RefCell::new(Some(element))));
+    }
+
+    /// Register a route guard.
+    ///
+    /// Guards are used to protect routes from unauthorized access.
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// use ferric_core::router::{CanActivate, GuardResult};
+    ///
+    /// struct AuthGuard;
+    /// impl CanActivate for AuthGuard {
+    ///     fn can_activate(&self, route: &Route, state: &RouterStateSnapshot) -> GuardResult {
+    ///         if is_authenticated() {
+    ///             GuardResult::Allow
+    ///         } else {
+    ///             GuardResult::Redirect("/login".to_string())
+    ///         }
+    ///     }
+    /// }
+    ///
+    /// router.register_guard("auth", AuthGuard);
+    /// ```
+    pub fn register_guard<G: CanActivate + 'static>(&self, name: &str, guard: G) {
+        self.guards.register(name, guard);
+    }
+
+    /// Register a route data resolver.
+    ///
+    /// Resolvers pre-fetch data before a route is activated.
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// use ferric_core::router::{Resolve, ResolveResult};
+    ///
+    /// struct UserResolver;
+    /// impl Resolve for UserResolver {
+    ///     type Output = User;
+    ///
+    ///     fn resolve(&self, route: &ActivatedRouteSnapshot) -> ResolveResult<Self::Output> {
+    ///         let user_id = route.params.get("id")?;
+    ///         ResolveResult::Ready(fetch_user(user_id))
+    ///     }
+    /// }
+    ///
+    /// router.register_resolver("user", UserResolver);
+    /// ```
+    pub fn register_resolver<R: Resolve + 'static>(&self, name: &str, resolver: R)
+    where
+        R::Output: 'static,
+    {
+        self.resolvers.register(name, resolver);
     }
 
     /// Unregister a named outlet.

@@ -141,8 +141,3 @@ impl std::fmt::Display for Response {
     }
 }
 
-
-        write!(f, "HTTP {} {}", self.status_code, self.status_text)
-    }
-}
-

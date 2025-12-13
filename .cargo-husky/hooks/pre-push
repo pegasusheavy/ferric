@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Pre-push hook for Ferric
+# Runs tests before pushing
+
+set -e
+
+echo "🧪 Running pre-push checks..."
+
+# Run all tests in the workspace
+echo "🔬 Running tests..."
+cargo test --workspace --all-features || {
+    echo "❌ Tests failed!"
+    echo "💡 Fix failing tests before pushing"
+    exit 1
+}
+echo "✅ All tests passed"
+
+# Check for WASM build (optional - comment out if too slow)
+# if command -v wasm-pack > /dev/null 2>&1; then
+#     echo "🌐 Checking WASM build..."
+#     wasm-pack build --target web ferric-core || {
+#         echo "❌ WASM build failed!"
+#         exit 1
+#     }
+#     echo "✅ WASM build successful"
+# fi
+
+echo "✨ All pre-push checks passed!"
+

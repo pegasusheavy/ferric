@@ -170,7 +170,29 @@ impl Index {
     }
 }
 
-/// Builder for creating indexes during store creation.
+/// Builder for creating indexes during database upgrades.
+///
+/// **Note:** This builder is currently not used in the implementation. Indexes are
+/// created directly through [`ObjectStoreBuilder`](crate::ObjectStoreBuilder) methods
+/// like `.index()`, `.unique_index()`, and `.multi_entry_index()`.
+///
+/// This struct is retained in the public API for potential future use cases where
+/// more fine-grained control over index creation might be needed.
+///
+/// # Recommended Usage
+///
+/// Use the builder methods on `ObjectStoreBuilder` instead:
+///
+/// ```ignore
+/// use ferric_idb::prelude::*;
+///
+/// let store = ObjectStoreBuilder::new(db, "users")
+///     .key_path("id")
+///     .index("email", "email")
+///     .unique_index("username", "username")
+///     .build()?;
+/// ```
+#[allow(dead_code)] // Reserved for future use; indexes created via ObjectStoreBuilder
 pub struct IndexBuilder<'a> {
     store: &'a web_sys::IdbObjectStore,
     name: String,
@@ -179,7 +201,11 @@ pub struct IndexBuilder<'a> {
     multi_entry: bool,
 }
 
+#[allow(dead_code)] // Reserved for future use
 impl<'a> IndexBuilder<'a> {
+    /// Create a new index builder.
+    ///
+    /// This is currently not used. Use `ObjectStoreBuilder` methods instead.
     pub(crate) fn new(store: &'a web_sys::IdbObjectStore, name: &str, key_path: &str) -> Self {
         Self {
             store,

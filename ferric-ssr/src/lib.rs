@@ -36,6 +36,7 @@
 
 mod config;
 mod error;
+pub mod hydration;
 pub mod platform;
 mod render;
 mod response;
@@ -45,13 +46,18 @@ mod stream;
 
 pub use config::SsrConfig;
 pub use error::{SsrError, SsrResult};
+pub use hydration::{
+    FullHydration, HydrationConfig, HydrationMarkers, HydrationStrategy,
+    Island, IslandLoading, IslandPriority, PartialHydration,
+};
 pub use platform::{
     is_browser, is_server, set_platform, with_platform, Platform, PlatformValue,
     render_on_browser, render_on_server, server_or, browser_or,
     BrowserOnly, ServerOnly, PlatformAware,
 };
 pub use render::{
-    render_to_string, render_to_string_with_state, HtmlRenderer, RenderContext, Renderable,
+    render_to_string, render_to_string_with_state, render_with_hydration, wrap_in_shell,
+    HtmlRenderer, RenderContext, Renderable, ShellConfig,
 };
 pub use response::{HtmlResponse, SsrResponse};
 pub use server::{SsrServer, SsrService};
@@ -62,12 +68,16 @@ pub use stream::{render_to_stream, HtmlStream};
 pub mod prelude {
     pub use crate::config::SsrConfig;
     pub use crate::error::{SsrError, SsrResult};
+    pub use crate::hydration::{
+        FullHydration, HydrationConfig, HydrationStrategy,
+        Island, IslandLoading, IslandPriority, PartialHydration,
+    };
     pub use crate::platform::{
         is_browser, is_server, set_platform, with_platform, Platform, PlatformValue,
         render_on_browser, render_on_server, server_or, browser_or,
         BrowserOnly, ServerOnly,
     };
-    pub use crate::render::{render_to_string, HtmlRenderer, RenderContext, Renderable};
+    pub use crate::render::{render_to_string, render_with_hydration, HtmlRenderer, RenderContext, Renderable};
     pub use crate::response::{HtmlResponse, SsrResponse};
     pub use crate::server::SsrServer;
     pub use crate::state::StateSerializer;

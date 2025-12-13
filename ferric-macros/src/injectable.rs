@@ -43,24 +43,6 @@ pub fn injectable_impl(args: TokenStream, input: TokenStream) -> syn::Result<Tok
     // Collect fields that need injection
     let inject_fields = collect_inject_fields(&item.fields)?;
 
-    // Generate the field initialization
-    let field_inits: Vec<_> = if inject_fields.is_empty() {
-        // No inject fields, try to use Default
-        vec![quote! { ..Default::default() }]
-    } else {
-        inject_fields
-            .iter()
-            .map(|(name, ty)| {
-                quote! {
-                    #name: injector.resolve::<#ty>()
-                        .expect(concat!("Failed to resolve dependency: ", stringify!(#ty)))
-                        .as_ref()
-                        .clone()
-                }
-            })
-            .collect()
-    };
-
     // Check if there are non-inject fields
     let has_other_fields = match &item.fields {
         Fields::Named(named) => named.named.len() > inject_fields.len(),
