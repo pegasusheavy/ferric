@@ -1,0 +1,34 @@
+<section class="todoapp">
+    <h1 class="todoapp-title">todos</h1>
+
+    <header class="todo-header">
+        <input
+            class="new-todo"
+            type="text"
+            placeholder="What needs to be done?"
+            autofocus
+        />
+    </header>
+
+    <section class="main toggle-all-container">
+        <input id="toggle-all" class="toggle-all" type="checkbox" />
+        <label class="toggle-all-label" for="toggle-all">❯</label>
+        <ul class="todo-list"></ul>
+    </section>
+
+    <footer class="todo-footer" style="display: none;">
+        <span class="todo-count">0 items left</span>
+        <ul class="filters">
+            <li><a href="#/" class="selected">All</a></li>
+            <li><a href="#/active">Active</a></li>
+            <li><a href="#/completed">Completed</a></li>
+        </ul>
+        <button class="clear-completed" style="display: none;">Clear completed</button>
+    </footer>
+</section>
+
+<footer class="info">
+    <p>Double-click to edit a todo</p>
+    <p>Built with <a href="https://github.com/ferric-rs/ferric">Ferric</a></p>
+</footer>
+

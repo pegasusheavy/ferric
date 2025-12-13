@@ -1,0 +1,33 @@
+<div class="demo-card">
+    <h2 class="demo-title">🔍 Async Search Demo</h2>
+    <p class="demo-description">
+        Demonstrates async data fetching with debounced input and loading states.
+    </p>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search technologies..." class="input input-large">
+        <span id="loading-indicator" class="loading-indicator hidden">⏳ Loading...</span>
+    </div>
+
+    <div class="search-meta">
+        <span id="result-count" class="result-count"></span>
+        <span id="debounce-indicator" class="debounce-indicator"></span>
+    </div>
+
+    <div id="search-results" class="search-results">
+        <p class="placeholder-text">Start typing to search...</p>
+    </div>
+
+    <div id="search-error" class="error-message hidden"></div>
+
+    <div class="info-box">
+        <h4>How it works:</h4>
+        <ol class="info-list">
+            <li>Input changes trigger the <code>query</code> signal</li>
+            <li>A debounce effect waits 300ms before updating <code>debounced_query</code></li>
+            <li>When <code>debounced_query</code> changes, the search runs</li>
+            <li><code>is_loading</code> and <code>results</code> signals update</li>
+            <li>Effects update the DOM reactively</li>
+        </ol>
+    </div>
+</div>

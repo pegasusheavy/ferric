@@ -1,0 +1,19 @@
+{
+  "name": "ferric-docs",
+  "version": "0.1.0",
+  "description": "Ferric Framework Documentation Website",
+  "private": true,
+  "scripts": {
+    "dev:css": "ferric tailwind --watch",
+    "build:css": "ferric tailwind --minify",
+    "build:wasm": "wasm-pack build --target web --out-dir dist/pkg",
+    "build": "pnpm run build:css"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.8",
+    "autoprefixer": "^10.4.22",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.8"
+  }
+}

@@ -1,0 +1,122 @@
+/* ===========================================
+   Timer Demo Styles
+   =========================================== */
+
+.timer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .timer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.timer-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.timer-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.timer-display {
+    font-size: 3rem;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    padding: 1.5rem 1rem;
+    background-color: rgb(15 23 42); /* slate-900 */
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.timer-display-small {
+    font-size: 2.5rem;
+}
+
+.countdown-display {
+    color: rgb(96 165 250); /* blue-400 */
+}
+
+.countdown-display.warning {
+    color: rgb(248 113 113); /* red-400 */
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.timer-note {
+    font-size: 0.75rem;
+    color: rgb(107 114 128); /* gray-500 */
+}
+
+.timer-note code {
+    color: rgb(167 139 250); /* purple-400 */
+}
+
+.lap-times {
+    text-align: left;
+    max-height: 6rem;
+    overflow-y: auto;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+.lap-item {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.preset-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 1rem;
+}
+
+
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.timer-note {
+    font-size: 0.75rem;
+    color: rgb(107 114 128); /* gray-500 */
+}
+
+.timer-note code {
+    color: rgb(167 139 250); /* purple-400 */
+}
+
+.lap-times {
+    text-align: left;
+    max-height: 6rem;
+    overflow-y: auto;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+.lap-item {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}

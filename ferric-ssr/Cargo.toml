@@ -1,0 +1,40 @@
+[package]
+name = "ferric-ssr"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Server-side rendering for Ferric framework, built on Hyper"
+keywords = ["ssr", "server-side-rendering", "hyper", "ferric", "web"]
+categories = ["web-programming", "web-programming::http-server"]
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+# HTTP server
+hyper = { version = "1.5", features = ["full"] }
+hyper-util = { version = "0.1", features = ["full"] }
+http-body-util = "0.1"
+tokio = { version = "1.35", features = ["rt-multi-thread", "macros", "net"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# HTML escaping and utilities
+html-escape = "0.2"
+
+# Async utilities
+futures = "0.3"
+pin-project-lite = "0.2"
+
+# Error handling
+thiserror = "1.0"
+
+# URL parsing
+url = "2.5"
+
+[dev-dependencies]
+tokio-test = "0.4"

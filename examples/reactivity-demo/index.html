@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferric Reactivity Demo</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rust': {
+                            500: '#f74c00',
+                            600: '#b7410e',
+                        },
+                        'wasm': {
+                            400: '#9d8cff',
+                            500: '#654ff0',
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Common Styles -->
+    <link rel="stylesheet" href="styles/common.css">
+
+    <!-- Component Styles -->
+    <link rel="stylesheet" href="styles/counter.css">
+    <link rel="stylesheet" href="styles/shopping_cart.css">
+    <link rel="stylesheet" href="styles/async_search.css">
+    <link rel="stylesheet" href="styles/timer.css">
+    <link rel="stylesheet" href="styles/form_validation.css">
+
+    <!-- Animations -->
+    <style>
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse { animation: pulse-scale 0.3s ease; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-blink { animation: blink 1s infinite; }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100 min-h-screen font-sans">
+    <header class="text-center py-8 px-4 bg-gradient-to-br from-slate-800 to-slate-900 border-b border-white/10">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-rust-500 to-wasm-500 bg-clip-text text-transparent mb-2">
+            🦀 Ferric Reactivity Demo
+        </h1>
+        <p class="text-gray-400 text-lg">Zone-less reactive programming in Rust + WASM</p>
+    </header>
+
+    <nav class="flex justify-center gap-4 p-4 bg-slate-800 sticky top-0 z-50 flex-wrap">
+        <a href="#counter-demo" class="text-gray-400 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all">Counter</a>
+        <a href="#cart-demo" class="text-gray-400 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all">Shopping Cart</a>
+        <a href="#search-demo" class="text-gray-400 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all">Async Search</a>
+        <a href="#timer-demo" class="text-gray-400 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all">Timers</a>
+        <a href="#form-demo" class="text-gray-400 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all">Form Validation</a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-8 space-y-8">
+        <section id="counter-demo"></section>
+        <section id="cart-demo"></section>
+        <section id="search-demo"></section>
+        <section id="timer-demo"></section>
+        <section id="form-demo"></section>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 border-t border-white/10">
+        <p>
+            Built with <a href="https://github.com/example/ferric" class="text-wasm-400 hover:underline">Ferric</a> •
+            <a href="https://www.rust-lang.org/" class="text-wasm-400 hover:underline">Rust</a> +
+            <a href="https://webassembly.org/" class="text-wasm-400 hover:underline">WebAssembly</a>
+        </p>
+    </footer>
+
+    <script type="module">
+        import init from './pkg/reactivity_demo.js';
+        init();
+    </script>
+</body>
+</html>

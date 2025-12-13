@@ -1,0 +1,35 @@
+{
+  "name": "ferric-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ferric - An Angular-inspired frontend framework built with Rust and WebAssembly",
+  "license": "MIT",
+  "author": "Joseph R Quinn",
+  "type": "module",
+  "scripts": {
+    "build": "cargo build --release && pnpm --filter @ferric/tools build",
+    "build:wasm": "wasm-pack build --target web -d ../pkg ferric",
+    "build:tools": "pnpm --filter @ferric/tools build",
+    "dev": "pnpm --filter @ferric/tools dev",
+    "test": "cargo test",
+    "test:wasm": "wasm-pack test --headless --firefox ferric",
+    "clean": "rm -rf target pkg dist ferric/pkg tools/dist",
+    "typecheck": "pnpm --filter @ferric/tools typecheck"
+  },
+  "keywords": [
+    "wasm",
+    "webassembly",
+    "rust",
+    "frontend",
+    "framework",
+    "angular"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/ferric"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

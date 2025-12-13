@@ -1,0 +1,52 @@
+{
+  "name": "todo-benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Benchmark comparing React vs Ferric Todo apps",
+  "scripts": {
+    "build:react": "cd react-todo && npm run build",
+    "build:ferric": "cd ferric-todo && ./build.sh",
+    "build": "npm run build:react && npm run build:ferric",
+    "benchmark": "node benchmark/runner.js",
+    "benchmark:bundle": "node benchmark/bundle-size.js",
+    "benchmark:runtime": "node benchmark/runtime-perf.js",
+    "benchmark:memory": "node benchmark/memory-usage.js",
+    "report": "node benchmark/generate-report.js",
+    "serve:react": "cd react-todo && npm run preview",
+    "serve:ferric": "cd ferric-todo && python3 -m http.server 3001 -d dist"
+  },
+  "devDependencies": {
+    "puppeteer": "^21.0.0",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.3",
+    "fs-extra": "^11.2.0",
+    "gzip-size": "^7.0.0"
+  }
+}
+
+
+  "name": "todo-benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Benchmark comparing React vs Ferric Todo apps",
+  "scripts": {
+    "build:react": "cd react-todo && npm run build",
+    "build:ferric": "cd ferric-todo && ./build.sh",
+    "build": "npm run build:react && npm run build:ferric",
+    "benchmark": "node benchmark/runner.js",
+    "benchmark:bundle": "node benchmark/bundle-size.js",
+    "benchmark:runtime": "node benchmark/runtime-perf.js",
+    "benchmark:memory": "node benchmark/memory-usage.js",
+    "report": "node benchmark/generate-report.js",
+    "serve:react": "cd react-todo && npm run preview",
+    "serve:ferric": "cd ferric-todo && python3 -m http.server 3001 -d dist"
+  },
+  "devDependencies": {
+    "puppeteer": "^21.0.0",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.3",
+    "fs-extra": "^11.2.0",
+    "gzip-size": "^7.0.0"
+  }
+}
+

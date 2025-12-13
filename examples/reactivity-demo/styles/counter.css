@@ -1,0 +1,105 @@
+/* ===========================================
+   Counter Demo Styles
+   =========================================== */
+
+.counter-display {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(to right, #f74c00, #654ff0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: transform 150ms ease;
+}
+
+.counter-display.pulse {
+    animation: pulse-scale 0.3s ease;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.step-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+.step-display {
+    color: rgb(107 114 128);
+    min-width: 120px;
+}
+
+.batch-section {
+    text-align: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+}
+
+.batch-note {
+    font-size: 0.875rem;
+    color: rgb(107 114 128);
+    margin-top: 0.5rem;
+}
+
+.effect-log-section {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgb(15 23 42);
+    border-radius: 0.5rem;
+    max-height: 12rem;
+    overflow-y: auto;
+}
+
+.log-title {
+    color: rgb(107 114 128);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.effect-log {
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+}
+
+.log-entry {
+    color: rgb(74 222 128); /* green-400 */
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
+    color: rgb(107 114 128);
+    margin-top: 0.5rem;
+}
+
+.effect-log-section {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgb(15 23 42);
+    border-radius: 0.5rem;
+    max-height: 12rem;
+    overflow-y: auto;
+}
+
+.log-title {
+    color: rgb(107 114 128);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.effect-log {
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+}

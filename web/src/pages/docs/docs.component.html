@@ -1,0 +1,265 @@
+<article class="max-w-none">
+    <header class="mb-12 pb-8 border-b border-slate-200 dark:border-slate-700">
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Documentation</h1>
+        <p class="text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
+            Learn how to build fast, type-safe web applications with Ferric.
+        </p>
+    </header>
+
+    <!-- Table of Contents -->
+    <nav class="mb-12 p-6 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-4">On this page</h2>
+        <ul class="space-y-2">
+            <li><a href="#introduction" class="sidebar-link">Introduction</a></li>
+            <li><a href="#why-ferric" class="sidebar-link">Why Ferric?</a></li>
+            <li><a href="#core-concepts" class="sidebar-link">Core Concepts</a></li>
+            <li><a href="#next-steps" class="sidebar-link">Next Steps</a></li>
+        </ul>
+    </nav>
+
+    <!-- Introduction -->
+    <section id="introduction" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Introduction</h2>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Ferric is a modern web framework for building reactive, component-based applications
+            using Rust and WebAssembly. It combines the safety and performance of Rust with
+            familiar patterns from frameworks like Angular and React.
+        </p>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            With Ferric, you can build web applications that:
+        </p>
+        <ul class="list-disc pl-6 text-slate-600 dark:text-slate-400 space-y-2 mb-6">
+            <li>Run at near-native speed with WebAssembly</li>
+            <li>Catch errors at compile time with Rust's type system</li>
+            <li>Update efficiently with fine-grained reactivity</li>
+            <li>Scale cleanly with dependency injection</li>
+        </ul>
+    </section>
+
+    <!-- Why Ferric -->
+    <section id="why-ferric" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Why Ferric?</h2>
+
+        <div class="callout callout-info mb-6">
+            <div class="text-xl">💡</div>
+            <div class="text-sm text-slate-700 dark:text-slate-300">
+                <strong class="block mb-1 text-slate-900 dark:text-white">Performance without compromise.</strong>
+                Ferric compiles to highly optimized WebAssembly, delivering performance
+                that JavaScript frameworks simply cannot match.
+            </div>
+        </div>
+
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Traditional JavaScript frameworks suffer from inherent performance limitations:
+            garbage collection pauses, dynamic typing overhead, and JIT compilation unpredictability.
+            Ferric sidesteps all of these by leveraging Rust's zero-cost abstractions and
+            compiling directly to WebAssembly.
+        </p>
+    </section>
+
+    <!-- Core Concepts -->
+    <section id="core-concepts" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Core Concepts</h2>
+
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Components</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Components are the building blocks of Ferric applications. Each component is a
+            Rust struct that defines its own state and rendering logic.
+        </p>
+        <div class="code-block mb-6">
+            <div class="code-block-header">
+                <span class="code-block-dot bg-red-500"></span>
+                <span class="code-block-dot bg-yellow-500"></span>
+                <span class="code-block-dot bg-green-500"></span>
+                <span class="ml-auto text-xs font-mono text-slate-500">my_component.rs</span>
+            </div>
+            <pre class="code-block-content"><code><span class="text-purple-400">#[component]</span>
+<span class="text-purple-400">fn</span> <span class="text-blue-400">MyComponent</span>() -> <span class="text-purple-400">impl</span> View {
+    view! {
+        &lt;div class=<span class="text-green-400">"my-component"</span>&gt;
+            &lt;h1&gt;<span class="text-green-400">"Hello, Ferric!"</span>&lt;/h1&gt;
+        &lt;/div&gt;
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Signals</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Signals are reactive primitives that automatically track dependencies and
+            trigger updates when their values change.
+        </p>
+        <div class="code-block mb-6">
+            <div class="code-block-header">
+                <span class="code-block-dot bg-red-500"></span>
+                <span class="code-block-dot bg-yellow-500"></span>
+                <span class="code-block-dot bg-green-500"></span>
+                <span class="ml-auto text-xs font-mono text-slate-500">signals.rs</span>
+            </div>
+            <pre class="code-block-content"><code><span class="text-slate-500">// Create a signal with initial value</span>
+<span class="text-purple-400">let</span> count = <span class="text-blue-400">signal</span>(<span class="text-amber-400">0</span>);
+
+<span class="text-slate-500">// Read the value</span>
+<span class="text-purple-400">let</span> current = count.<span class="text-blue-400">get</span>();
+
+<span class="text-slate-500">// Update the value</span>
+count.<span class="text-blue-400">set</span>(<span class="text-amber-400">1</span>);
+
+<span class="text-slate-500">// Update based on previous value</span>
+count.<span class="text-blue-400">update</span>(|n| *n + <span class="text-amber-400">1</span>);</code></pre>
+        </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section id="next-steps" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pt-4">Next Steps</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+            <a href="/docs/quick-start" class="doc-card" data-link>
+                <div class="text-2xl mb-3">🚀</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Quick Start</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Create your first Ferric application in minutes.</p>
+            </a>
+            <a href="/docs/components" class="doc-card" data-link>
+                <div class="text-2xl mb-3">🧩</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Components</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Learn how to build reusable UI components.</p>
+            </a>
+            <a href="/docs/reactivity" class="doc-card" data-link>
+                <div class="text-2xl mb-3">⚡</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Reactivity</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Understand signals, computed values, and effects.</p>
+            </a>
+        </div>
+    </section>
+</article>
+
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Documentation</h1>
+        <p class="text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
+            Learn how to build fast, type-safe web applications with Ferric.
+        </p>
+    </header>
+
+    <!-- Table of Contents -->
+    <nav class="mb-12 p-6 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-4">On this page</h2>
+        <ul class="space-y-2">
+            <li><a href="#introduction" class="sidebar-link">Introduction</a></li>
+            <li><a href="#why-ferric" class="sidebar-link">Why Ferric?</a></li>
+            <li><a href="#core-concepts" class="sidebar-link">Core Concepts</a></li>
+            <li><a href="#next-steps" class="sidebar-link">Next Steps</a></li>
+        </ul>
+    </nav>
+
+    <!-- Introduction -->
+    <section id="introduction" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Introduction</h2>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Ferric is a modern web framework for building reactive, component-based applications
+            using Rust and WebAssembly. It combines the safety and performance of Rust with
+            familiar patterns from frameworks like Angular and React.
+        </p>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            With Ferric, you can build web applications that:
+        </p>
+        <ul class="list-disc pl-6 text-slate-600 dark:text-slate-400 space-y-2 mb-6">
+            <li>Run at near-native speed with WebAssembly</li>
+            <li>Catch errors at compile time with Rust's type system</li>
+            <li>Update efficiently with fine-grained reactivity</li>
+            <li>Scale cleanly with dependency injection</li>
+        </ul>
+    </section>
+
+    <!-- Why Ferric -->
+    <section id="why-ferric" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Why Ferric?</h2>
+
+        <div class="callout callout-info mb-6">
+            <div class="text-xl">💡</div>
+            <div class="text-sm text-slate-700 dark:text-slate-300">
+                <strong class="block mb-1 text-slate-900 dark:text-white">Performance without compromise.</strong>
+                Ferric compiles to highly optimized WebAssembly, delivering performance
+                that JavaScript frameworks simply cannot match.
+            </div>
+        </div>
+
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Traditional JavaScript frameworks suffer from inherent performance limitations:
+            garbage collection pauses, dynamic typing overhead, and JIT compilation unpredictability.
+            Ferric sidesteps all of these by leveraging Rust's zero-cost abstractions and
+            compiling directly to WebAssembly.
+        </p>
+    </section>
+
+    <!-- Core Concepts -->
+    <section id="core-concepts" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pt-4">Core Concepts</h2>
+
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Components</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Components are the building blocks of Ferric applications. Each component is a
+            Rust struct that defines its own state and rendering logic.
+        </p>
+        <div class="code-block mb-6">
+            <div class="code-block-header">
+                <span class="code-block-dot bg-red-500"></span>
+                <span class="code-block-dot bg-yellow-500"></span>
+                <span class="code-block-dot bg-green-500"></span>
+                <span class="ml-auto text-xs font-mono text-slate-500">my_component.rs</span>
+            </div>
+            <pre class="code-block-content"><code><span class="text-purple-400">#[component]</span>
+<span class="text-purple-400">fn</span> <span class="text-blue-400">MyComponent</span>() -> <span class="text-purple-400">impl</span> View {
+    view! {
+        &lt;div class=<span class="text-green-400">"my-component"</span>&gt;
+            &lt;h1&gt;<span class="text-green-400">"Hello, Ferric!"</span>&lt;/h1&gt;
+        &lt;/div&gt;
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Signals</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Signals are reactive primitives that automatically track dependencies and
+            trigger updates when their values change.
+        </p>
+        <div class="code-block mb-6">
+            <div class="code-block-header">
+                <span class="code-block-dot bg-red-500"></span>
+                <span class="code-block-dot bg-yellow-500"></span>
+                <span class="code-block-dot bg-green-500"></span>
+                <span class="ml-auto text-xs font-mono text-slate-500">signals.rs</span>
+            </div>
+            <pre class="code-block-content"><code><span class="text-slate-500">// Create a signal with initial value</span>
+<span class="text-purple-400">let</span> count = <span class="text-blue-400">signal</span>(<span class="text-amber-400">0</span>);
+
+<span class="text-slate-500">// Read the value</span>
+<span class="text-purple-400">let</span> current = count.<span class="text-blue-400">get</span>();
+
+<span class="text-slate-500">// Update the value</span>
+count.<span class="text-blue-400">set</span>(<span class="text-amber-400">1</span>);
+
+<span class="text-slate-500">// Update based on previous value</span>
+count.<span class="text-blue-400">update</span>(|n| *n + <span class="text-amber-400">1</span>);</code></pre>
+        </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section id="next-steps" class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pt-4">Next Steps</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+            <a href="/docs/quick-start" class="doc-card" data-link>
+                <div class="text-2xl mb-3">🚀</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Quick Start</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Create your first Ferric application in minutes.</p>
+            </a>
+            <a href="/docs/components" class="doc-card" data-link>
+                <div class="text-2xl mb-3">🧩</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Components</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Learn how to build reusable UI components.</p>
+            </a>
+            <a href="/docs/reactivity" class="doc-card" data-link>
+                <div class="text-2xl mb-3">⚡</div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-2">Reactivity</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">Understand signals, computed values, and effects.</p>
+            </a>
+        </div>
+    </section>
+</article>

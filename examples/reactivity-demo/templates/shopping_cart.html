@@ -1,0 +1,46 @@
+<div class="demo-card">
+    <h2 class="demo-title">🛒 Shopping Cart Demo</h2>
+    <p class="demo-description">
+        Demonstrates <code>computed()</code> chains and <code>watch()</code>.
+    </p>
+
+    <div class="cart-layout">
+        <div class="products-section">
+            <h3 class="section-title">Products</h3>
+            <div id="products-list" class="products-list"></div>
+        </div>
+
+        <div class="cart-section">
+            <h3 class="section-title">
+                Cart <span id="cart-badge" class="cart-badge hidden"></span>
+            </h3>
+            <div id="cart-items" class="cart-items">
+                <p class="empty-message">Your cart is empty</p>
+            </div>
+
+            <div class="discount-input-group">
+                <input type="text" id="discount-input" placeholder="Discount code" class="input">
+                <button id="apply-discount" class="btn btn-primary">Apply</button>
+            </div>
+            <p class="hint">Try: RUST10, FERRIC20, or WASM50</p>
+
+            <div class="cart-totals">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div id="discount-row" class="total-row discount hidden">
+                    <span>Discount:</span>
+                    <span id="discount">-$0.00</span>
+                </div>
+                <div class="total-row total">
+                    <span>Total:</span>
+                    <span id="total">$0.00</span>
+                </div>
+            </div>
+
+            <button id="clear-cart" class="btn btn-danger full-width">Clear Cart</button>
+        </div>
+    </div>
+</div>
+

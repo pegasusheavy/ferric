@@ -1,0 +1,39 @@
+# Ferric Documentation Website Configuration
+
+[project]
+name = "ferric-docs"
+version = "0.1.0"
+description = "Documentation and introduction website for the Ferric framework"
+
+[build]
+out_dir = "dist"
+src_dir = "src"
+optimization = "release"
+source_maps = false
+wasm_opt = "s"
+
+[build.targets]
+browser = true
+server = false
+
+[ssr]
+enabled = false
+
+[styles]
+# Using TailwindCSS via npm/pnpm - CSS is compiled separately
+preprocessor = "css"
+root = "src/styles.css"
+output = "styles.css"
+output_style = "compressed"
+
+[serve]
+port = 8080
+host = "127.0.0.1"
+live_reload = true
+open = true
+
+[assets]
+dir = "assets"
+copy = ["favicon.svg"]
+hash = false
+

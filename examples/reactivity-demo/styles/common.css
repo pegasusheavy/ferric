@@ -1,0 +1,337 @@
+/* ===========================================
+   Ferric Reactivity Demo - Common Styles
+   =========================================== */
+
+/* Demo Card Container */
+.demo-card {
+    background-color: rgb(30 41 59); /* slate-800 */
+    border-radius: 0.75rem;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.demo-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.demo-description {
+    color: rgb(156 163 175); /* gray-400 */
+    margin-bottom: 1.5rem;
+}
+
+.demo-description code {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+    color: rgb(167 139 250); /* purple-400 */
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 150ms ease;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: rgb(124 58 237); /* purple-600 */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: rgb(139 92 246); /* purple-500 */
+}
+
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-accent {
+    background-color: rgb(249 115 22); /* orange-500 */
+    color: white;
+}
+
+.btn-accent:hover {
+    background-color: rgb(251 146 60); /* orange-400 */
+}
+
+.btn-danger {
+    background-color: rgb(239 68 68); /* red-500 */
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: rgb(248 113 113); /* red-400 */
+}
+
+.btn-warning {
+    background-color: rgb(245 158 11); /* amber-500 */
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: rgb(251 191 36); /* amber-400 */
+}
+
+.btn-success {
+    background-color: rgb(34 197 94); /* green-500 */
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: rgb(74 222 128); /* green-400 */
+}
+
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.btn-round {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.5rem;
+    border-radius: 9999px;
+    background-color: rgb(124 58 237);
+    color: white;
+}
+
+.btn-round:hover {
+    background-color: rgb(139 92 246);
+}
+
+.btn:disabled {
+    background-color: rgb(75 85 99); /* gray-600 */
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: rgb(15 23 42); /* slate-900 */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: white;
+    font-family: inherit;
+    transition: border-color 150ms ease;
+}
+
+.input:focus {
+    border-color: rgb(124 58 237); /* purple-600 */
+    outline: none;
+}
+
+.input-large {
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+}
+
+.input.invalid {
+    border-color: rgb(239 68 68); /* red-500 */
+}
+
+/* Labels */
+.label {
+    color: rgb(156 163 175); /* gray-400 */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+/* Info Boxes */
+.info-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+}
+
+.info-box-accent {
+    background-color: rgba(124, 58, 237, 0.1);
+    border-left: 4px solid rgb(124 58 237);
+}
+
+.info-box h4 {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.info-list {
+    color: rgb(156 163 175);
+    font-size: 0.875rem;
+    list-style: decimal;
+    list-style-position: inside;
+}
+
+.info-list li {
+    margin-bottom: 0.25rem;
+}
+
+.info-list code {
+    color: rgb(167 139 250);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.placeholder-text {
+    color: rgb(107 114 128); /* gray-500 */
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.empty-message {
+    color: rgb(107 114 128);
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.hint {
+    font-size: 0.75rem;
+    color: rgb(107 114 128);
+    margin-bottom: 1rem;
+}
+
+
+
+.btn:disabled {
+    background-color: rgb(75 85 99); /* gray-600 */
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: rgb(15 23 42); /* slate-900 */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: white;
+    font-family: inherit;
+    transition: border-color 150ms ease;
+}
+
+.input:focus {
+    border-color: rgb(124 58 237); /* purple-600 */
+    outline: none;
+}
+
+.input-large {
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+}
+
+.input.invalid {
+    border-color: rgb(239 68 68); /* red-500 */
+}
+
+/* Labels */
+.label {
+    color: rgb(156 163 175); /* gray-400 */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+/* Info Boxes */
+.info-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+}
+
+.info-box-accent {
+    background-color: rgba(124, 58, 237, 0.1);
+    border-left: 4px solid rgb(124 58 237);
+}
+
+.info-box h4 {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.info-list {
+    color: rgb(156 163 175);
+    font-size: 0.875rem;
+    list-style: decimal;
+    list-style-position: inside;
+}
+
+.info-list li {
+    margin-bottom: 0.25rem;
+}
+
+.info-list code {
+    color: rgb(167 139 250);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.placeholder-text {
+    color: rgb(107 114 128); /* gray-500 */
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.empty-message {
+    color: rgb(107 114 128);
+    text-align: center;
+    padding: 1.5rem;
+}

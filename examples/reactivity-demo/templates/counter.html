@@ -1,0 +1,41 @@
+<div class="demo-card">
+    <h2 class="demo-title">🔢 Counter Demo</h2>
+    <p class="demo-description">
+        Demonstrates <code>signal()</code>, <code>computed()</code>,
+        <code>effect()</code>, and <code>batch()</code>.
+    </p>
+
+    <div id="counter-display" class="counter-display">
+        Count: 0 (doubled: 0, even)
+    </div>
+
+    <div class="button-row">
+        <button id="decrement" class="btn btn-round">−</button>
+        <button id="increment" class="btn btn-round">+</button>
+        <button id="reset" class="btn btn-primary">Reset</button>
+    </div>
+
+    <div class="step-controls">
+        <label class="label">Step size:</label>
+        <button id="step-1" class="btn btn-small">1</button>
+        <button id="step-5" class="btn btn-small">5</button>
+        <button id="step-10" class="btn btn-small">10</button>
+        <span id="current-step" class="step-display">Current step: 1</span>
+    </div>
+
+    <div class="batch-section">
+        <button id="batch-update" class="btn btn-accent">
+            Batch +10 (updates count 10 times)
+        </button>
+        <p class="batch-note">
+            Without batching: 10 effect runs<br>
+            With batching: 1 effect run
+        </p>
+    </div>
+
+    <div class="effect-log-section">
+        <h4 class="log-title">Effect Log:</h4>
+        <div id="effect-log" class="effect-log"></div>
+    </div>
+</div>
+

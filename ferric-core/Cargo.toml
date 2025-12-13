@@ -1,0 +1,76 @@
+[package]
+name = "ferric-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "An Angular-inspired frontend framework built with Rust and WebAssembly"
+keywords = ["wasm", "webassembly", "frontend", "framework", "angular"]
+categories = ["wasm", "web-programming"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook"]
+
+[dependencies]
+ferric_macros = { path = "../ferric-macros" }
+wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+js-sys.workspace = true
+console_error_panic_hook = { workspace = true, optional = true }
+serde.workspace = true
+serde_json.workspace = true
+once_cell.workspace = true
+rustc-hash.workspace = true
+
+[dependencies.web-sys]
+workspace = true
+features = [
+    "console",
+    "Window",
+    "Document",
+    "DocumentFragment",
+    "Element",
+    "HtmlElement",
+    "HtmlCollection",
+    "Node",
+    "NodeList",
+    "Text",
+    "Comment",
+    "Event",
+    "EventTarget",
+    "MouseEvent",
+    "KeyboardEvent",
+    "InputEvent",
+    "HtmlInputElement",
+    "HtmlTextAreaElement",
+    "HtmlSelectElement",
+    "HtmlButtonElement",
+    "DomTokenList",
+    "CssStyleDeclaration",
+    "History",
+    "Location",
+    "Url",
+    "PopStateEvent",
+    "CustomEvent",
+    "CustomEventInit",
+    "MutationObserver",
+    "MutationObserverInit",
+    "MutationRecord",
+]
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+criterion = "0.5"
+
+[[bench]]
+name = "reactive"
+harness = false
+
+[profile.release]
+opt-level = "s"
+lto = true
+

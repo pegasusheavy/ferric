@@ -1,0 +1,7 @@
+packages:
+  # Build tools
+  - 'tools'
+
+  # Example applications (future)
+  - 'examples/*'
+

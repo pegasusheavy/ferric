@@ -1,0 +1,45 @@
+# Rust / Cargo
+/target/
+Cargo.lock
+
+# WASM build outputs
+/pkg/
+/out/
+ferric/pkg/
+
+# Node modules
+node_modules/
+
+# Build outputs
+/dist/
+tools/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Test coverage
+*.profraw
+*.profdata
+
+# Documentation build
+/doc/
+
+# Logs
+*.log
+
+# pnpm
+pnpm-lock.yaml
+
+pkg/
+

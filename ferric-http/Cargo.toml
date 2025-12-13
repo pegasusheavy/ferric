@@ -1,0 +1,55 @@
+[package]
+name = "ferric-http"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Ergonomic HTTP client for Ferric - Fetch API on WASM, reqwest on native"
+keywords = ["http", "fetch", "wasm", "async", "client"]
+categories = ["web-programming::http-client", "wasm"]
+
+[features]
+default = []
+json = ["serde", "serde_json"]
+multipart = []
+
+[dependencies]
+thiserror = "2.0"
+url = "2.5"
+http = "1.2"
+
+# Optional JSON support
+serde = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }
+
+# WASM dependencies (browser)
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = { workspace = true }
+wasm-bindgen-futures = { workspace = true }
+js-sys = { workspace = true }
+web-sys = { workspace = true, features = [
+    "console",
+    "Window",
+    "Request",
+    "RequestInit",
+    "RequestMode",
+    "RequestCredentials",
+    "Response",
+    "Headers",
+    "AbortController",
+    "AbortSignal",
+    "Blob",
+    "FormData",
+    "ReadableStream",
+    "ReadableStreamDefaultReader",
+] }
+
+# Native dependencies (server/CLI)
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+reqwest = { version = "0.12", features = ["json", "multipart", "stream"] }
+tokio = { version = "1", features = ["rt"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+wasm-bindgen-test = "0.3"
+

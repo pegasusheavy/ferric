@@ -1,0 +1,36 @@
+[package]
+name = "ferric_forms"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Reactive forms for the Ferric framework"
+keywords = ["wasm", "webassembly", "forms", "reactive", "validation"]
+categories = ["wasm", "web-programming"]
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+ferric-core = { path = "../ferric-core" }
+ferric_forms_macros = { path = "../ferric-forms-macros" }
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+web-sys = { workspace = true, features = [
+    "HtmlInputElement",
+    "HtmlTextAreaElement",
+    "HtmlSelectElement",
+    "HtmlFormElement",
+    "Event",
+    "InputEvent",
+    "FocusEvent",
+    "SubmitEvent",
+] }
+serde.workspace = true
+serde_json.workspace = true
+regex = "1.10"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+

@@ -1,0 +1,56 @@
+<div class="demo-card">
+    <h2 class="demo-title">⏱️ Timer Demo</h2>
+    <p class="demo-description">
+        Demonstrates effect cleanup and <code>untracked()</code> reads.
+    </p>
+
+    <div class="timer-grid">
+        <!-- Basic Counter -->
+        <div class="timer-card">
+            <h3 class="timer-title">Counter</h3>
+            <div id="counter-display" class="timer-display">0</div>
+            <div class="timer-controls">
+                <button id="counter-toggle" class="btn btn-primary">Start</button>
+                <button id="counter-reset" class="btn btn-secondary">Reset</button>
+            </div>
+            <p class="timer-note">Uses <code>untracked()</code> in interval</p>
+        </div>
+
+        <!-- Stopwatch -->
+        <div class="timer-card">
+            <h3 class="timer-title">Stopwatch</h3>
+            <div id="stopwatch-display" class="timer-display timer-display-small">00:00.00</div>
+            <div class="timer-controls">
+                <button id="stopwatch-toggle" class="btn btn-primary">Start</button>
+                <button id="stopwatch-lap" class="btn btn-warning">Lap</button>
+                <button id="stopwatch-reset" class="btn btn-secondary">Reset</button>
+            </div>
+            <div id="lap-times" class="lap-times"></div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="timer-card">
+            <h3 class="timer-title">Countdown</h3>
+            <div id="countdown-display" class="timer-display countdown-display">10</div>
+            <div class="timer-controls">
+                <button id="countdown-toggle" class="btn btn-primary">Start</button>
+                <button id="countdown-reset" class="btn btn-secondary">Reset</button>
+            </div>
+            <div class="preset-buttons">
+                <button class="preset btn btn-small" data-time="5">5s</button>
+                <button class="preset btn btn-small" data-time="10">10s</button>
+                <button class="preset btn btn-small" data-time="30">30s</button>
+                <button class="preset btn btn-small" data-time="60">60s</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box info-box-accent">
+        <h4>About <code>untracked()</code>:</h4>
+        <p>
+            The interval callbacks use <code>untracked()</code> to read signals
+            without creating dependencies. This prevents the effect from re-running every time the counter updates.
+        </p>
+    </div>
+</div>
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ferric Todo - Benchmark</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="todo-app">
+    <header class="header">
+      <h1>Ferric Todos</h1>
+      <div class="stats">
+        <span>0 total</span>
+        <span>0 active</span>
+        <span>0 completed</span>
+      </div>
+    </header>
+
+    <section class="input-section">
+      <input
+        type="text"
+        class="new-todo"
+        placeholder="What needs to be done?"
+        onkeydown="if(event.key==='Enter') add_todo()"
+      />
+      <button onclick="add_todo()">Add</button>
+    </section>
+
+    <section class="controls">
+      <button onclick="toggle_all()">Toggle All</button>
+      <button onclick="bulk_add(100)">Add 100</button>
+      <button onclick="bulk_add(1000)">Add 1000</button>
+      <button onclick="clear_completed()">Clear Completed</button>
+    </section>
+
+    <section class="filters">
+      <button class="active" onclick="set_filter('all')">All</button>
+      <button onclick="set_filter('active')">Active</button>
+      <button onclick="set_filter('completed')">Completed</button>
+    </section>
+
+    <ul class="todo-list" onclick="handleTodoClick(event)"></ul>
+  </div>
+
+  <script type="module">
+    import init, { add_todo, toggle_todo, delete_todo, toggle_all, bulk_add, clear_completed, set_filter } from './pkg/ferric_todo_benchmark.js';
+
+    // Make functions global
+    window.add_todo = add_todo;
+    window.toggle_todo = toggle_todo;
+    window.delete_todo = delete_todo;
+    window.toggle_all = toggle_all;
+    window.bulk_add = bulk_add;
+    window.clear_completed = clear_completed;
+    window.set_filter = set_filter;
+
+    // Event delegation for todo list
+    window.handleTodoClick = function(event) {
+      const li = event.target.closest('li');
+      if (!li) return;
+
+      const id = parseInt(li.dataset.id, 10);
+
+      if (event.target.matches('[data-action="toggle"]')) {
+        toggle_todo(id);
+      } else if (event.target.matches('[data-action="delete"]')) {
+        delete_todo(id);
+      }
+    };
+
+    await init();
+    window.__BENCHMARK__.mark('rendered');
+  </script>
+</body>
+</html>
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ferric Todo - Benchmark</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="todo-app">
+    <header class="header">
+      <h1>Ferric Todos</h1>
+      <div class="stats">
+        <span>0 total</span>
+        <span>0 active</span>
+        <span>0 completed</span>
+      </div>
+    </header>
+
+    <section class="input-section">
+      <input
+        type="text"
+        class="new-todo"
+        placeholder="What needs to be done?"
+        onkeydown="if(event.key==='Enter') add_todo()"
+      />
+      <button onclick="add_todo()">Add</button>
+    </section>
+
+    <section class="controls">
+      <button onclick="toggle_all()">Toggle All</button>
+      <button onclick="bulk_add(100)">Add 100</button>
+      <button onclick="bulk_add(1000)">Add 1000</button>
+      <button onclick="clear_completed()">Clear Completed</button>
+    </section>
+
+    <section class="filters">
+      <button class="active" onclick="set_filter('all')">All</button>
+      <button onclick="set_filter('active')">Active</button>
+      <button onclick="set_filter('completed')">Completed</button>
+    </section>
+
+    <ul class="todo-list" onclick="handleTodoClick(event)"></ul>
+  </div>
+
+  <script type="module">
+    import init, { add_todo, toggle_todo, delete_todo, toggle_all, bulk_add, clear_completed, set_filter } from './pkg/ferric_todo_benchmark.js';
+
+    // Make functions global
+    window.add_todo = add_todo;
+    window.toggle_todo = toggle_todo;
+    window.delete_todo = delete_todo;
+    window.toggle_all = toggle_all;
+    window.bulk_add = bulk_add;
+    window.clear_completed = clear_completed;
+    window.set_filter = set_filter;
+
+    // Event delegation for todo list
+    window.handleTodoClick = function(event) {
+      const li = event.target.closest('li');
+      if (!li) return;
+
+      const id = parseInt(li.dataset.id, 10);
+
+      if (event.target.matches('[data-action="toggle"]')) {
+        toggle_todo(id);
+      } else if (event.target.matches('[data-action="delete"]')) {
+        delete_todo(id);
+      }
+    };
+
+    await init();
+    window.__BENCHMARK__.mark('rendered');
+  </script>
+</body>
+</html>
+
