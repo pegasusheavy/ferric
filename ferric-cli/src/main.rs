@@ -14,6 +14,7 @@ mod server;
 mod tailwind;
 mod templates;
 mod utils;
+mod wasm_chunking;
 
 #[derive(Parser)]
 #[command(name = "ferric")]

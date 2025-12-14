@@ -1,0 +1,15 @@
+[package]
+name = "chunked-app-dashboard"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+chunked-app-core = { path = "../core" }
+ferric-core.workspace = true
+wasm-bindgen.workspace = true
+web-sys.workspace = true
+

@@ -43,7 +43,7 @@ pub fn hash_file(path: &Path, strategy: Strategy, length: usize) -> Result<Strin
 fn hash_file_md5(path: &Path, length: usize) -> Result<String> {
     let content = fs::read(path)
         .with_context(|| format!("Failed to read file for hashing: {}", path.display()))?;
-    
+
     let hash = format!("{:x}", md5::compute(&content));
     Ok(hash[..length.min(hash.len())].to_string())
 }
@@ -51,10 +51,10 @@ fn hash_file_md5(path: &Path, length: usize) -> Result<String> {
 /// Generate SHA256 hash of file content
 fn hash_file_sha256(path: &Path, length: usize) -> Result<String> {
     use sha2::{Sha256, Digest};
-    
+
     let content = fs::read(path)
         .with_context(|| format!("Failed to read file for hashing: {}", path.display()))?;
-    
+
     let mut hasher = Sha256::new();
     hasher.update(&content);
     let result = hasher.finalize();
@@ -78,27 +78,27 @@ pub fn rename_with_hash(
     length: usize,
 ) -> Result<PathBuf> {
     let hash = hash_file(path, strategy, length)?;
-    
+
     let file_stem = path
         .file_stem()
         .and_then(|s| s.to_str())
         .context("Invalid file name")?;
-    
+
     let extension = path
         .extension()
         .and_then(|s| s.to_str())
         .unwrap_or("");
-    
+
     let new_name = if extension.is_empty() {
         format!("{}.{}", file_stem, hash)
     } else {
         format!("{}.{}.{}", file_stem, hash, extension)
     };
-    
+
     let new_path = path.with_file_name(new_name);
     fs::rename(path, &new_path)
         .with_context(|| format!("Failed to rename {} to {}", path.display(), new_path.display()))?;
-    
+
     Ok(new_path)
 }
 
@@ -113,9 +113,9 @@ pub fn apply_cache_busting(
         .and_then(|s| s.to_str())
         .context("Invalid file name")?
         .to_string();
-    
+
     let new_path = rename_with_hash(path, strategy, length)?;
-    
+
     Ok((new_path, original_name))
 }
 
@@ -126,9 +126,9 @@ pub fn update_html_references(
 ) -> Result<()> {
     let content = fs::read_to_string(html_path)
         .with_context(|| format!("Failed to read HTML file: {}", html_path.display()))?;
-    
+
     let mut updated_content = content;
-    
+
     // Replace references in src, href attributes
     for (original, hashed) in mappings {
         // Match various reference patterns
@@ -144,7 +144,7 @@ pub fn update_html_references(
             format!(r#"src="/{}""#, original),
             format!(r#"href="/{}""#, original),
         ];
-        
+
         let replacements = vec![
             format!(r#"src="{}""#, hashed),
             format!(r#"src='{}'"#, hashed),
@@ -155,15 +155,15 @@ pub fn update_html_references(
             format!(r#"src="/{}""#, hashed),
             format!(r#"href="/{}""#, hashed),
         ];
-        
+
         for (pattern, replacement) in patterns.iter().zip(replacements.iter()) {
             updated_content = updated_content.replace(pattern, replacement);
         }
     }
-    
+
     fs::write(html_path, updated_content)
         .with_context(|| format!("Failed to write updated HTML: {}", html_path.display()))?;
-    
+
     Ok(())
 }
 
@@ -177,15 +177,15 @@ pub fn process_directory(
     _assets: bool,
 ) -> Result<HashMap<String, String>> {
     let mut mappings = HashMap::new();
-    
+
     if !dir.exists() {
         return Ok(mappings);
     }
-    
+
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
-        
+
         if path.is_file() {
             let should_hash = if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
                 match ext {
@@ -196,7 +196,7 @@ pub fn process_directory(
             } else {
                 false
             };
-            
+
             if should_hash {
                 match apply_cache_busting(&path, strategy, length) {
                     Ok((new_path, original_name)) => {
@@ -214,7 +214,7 @@ pub fn process_directory(
             }
         }
     }
-    
+
     Ok(mappings)
 }
 
@@ -231,7 +231,7 @@ mod tests {
         let file_path = dir.path().join("test.css");
         let mut file = File::create(&file_path).unwrap();
         file.write_all(b"body { color: red; }").unwrap();
-        
+
         let hash = hash_file_md5(&file_path, 8).unwrap();
         assert_eq!(hash.len(), 8);
         assert!(hash.chars().all(|c| c.is_ascii_hexdigit()));
@@ -251,7 +251,7 @@ mod tests {
         let mut file = File::create(&file_path).unwrap();
         file.write_all(b"body { color: red; }").unwrap();
         drop(file);
-        
+
         let new_path = rename_with_hash(&file_path, Strategy::Md5, 8).unwrap();
         assert!(new_path.exists());
         assert!(!file_path.exists());

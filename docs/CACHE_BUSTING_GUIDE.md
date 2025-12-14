@@ -29,7 +29,7 @@ hash_length = 8
 # Apply to CSS files
 css = true
 
-# Apply to JS/Wasm files  
+# Apply to JS/Wasm files
 js = true
 
 # Apply to other assets
@@ -339,7 +339,7 @@ grep "styles" dist/index.html
 ### Build Time
 
 - **MD5**: +10-50ms per file
-- **SHA256**: +20-100ms per file  
+- **SHA256**: +20-100ms per file
 - **Timestamp**: <1ms (no hashing)
 
 ### Runtime
@@ -360,19 +360,19 @@ Works with all browsers - it's just renamed files!
 
 ## FAQ
 
-**Q: Does this work with CDNs?**  
+**Q: Does this work with CDNs?**
 A: Yes! CDNs will cache each unique filename separately.
 
-**Q: What about source maps?**  
+**Q: What about source maps?**
 A: Source maps are not currently cache busted.
 
-**Q: Can I use custom hash functions?**  
+**Q: Can I use custom hash functions?**
 A: Currently supports MD5, SHA256, and timestamp.
 
-**Q: Does it work with dynamic imports?**  
+**Q: Does it work with dynamic imports?**
 A: Yes, but ensure your bundler preserves the import paths.
 
-**Q: What about service workers?**  
+**Q: What about service workers?**
 A: Update your service worker to handle hashed filenames dynamically.
 
 ## See Also

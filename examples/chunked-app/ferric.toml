@@ -1,0 +1,52 @@
+# Chunked Application Example - Ferric Configuration
+
+[project]
+name = "chunked-app"
+version = "0.1.0"
+description = "Example of WASM code splitting with Ferric"
+
+[build]
+out_dir = "dist"
+src_dir = "core/src"
+optimization = "release"
+source_maps = false
+wasm_opt = "s"
+
+[build.targets]
+browser = true
+server = false
+
+# Enable WASM chunking
+[build.chunking]
+enabled = true
+
+# Admin panel chunk - loaded on /admin route
+[[build.chunking.chunks]]
+name = "admin"
+module = "admin"
+priority = 50
+preload = "route"
+
+# Dashboard chunk - loaded when idle
+[[build.chunking.chunks]]
+name = "dashboard"
+module = "dashboard"
+priority = 80
+preload = "idle"
+
+[build.cache_busting]
+enabled = true
+strategy = "md5"
+hash_length = 8
+css = true
+js = true
+
+[styles]
+preprocessor = "css"
+root = "styles.css"
+output = "styles.css"
+
+[serve]
+port = 8080
+host = "127.0.0.1"
+

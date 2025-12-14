@@ -1,0 +1,17 @@
+[package]
+name = "chunked-app-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+ferric-core.workspace = true
+ferric_macros.workspace = true
+ferric-router.workspace = true
+wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+web-sys.workspace = true
+

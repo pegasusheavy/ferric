@@ -291,6 +291,40 @@ pub struct BuildConfig {
     /// Cache busting configuration
     #[serde(default)]
     pub cache_busting: CacheBustingConfig,
+
+    /// WASM chunking configuration
+    #[serde(default)]
+    pub chunking: WasmChunkingConfig,
+}
+
+/// WASM chunking configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WasmChunkingConfig {
+    /// Enable WASM code splitting
+    #[serde(default)]
+    pub enabled: bool,
+
+    /// Lazy-loaded chunks
+    #[serde(default)]
+    pub chunks: Vec<LazyChunkConfig>,
+}
+
+/// Configuration for a lazy-loaded chunk
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LazyChunkConfig {
+    /// Chunk name
+    pub name: String,
+
+    /// Module path to compile as chunk
+    pub module: String,
+
+    /// Priority (0-100, higher = load sooner)
+    #[serde(default)]
+    pub priority: u8,
+
+    /// Preload strategy
+    #[serde(default)]
+    pub preload: String, // "immediate", "idle", "route", "interaction", "manual"
 }
 
 /// Cache busting configuration
@@ -359,6 +393,7 @@ impl Default for BuildConfig {
             wasm_opt: default_wasm_opt(),
             targets: BuildTargets::default(),
             cache_busting: CacheBustingConfig::default(),
+            chunking: WasmChunkingConfig::default(),
         }
     }
 }
@@ -372,6 +407,15 @@ impl Default for CacheBustingConfig {
             css: true,
             js: true,
             assets: false,
+        }
+    }
+}
+
+impl Default for WasmChunkingConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            chunks: Vec::new(),
         }
     }
 }
