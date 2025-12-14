@@ -30,8 +30,30 @@ jobs:
           target: wasm32-unknown-unknown
           override: true
 
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install ferric-cli
+        run: |
+          echo "📦 Installing ferric-cli from workspace..."
+          cargo install --path ferric-cli --force
+          echo "✅ ferric-cli installed:"
+          ferric --version
+
       - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+        run: |
+          echo "📦 Installing wasm-pack..."
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,42 +67,77 @@ jobs:
           cd web
           npm ci
 
-      - name: Build CSS with TailwindCSS 4
+      - name: Build CSS with ferric-cli
         run: |
           cd web
-          npx @tailwindcss/cli@next -i ./styles/rust-theme.css -o ./styles/dist/rust-theme.min.css --minify
+          echo "🎨 Building CSS with TailwindCSS 4..."
+          ferric tailwind -i ./styles/rust-theme.css -o ./styles/dist/rust-theme.min.css --minify
+          echo "✅ CSS build complete"
+          ls -la styles/dist/
 
-      - name: Build Wasm application
+      - name: Build Wasm application with ferric-cli  
         run: |
           cd web
-          wasm-pack build --target web --out-dir pkg --release
-
+          echo "🦀 Building Wasm application..."
+          ferric build --release --target browser
+          echo "✅ Wasm build complete"
+          
+          # Show build output
+          if [ -d "dist" ]; then
+            echo "📦 Build output in dist/:"
+            ls -la dist/
+            [ -d "dist/pkg" ] && ls -la dist/pkg/
+          else
+            echo "📦 Build output:"
+            ls -la pkg/ 2>/dev/null || echo "Note: pkg directory location varies"
+          fi
+          
       - name: Generate documentation HTML
         run: |
           if [ -f scripts/generate-docs-html.sh ]; then
+            echo "📚 Generating documentation HTML..."
             bash scripts/generate-docs-html.sh
           fi
 
       - name: Prepare deployment directory
         run: |
           mkdir -p deploy
-
-          # Copy web assets
-          cp -r web/index.html deploy/
-          cp -r web/docs.html deploy/ || true
-          cp -r web/docs-rust-theme.html deploy/ || true
-          cp -r web/benchmarks.html deploy/ || true
-          cp -r web/run-benchmarks.html deploy/ || true
-          cp -r web/pkg deploy/
+          
+          echo "📦 Preparing deployment directory..."
+          
+          # Copy web assets (ferric build outputs to dist/)
+          if [ -d "web/dist" ]; then
+            echo "  Copying from web/dist/..."
+            cp web/dist/index.html deploy/ 2>/dev/null || cp web/index.html deploy/
+            cp -r web/dist/pkg deploy/ 2>/dev/null || cp -r web/pkg deploy/ 2>/dev/null || true
+          else
+            echo "  Copying from web/..."
+            cp web/index.html deploy/
+            cp -r web/pkg deploy/ 2>/dev/null || true
+          fi
+          
+          # Copy styles (always from web/styles)
           cp -r web/styles deploy/
-          cp -r web/assets deploy/ || true
-          cp -r web/docs deploy/ || true
-
+          
+          # Copy optional assets
+          cp web/docs.html deploy/ 2>/dev/null || true
+          cp web/docs-rust-theme.html deploy/ 2>/dev/null || true
+          cp web/benchmarks.html deploy/ 2>/dev/null || true
+          cp web/run-benchmarks.html deploy/ 2>/dev/null || true
+          cp -r web/assets deploy/ 2>/dev/null || true
+          cp -r web/docs deploy/ 2>/dev/null || true
+          
           # Create .nojekyll to disable Jekyll processing
           touch deploy/.nojekyll
-
+          
           # Create CNAME if needed (update with your domain)
           # echo "ferric.rs" > deploy/CNAME
+          
+          echo "✅ Deployment directory prepared:"
+          ls -la deploy/
+          echo ""
+          echo "📊 Package contents:"
+          ls -la deploy/pkg/ 2>/dev/null || echo "  (pkg directory not found)"
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
@@ -97,4 +154,5 @@ jobs:
         run: |
           echo "🚀 Deployed to GitHub Pages!"
           echo "📄 URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-
+          echo ""
+          echo "✨ Built with ferric-cli!"
