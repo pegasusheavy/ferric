@@ -127,20 +127,63 @@ fn apply_cache_busting(config: &FerricConfig) -> Result<()> {
     let strategy = Strategy::from_str(&cb_config.strategy);
     let out_dir = Path::new(&config.build.out_dir);
 
+    let mut all_mappings = std::collections::HashMap::new();
+
     // Process pkg directory (wasm + js files)
     let pkg_dir = out_dir.join("pkg");
-    let mut mappings = process_directory(
-        &pkg_dir,
-        strategy,
-        cb_config.hash_length,
-        cb_config.css,
-        cb_config.js,
-        cb_config.assets,
-    )?;
+    if pkg_dir.exists() {
+        println!("    {} Processing pkg/ directory...", style("→").cyan());
+        let pkg_mappings = process_directory(
+            &pkg_dir,
+            strategy,
+            cb_config.hash_length,
+            cb_config.css,
+            cb_config.js,
+            cb_config.assets,
+        )?;
+        println!(
+            "      {} Hashed {} files in pkg/",
+            style("✓").green(),
+            pkg_mappings.len()
+        );
+        all_mappings.extend(pkg_mappings);
+    }
 
-    // Process styles directory
+    // Process styles in root output directory
+    let css_files = ["styles.css", "main.css", "app.css"];
+    for css_file in &css_files {
+        let css_path = out_dir.join(css_file);
+        if css_path.exists() && cb_config.css {
+            match crate::cache_busting::apply_cache_busting(&css_path, strategy, cb_config.hash_length) {
+                Ok((new_path, original_name)) => {
+                    let new_name = new_path
+                        .file_name()
+                        .and_then(|s| s.to_str())
+                        .unwrap_or("")
+                        .to_string();
+                    all_mappings.insert(original_name, new_name);
+                    println!(
+                        "      {} Hashed {}",
+                        style("✓").green(),
+                        css_file
+                    );
+                }
+                Err(e) => {
+                    println!(
+                        "      {} Failed to hash {}: {}",
+                        style("!").yellow(),
+                        css_file,
+                        e
+                    );
+                }
+            }
+        }
+    }
+
+    // Process styles directory if it exists
     let styles_dir = out_dir.join("styles");
     if styles_dir.exists() {
+        println!("    {} Processing styles/ directory...", style("→").cyan());
         let style_mappings = process_directory(
             &styles_dir,
             strategy,
@@ -149,31 +192,83 @@ fn apply_cache_busting(config: &FerricConfig) -> Result<()> {
             false, // Don't reprocess js in styles dir
             cb_config.assets,
         )?;
-        mappings.extend(style_mappings);
+        println!(
+            "      {} Hashed {} files in styles/",
+            style("✓").green(),
+            style_mappings.len()
+        );
+        all_mappings.extend(style_mappings);
     }
 
-    // Process dist directory
-    let dist_styles = out_dir.join("dist");
-    if dist_styles.exists() {
-        let dist_mappings = process_directory(
-            &dist_styles,
-            strategy,
-            cb_config.hash_length,
-            cb_config.css,
-            false,
-            cb_config.assets,
-        )?;
-        mappings.extend(dist_mappings);
+    // Process assets if enabled
+    if cb_config.assets {
+        let assets_dir = out_dir.join("assets");
+        if assets_dir.exists() {
+            println!("    {} Processing assets/ directory...", style("→").cyan());
+            let asset_mappings = process_directory(
+                &assets_dir,
+                strategy,
+                cb_config.hash_length,
+                false,
+                false,
+                true,
+            )?;
+            println!(
+                "      {} Hashed {} assets",
+                style("✓").green(),
+                asset_mappings.len()
+            );
+            all_mappings.extend(asset_mappings);
+        }
     }
 
     // Update HTML file references
     let html_path = out_dir.join("index.html");
-    if html_path.exists() && !mappings.is_empty() {
-        update_html_references(&html_path, &mappings)?;
+    if html_path.exists() && !all_mappings.is_empty() {
+        println!("    {} Updating index.html references...", style("→").cyan());
+        update_html_references(&html_path, &all_mappings)?;
         println!(
-            "    {} Updated {} file references in index.html",
+            "    {} Updated {} asset references in index.html",
             style("✓").green(),
-            mappings.len()
+            all_mappings.len()
+        );
+        
+        // Print sample mappings for verification
+        if all_mappings.len() <= 5 {
+            for (original, hashed) in &all_mappings {
+                println!(
+                    "      {} {} → {}",
+                    style("→").dim(),
+                    original,
+                    hashed
+                );
+            }
+        } else {
+            let mut sample: Vec<_> = all_mappings.iter().take(3).collect();
+            sample.sort_by_key(|(k, _)| *k);
+            for (original, hashed) in sample {
+                println!(
+                    "      {} {} → {}",
+                    style("→").dim(),
+                    original,
+                    hashed
+                );
+            }
+            println!(
+                "      {} ... and {} more",
+                style("→").dim(),
+                all_mappings.len() - 3
+            );
+        }
+    } else if all_mappings.is_empty() {
+        println!(
+            "    {} No files to hash (check build configuration)",
+            style("!").yellow()
+        );
+    } else if !html_path.exists() {
+        println!(
+            "    {} index.html not found, skipping reference updates",
+            style("!").yellow()
         );
     }
 

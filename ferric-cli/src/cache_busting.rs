@@ -126,45 +126,81 @@ pub fn update_html_references(
 ) -> Result<()> {
     let content = fs::read_to_string(html_path)
         .with_context(|| format!("Failed to read HTML file: {}", html_path.display()))?;
-
+    
     let mut updated_content = content;
-
-    // Replace references in src, href attributes
+    
+    // Replace references in src, href, and other attributes
     for (original, hashed) in mappings {
-        // Match various reference patterns
-        let patterns = vec![
-            format!(r#"src="{}""#, original),
-            format!(r#"src='{}'"#, original),
-            format!(r#"href="{}""#, original),
-            format!(r#"href='{}'"#, original),
-            // Relative paths
-            format!(r#"src="./{}""#, original),
-            format!(r#"href="./{}""#, original),
-            // Absolute paths
-            format!(r#"src="/{}""#, original),
-            format!(r#"href="/{}""#, original),
-        ];
-
-        let replacements = vec![
-            format!(r#"src="{}""#, hashed),
-            format!(r#"src='{}'"#, hashed),
-            format!(r#"href="{}""#, hashed),
-            format!(r#"href='{}'"#, hashed),
-            format!(r#"src="./{}""#, hashed),
-            format!(r#"href="./{}""#, hashed),
-            format!(r#"src="/{}""#, hashed),
-            format!(r#"href="/{}""#, hashed),
-        ];
-
-        for (pattern, replacement) in patterns.iter().zip(replacements.iter()) {
-            updated_content = updated_content.replace(pattern, replacement);
-        }
+        updated_content = replace_asset_references(&updated_content, original, hashed);
     }
-
+    
     fs::write(html_path, updated_content)
         .with_context(|| format!("Failed to write updated HTML: {}", html_path.display()))?;
-
+    
     Ok(())
+}
+
+/// Replace all asset references in HTML content
+fn replace_asset_references(content: &str, original: &str, hashed: &str) -> String {
+    let mut result = content.to_string();
+    
+    // Extract filename for path-aware matching
+    let original_filename = Path::new(original)
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or(original);
+    
+    // Pattern 1: Direct references (src="file.css", href="file.js")
+    let patterns = vec![
+        // Quoted attributes with various paths
+        (format!(r#"src="{}""#, original), format!(r#"src="{}""#, hashed)),
+        (format!(r#"src='{}'"#, original), format!(r#"src='{}'"#, hashed)),
+        (format!(r#"href="{}""#, original), format!(r#"href="{}""#, hashed)),
+        (format!(r#"href='{}'"#, original), format!(r#"href='{}'"#, hashed)),
+        
+        // With ./ prefix
+        (format!(r#"src="./{}""#, original), format!(r#"src="./{}""#, hashed)),
+        (format!(r#"src='./{}'"#, original), format!(r#"src='./{}'"#, hashed)),
+        (format!(r#"href="./{}""#, original), format!(r#"href="./{}""#, hashed)),
+        (format!(r#"href='./{}'"#, original), format!(r#"href='./{}'"#, hashed)),
+        
+        // With / prefix (absolute)
+        (format!(r#"src="/{}""#, original), format!(r#"src="/{}""#, hashed)),
+        (format!(r#"src='/{}'"#, original), format!(r#"src='/{}'"#, hashed)),
+        (format!(r#"href="/{}""#, original), format!(r#"href="/{}""#, hashed)),
+        (format!(r#"href='/{}'"#, original), format!(r#"href='/{}'"#, hashed)),
+        
+        // In directories (pkg/file.js, styles/file.css)
+        (format!(r#"src="pkg/{}""#, original_filename), format!(r#"src="pkg/{}""#, hashed)),
+        (format!(r#"src='pkg/{}'"#, original_filename), format!(r#"src='pkg/{}'"#, hashed)),
+        (format!(r#"href="pkg/{}""#, original_filename), format!(r#"href="pkg/{}""#, hashed)),
+        (format!(r#"href='pkg/{}'"#, original_filename), format!(r#"href='pkg/{}'"#, hashed)),
+        
+        (format!(r#"src="styles/{}""#, original_filename), format!(r#"src="styles/{}""#, hashed)),
+        (format!(r#"src='styles/{}'"#, original_filename), format!(r#"src='styles/{}'"#, hashed)),
+        (format!(r#"href="styles/{}""#, original_filename), format!(r#"href="styles/{}""#, hashed)),
+        (format!(r#"href='styles/{}'"#, original_filename), format!(r#"href='styles/{}'"#, hashed)),
+        
+        (format!(r#"src="dist/{}""#, original_filename), format!(r#"src="dist/{}""#, hashed)),
+        (format!(r#"href="dist/{}""#, original_filename), format!(r#"href="dist/{}""#, hashed)),
+        
+        // Import statements in inline scripts
+        (format!(r#"import("./{}""#, original), format!(r#"import("./{}""#, hashed)),
+        (format!(r#"import('./{}'"#, original), format!(r#"import('./{}'"#, hashed)),
+        (format!(r#"from "{}""#, original), format!(r#"from "{}""#, hashed)),
+        (format!(r#"from '{}'"#, original), format!(r#"from '{}'"#, hashed)),
+        
+        // Link preload/prefetch
+        (format!(r#"<link rel="preload" href="{}""#, original), format!(r#"<link rel="preload" href="{}""#, hashed)),
+        (format!(r#"<link rel="prefetch" href="{}""#, original), format!(r#"<link rel="prefetch" href="{}""#, hashed)),
+        (format!(r#"<link rel="modulepreload" href="{}""#, original), format!(r#"<link rel="modulepreload" href="{}""#, hashed)),
+    ];
+    
+    for (pattern, replacement) in patterns {
+        result = result.replace(&pattern, &replacement);
+    }
+    
+    result
 }
 
 /// Process directory for cache busting
@@ -174,29 +210,60 @@ pub fn process_directory(
     length: usize,
     css: bool,
     js: bool,
-    _assets: bool,
+    assets: bool,
 ) -> Result<HashMap<String, String>> {
     let mut mappings = HashMap::new();
-
+    
     if !dir.exists() {
         return Ok(mappings);
     }
+    
+    // Recursively process directory
+    process_directory_recursive(dir, dir, strategy, length, css, js, assets, &mut mappings)?;
+    
+    Ok(mappings)
+}
 
-    for entry in fs::read_dir(dir)? {
+/// Recursively process directory and subdirectories
+fn process_directory_recursive(
+    base_dir: &Path,
+    current_dir: &Path,
+    strategy: Strategy,
+    length: usize,
+    css: bool,
+    js: bool,
+    assets: bool,
+    mappings: &mut HashMap<String, String>,
+) -> Result<()> {
+    for entry in fs::read_dir(current_dir)? {
         let entry = entry?;
         let path = entry.path();
-
-        if path.is_file() {
+        
+        if path.is_dir() {
+            // Recursively process subdirectories
+            process_directory_recursive(
+                base_dir,
+                &path,
+                strategy,
+                length,
+                css,
+                js,
+                assets,
+                mappings,
+            )?;
+        } else if path.is_file() {
             let should_hash = if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
                 match ext {
                     "css" if css => true,
                     "js" | "wasm" if js => true,
+                    "png" | "jpg" | "jpeg" | "gif" | "svg" | "webp" | "ico" if assets => true,
+                    "woff" | "woff2" | "ttf" | "eot" | "otf" if assets => true,
                     _ => false,
                 }
             } else {
                 false
             };
-
+            
             if should_hash {
                 match apply_cache_busting(&path, strategy, length) {
                     Ok((new_path, original_name)) => {
@@ -205,7 +272,21 @@ pub fn process_directory(
                             .and_then(|s| s.to_str())
                             .unwrap_or("")
                             .to_string();
-                        mappings.insert(original_name, new_name);
+                        
+                        // Store both filename and relative path for better matching
+                        mappings.insert(original_name.clone(), new_name.clone());
+                        
+                        // Also store relative path from base dir
+                        if let Ok(rel_path) = path.parent().unwrap_or(base_dir).strip_prefix(base_dir) {
+                            if !rel_path.as_os_str().is_empty() {
+                                let rel_original = rel_path.join(&original_name);
+                                let rel_new = rel_path.join(&new_name);
+                                
+                                if let (Some(o), Some(n)) = (rel_original.to_str(), rel_new.to_str()) {
+                                    mappings.insert(o.to_string(), n.to_string());
+                                }
+                            }
+                        }
                     }
                     Err(e) => {
                         eprintln!("Warning: Failed to hash {}: {}", path.display(), e);
@@ -214,8 +295,8 @@ pub fn process_directory(
             }
         }
     }
-
-    Ok(mappings)
+    
+    Ok(())
 }
 
 #[cfg(test)]

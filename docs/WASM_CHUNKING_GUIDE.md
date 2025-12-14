@@ -71,7 +71,7 @@ pub async fn load_admin_module() -> Result<JsValue, JsValue> {
             .dyn_into::<js_sys::Promise>()
             .unwrap()
     ).await?;
-    
+
     Ok(module)
 }
 ```
@@ -112,7 +112,7 @@ Load right after main chunk:
 preload = "immediate"
 ```
 
-### Idle  
+### Idle
 Load when browser is idle (using `requestIdleCallback`):
 ```toml
 preload = "idle"
@@ -207,11 +207,11 @@ use ferric_router::*;
 let routes = vec![
     Route::new("/")
         .component::<HomeComponent>(),
-    
+
     Route::new("/admin")
         .lazy_load("admin")  // Load admin chunk
         .component::<AdminComponent>(),
-    
+
     Route::new("/dashboard")
         .lazy_load("dashboard")
         .component::<DashboardComponent>(),
@@ -376,11 +376,11 @@ pub fn create_router() -> Router {
     Router::new(vec![
         Route::new("/")
             .component::<HomeComponent>(),
-        
+
         Route::new("/admin")
             .lazy_load_chunk("admin")
             .component_from_chunk("admin", "AdminPanel"),
-        
+
         Route::new("/analytics")
             .lazy_load_chunk("analytics")
             .component_from_chunk("analytics", "AnalyticsView"),
@@ -408,10 +408,10 @@ pub async fn load_admin() -> Result<(), JsValue> {
     let admin_module = js_sys::eval(
         "import('./pkg/admin/admin.js')"
     )?;
-    
+
     let promise = admin_module.dyn_into::<js_sys::Promise>()?;
     wasm_bindgen_futures::JsFuture::from(promise).await?;
-    
+
     Ok(())
 }
 ```

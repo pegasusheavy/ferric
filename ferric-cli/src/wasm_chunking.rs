@@ -36,11 +36,12 @@ pub struct ChunkDefinition {
 }
 
 /// Preload strategy for lazy chunks
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum PreloadStrategy {
     /// Load immediately after main chunk
     Immediate,
     /// Load when idle
+    #[default]
     Idle,
     /// Load on route activation
     OnRoute,
@@ -220,19 +221,19 @@ pub fn generate_chunk_loader(manifest: &ChunkManifest) -> String {
 const FerricChunks = {
   loaded: new Set(),
   loading: new Map(),
-  
+
   async loadChunk(name) {
     if (this.loaded.has(name)) {
       return true;
     }
-    
+
     if (this.loading.has(name)) {
       return await this.loading.get(name);
     }
-    
+
     const promise = this._loadChunkImpl(name);
     this.loading.set(name, promise);
-    
+
     try {
       await promise;
       this.loaded.add(name);
@@ -243,19 +244,19 @@ const FerricChunks = {
       throw err;
     }
   },
-  
+
   async _loadChunkImpl(name) {
     const script = document.createElement('script');
     script.type = 'module';
     script.src = `pkg/${name}/${name}.js`;
-    
+
     return new Promise((resolve, reject) => {
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
     });
   },
-  
+
   preloadChunk(name) {
     const link = document.createElement('link');
     link.rel = 'modulepreload';
@@ -279,7 +280,7 @@ window.addEventListener('load', () => {
     const chunks = Object.entries(CHUNK_MANIFEST.chunks)
       .filter(([name]) => name !== 'main')
       .sort((a, b) => (b[1].priority || 0) - (a[1].priority || 0));
-    
+
     for (const [name] of chunks) {
       FerricChunks.preloadChunk(name);
     }
