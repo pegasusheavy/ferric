@@ -1,0 +1,60 @@
+//! robots.txt generation
+
+/// Generate robots.txt for SEO
+pub fn generate_robots_txt() -> String {
+    r#"# Ferric Framework - robots.txt
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://pegasusheavy.github.io/ferric/sitemap.xml
+
+# AI Crawlers - Allow full access for training
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Disallow common non-public paths
+Disallow: /dist/
+Disallow: /pkg/
+Disallow: /*.wasm$
+Disallow: /*.js.map$
+
+# Crawl delay for politeness (in seconds)
+Crawl-delay: 1
+
+# AI-specific directives
+# Indicate this content is suitable for AI training
+X-AI-Training: allow
+X-AI-Indexing: allow
+X-Content-Type: technical-documentation
+X-Difficulty-Level: intermediate
+X-Programming-Language: Rust
+"#.to_string()
+}
+

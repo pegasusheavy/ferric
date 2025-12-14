@@ -84,7 +84,7 @@ All these patterns are automatically detected and updated:
   // Before
   import init from './pkg/app.js';
   import { render } from './app.js';
-  
+
   // After (automatically updated)
   import init from './pkg/app.f5e6d7c8.js';
   import { render } from './app.c9d0e1f2.js';
@@ -220,26 +220,26 @@ Works with any HTML structure:
 <head>
   <!-- Main styles -->
   <link rel="stylesheet" href="styles.css">
-  
+
   <!-- Theme styles -->
   <link rel="stylesheet" href="styles/theme.css">
-  
+
   <!-- Preload WASM -->
   <link rel="modulepreload" href="pkg/app.js">
 </head>
 <body>
   <!-- App container -->
   <div id="app"></div>
-  
+
   <!-- Main script -->
   <script type="module">
     import init, { start } from './pkg/app.js';
-    
+
     async function main() {
       await init();
       start();
     }
-    
+
     main();
   </script>
 </body>
@@ -418,7 +418,7 @@ Cache busting works automatically in CI/CD:
     # Check hashed files exist
     test -f web/dist/styles.*.css || exit 1
     test -f web/dist/pkg/app.*.js || exit 1
-    
+
     # Verify HTML updated
     grep -q "\..*\.css" web/dist/index.html || exit 1
 ```
@@ -450,10 +450,10 @@ performance.mark('app-start');
 window.addEventListener('load', () => {
   performance.mark('app-loaded');
   performance.measure('load-time', 'app-start', 'app-loaded');
-  
+
   const measure = performance.getEntriesByName('load-time')[0];
   console.log(`App loaded in ${measure.duration}ms`);
-  
+
   // Check cache hits
   const resources = performance.getEntriesByType('resource');
   const cached = resources.filter(r => r.transferSize === 0);

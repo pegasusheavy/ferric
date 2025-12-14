@@ -232,7 +232,7 @@ fn apply_cache_busting(config: &FerricConfig) -> Result<()> {
             style("✓").green(),
             all_mappings.len()
         );
-        
+
         // Print sample mappings for verification
         if all_mappings.len() <= 5 {
             for (original, hashed) in &all_mappings {

@@ -3,45 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferric Framework - Build blazingly fast web applications with Rust</title>
-    <meta name="description" content="Ferric is a modern web framework for Rust with Angular-inspired architecture, reactive programming, and WebAssembly performance.">
-
-    <!-- Rust-themed TailwindCSS -->
-    <link href="/styles/dist/rust-theme.min.css" rel="stylesheet">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
-
+    
+    <!-- Primary Meta Tags -->
+    <title>Ferric - Angular-inspired Rust Web Framework</title>
+    <meta name="title" content="Ferric - Angular-inspired Rust Web Framework">
+    <meta name="description" content="A modern, type-safe web framework for Rust with WASM support. Build reactive web applications with Angular-like patterns and full type safety.">
+    <meta name="keywords" content="Rust, WASM, WebAssembly, Web Framework, Frontend Framework, Reactive Programming, Type Safety, Angular, Ferric">
+    <meta name="author" content="Ferric Contributors">
+    <link rel="canonical" href="https://pegasusheavy.github.io/ferric/">
+    
+    <!-- Robots -->
+    <meta name="robots" content="index, follow, max-snippet:160, max-image-preview:large">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pegasusheavy.github.io/ferric/">
+    <meta property="og:title" content="Ferric - Angular-inspired Rust Web Framework">
+    <meta property="og:description" content="Build reactive web applications with Rust and WASM using Angular-like patterns">
+    <meta property="og:image" content="https://pegasusheavy.github.io/ferric/assets/og-image.png">
+    <meta property="og:image:alt" content="Ferric Framework - Rust Web Development">
+    <meta property="og:site_name" content="Ferric Framework">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pegasusheavy.github.io/ferric/">
+    <meta property="twitter:title" content="Ferric - Rust Web Framework">
+    <meta property="twitter:description" content="Build reactive web apps with Rust and WASM">
+    <meta property="twitter:image" content="https://pegasusheavy.github.io/ferric/assets/twitter-card.png">
+    <meta property="twitter:image:alt" content="Ferric Framework">
+    <meta property="twitter:site" content="@ferric_framework">
+    <meta property="twitter:creator" content="@pegasusheavy">
+    
+    <!-- AI-Specific Meta Tags for LLMs -->
+    <meta name="ai:content_type" content="technical-documentation">
+    <meta name="ai:topics" content="Rust, WebAssembly, Web Development, Frontend Frameworks, Reactive Programming">
+    <meta name="ai:difficulty" content="intermediate">
+    <meta name="ai:reading_time" content="5">
+    <meta name="ai:programming_language" content="Rust">
+    <meta name="ai:framework_type" content="web-framework">
+    <meta name="ai:content_summary" content="Ferric is a modern web framework for Rust inspired by Angular. It provides reactive programming, type safety, WASM support, and familiar patterns for building web applications.">
+    <meta name="ai:prerequisites" content="Basic Rust knowledge, Web development fundamentals">
+    <meta name="ai:related_topics" content="TypeScript, Angular, React, Vue.js">
+    
+    <!-- Additional SEO -->
+    <meta name="application-name" content="Ferric Framework">
+    <meta name="apple-mobile-web-app-title" content="Ferric">
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Ferric Framework",
+      "url": "https://pegasusheavy.github.io/ferric/",
+      "description": "Angular-inspired Rust web framework with WASM support",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://pegasusheavy.github.io/ferric/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Ferric",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "programmingLanguage": {
+        "@type": "ComputerLanguage",
+        "name": "Rust",
+        "url": "https://www.rust-lang.org/"
+      },
+      "description": "Modern web framework for Rust with WASM support and Angular-like patterns",
+      "softwareVersion": "0.1.0",
+      "license": "https://opensource.org/licenses/Apache-2.0"
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Ferric Framework",
+      "url": "https://pegasusheavy.github.io/ferric/",
+      "logo": "https://pegasusheavy.github.io/ferric/assets/logo.png",
+      "sameAs": [
+        "https://github.com/pegasusheavy/ferric"
+      ]
+    }
+    </script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Module preload for faster loading -->
+    <link rel="modulepreload" href="pkg/ferric_docs_app.js">
 </head>
-<body class="font-rust">
-    <!-- Ferric Application Root -->
-    <app-root></app-root>
-
-    <!-- Wasm Module -->
+<body>
+    <!-- Structured content for better SEO -->
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+            <h1>Ferric Framework</h1>
+        </nav>
+    </header>
+    
+    <main role="main" id="app" aria-label="Main content">
+        <!-- App will mount here -->
+        <noscript>
+            <div class="noscript-message">
+                <h2>Ferric Framework</h2>
+                <p>
+                    Ferric is a modern, Angular-inspired web framework for Rust with WebAssembly support.
+                    This site requires JavaScript to be enabled for the interactive experience.
+                </p>
+                <p>Key features:</p>
+                <ul>
+                    <li>Type-safe reactive programming</li>
+                    <li>Angular-like patterns and decorators</li>
+                    <li>Full WASM support</li>
+                    <li>Dependency injection</li>
+                    <li>Server-side rendering</li>
+                </ul>
+                <p>
+                    For documentation, please visit the 
+                    <a href="https://github.com/pegasusheavy/ferric">GitHub repository</a>.
+                </p>
+            </div>
+        </noscript>
+    </main>
+    
+    <footer role="contentinfo">
+        <p>
+            <small>
+                © 2024 Ferric Framework. Built with 🦀 Rust and ❤️. 
+                <a href="https://github.com/pegasusheavy/ferric">View on GitHub</a>
+            </small>
+        </p>
+    </footer>
+    
+    <!-- Main application script -->
     <script type="module">
-        import init from './pkg/ferric_docs_site.js';
-
-        async function run() {
+        import init from './pkg/ferric_docs_app.js';
+        
+        async function main() {
             try {
                 await init();
-                console.log('🦀 Ferric Documentation Site loaded!');
-            } catch (error) {
-                console.error('Failed to load Ferric:', error);
-                document.querySelector('app-root').innerHTML = `
-                    <div style="padding: 2rem; text-align: center;">
-                        <h1 style="color: #f2711e;">⚠️ Failed to load application</h1>
-                        <p>Please make sure WebAssembly is enabled in your browser.</p>
-                        <pre style="text-align: left; background: #f5f5f5; padding: 1rem; margin: 1rem auto; max-width: 600px;">${error}</pre>
-                    </div>
-                `;
+                console.log('✅ Ferric docs app initialized');
+            } catch (err) {
+                console.error('Failed to initialize app:', err);
             }
         }
-
-        run();
+        
+        main();
     </script>
 </body>
 </html>
