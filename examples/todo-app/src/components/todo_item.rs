@@ -3,7 +3,7 @@
 use crate::models::Todo;
 use crate::template::{html, on_event, query};
 use wasm_bindgen::JsCast;
-use web_sys::{Element, HtmlInputElement, KeyboardEvent, MouseEvent};
+use web_sys::{Element, HtmlInputElement, KeyboardEvent};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -85,12 +85,11 @@ impl TodoItem {
                 *editing_clone.borrow_mut() = true;
                 element_clone.set_class_name("todo-item editing");
 
-                if let Some(ref input) = edit_input_clone {
-                    if let Some(input) = input.dyn_ref::<HtmlInputElement>() {
+                if let Some(ref input) = edit_input_clone
+                    && let Some(input) = input.dyn_ref::<HtmlInputElement>() {
                         let _ = input.focus();
-                        let _ = input.select();
+                        input.select();
                     }
-                }
             });
         }
 
@@ -110,7 +109,7 @@ impl TodoItem {
             let on_edit = events.on_edit.clone();
             let input_clone = input.clone();
 
-            on_event(&input, "keydown", move |e: web_sys::Event| {
+            on_event(input, "keydown", move |e: web_sys::Event| {
                 let event: KeyboardEvent = e.unchecked_into();
                 let input_el = input_clone.dyn_ref::<HtmlInputElement>().unwrap();
 
@@ -135,7 +134,7 @@ impl TodoItem {
             let on_edit = events.on_edit.clone();
             let input_clone = input.clone();
 
-            on_event(&input, "blur", move |_: web_sys::Event| {
+            on_event(input, "blur", move |_: web_sys::Event| {
                 if *editing_clone.borrow() {
                     let input_el = input_clone.dyn_ref::<HtmlInputElement>().unwrap();
                     let value = input_el.value().trim().to_string();

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Ferric Framework</title>
+    <link href="./styles/dist/rust-theme.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="header-rust">
+        <div class="absolute inset-0 bg-gears opacity-10"></div>
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 animate-ferris-wave inline-block">
+                🦀 Ferric Documentation
+            </h1>
+            <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+                Build blazingly fast web applications with Rust
+            </p>
+            <div class="mt-8 flex gap-4 justify-center flex-wrap">
+                <a href="./index.html" class="btn-rust">Home</a>
+                <a href="./benchmarks.html" class="btn-rust-outline bg-white/10 border-white text-white hover:bg-white hover:text-rust-600">Benchmarks</a>
+                <a href="https://github.com/username/ferric" class="btn-rust-outline bg-white/10 border-white text-white hover:bg-white hover:text-rust-600">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="max-w-6xl mx-auto px-6 -mt-8 relative z-20">
+        <div class="search-box max-w-2xl mx-auto">
+            <svg class="search-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input type="text" class="search-input" placeholder="Search documentation..." id="searchInput">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Navigation Pills -->
+        <nav class="flex gap-2 flex-wrap mb-8 justify-center">
+            <button class="nav-item-rust nav-item-active" data-category="all">All Docs</button>
+            <button class="nav-item-rust" data-category="guides">Guides</button>
+            <button class="nav-item-rust" data-category="api">API Reference</button>
+            <button class="nav-item-rust" data-category="tutorials">Tutorials</button>
+            <button class="nav-item-rust" data-category="examples">Examples</button>
+        </nav>
+
+        <!-- Documentation Grid -->
+        <div class="feature-grid" id="docsGrid">
+            <!-- Getting Started -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🚀
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Getting Started</h3>
+                <p class="text-gear mb-4">
+                    Quick start guide to building your first Ferric application
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Beginner</span>
+                    <span class="badge-ferric">Essential</span>
+                </div>
+                <a href="./docs/getting-started.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Core Concepts -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🧠
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Core Concepts</h3>
+                <p class="text-gear mb-4">
+                    Understand the fundamental concepts behind Ferric
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                    <span class="badge-ferric">Essential</span>
+                </div>
+                <a href="./docs/core-concepts.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Components -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🧩
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Components</h3>
+                <p class="text-gear mb-4">
+                    Learn how to build reusable UI components
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Beginner</span>
+                </div>
+                <a href="./docs/components.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Reactivity -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    ⚡
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Reactivity System</h3>
+                <p class="text-gear mb-4">
+                    Signals, computed values, and effects for reactive programming
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                    <span class="badge-crab">Popular</span>
+                </div>
+                <a href="./docs/reactivity.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Router -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🛣️
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Routing</h3>
+                <p class="text-gear mb-4">
+                    Client-side routing with guards and resolvers
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                </div>
+                <a href="./docs/routing.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Forms -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    📝
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Forms & Validation</h3>
+                <p class="text-gear mb-4">
+                    Type-safe forms with automatic validation
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Advanced</span>
+                </div>
+                <a href="./docs/forms.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- HTTP Client -->
+            <article class="feature-card" data-category="api">
+                <div class="feature-icon">
+                    🌐
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">HTTP Client</h3>
+                <p class="text-gear mb-4">
+                    Make HTTP requests with interceptors and retry logic
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                </div>
+                <a href="./docs/http.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Dependency Injection -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    💉
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Dependency Injection</h3>
+                <p class="text-gear mb-4">
+                    Hierarchical DI system for managing services
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Advanced</span>
+                    <span class="badge-ferric">Essential</span>
+                </div>
+                <a href="./docs/di-architecture.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Server-Side Rendering -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🖥️
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Server-Side Rendering</h3>
+                <p class="text-gear mb-4">
+                    SSR with hydration for all major Rust frameworks
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Advanced</span>
+                    <span class="badge-crab">Popular</span>
+                </div>
+                <a href="./docs/ssr-integrations-guide.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Async Support -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🔄
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Async Programming</h3>
+                <p class="text-gear mb-4">
+                    Futures, promises, and async utilities
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Advanced</span>
+                </div>
+                <a href="./docs/async-support-guide.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Macros -->
+            <article class="feature-card" data-category="api">
+                <div class="feature-icon">
+                    🎯
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Macros Reference</h3>
+                <p class="text-gear mb-4">
+                    Complete guide to Ferric's powerful macros
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                </div>
+                <a href="./docs/macros-summary.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Testing -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🧪
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Testing Guide</h3>
+                <p class="text-gear mb-4">
+                    Unit testing, integration tests, and doctests
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                </div>
+                <a href="./docs/doctest-guide.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Todo App Tutorial -->
+            <article class="feature-card" data-category="tutorials">
+                <div class="feature-icon">
+                    ✅
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Build a Todo App</h3>
+                <p class="text-gear mb-4">
+                    Step-by-step tutorial for building a complete app
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Beginner</span>
+                    <span class="badge-crab">Popular</span>
+                </div>
+                <a href="./docs/todo-app-tutorial.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- API Examples -->
+            <article class="feature-card" data-category="examples">
+                <div class="feature-icon">
+                    📚
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Code Examples</h3>
+                <p class="text-gear mb-4">
+                    Browse real-world examples and patterns
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">All Levels</span>
+                </div>
+                <a href="https://github.com/username/ferric/tree/main/examples" class="link-rust">View on GitHub →</a>
+            </article>
+
+            <!-- Performance -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🏎️
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Performance Tips</h3>
+                <p class="text-gear mb-4">
+                    Optimize your Ferric applications
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Advanced</span>
+                </div>
+                <a href="./docs/performance.html" class="link-rust">Read more →</a>
+            </article>
+
+            <!-- Migration Guide -->
+            <article class="feature-card" data-category="guides">
+                <div class="feature-icon">
+                    🔄
+                </div>
+                <h3 class="text-xl font-bold text-gear-dark mb-2">Migration from React</h3>
+                <p class="text-gear mb-4">
+                    Learn how to migrate from React to Ferric
+                </p>
+                <div class="flex gap-2 flex-wrap mb-4">
+                    <span class="badge-rust">Intermediate</span>
+                </div>
+                <a href="./docs/migration.html" class="link-rust">Read more →</a>
+            </article>
+        </div>
+
+        <!-- Feature Highlights -->
+        <section class="mt-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gradient-rust">Why Choose Ferric?</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card-rust">
+                    <div class="card-header-rust">
+                        ⚡ Blazingly Fast
+                    </div>
+                    <div class="card-body">
+                        <p class="text-gear">
+                            Compiled to WebAssembly for native performance. 10x faster than JavaScript frameworks.
+                        </p>
+                    </div>
+                </div>
+                <div class="card-rust">
+                    <div class="card-header-rust">
+                        🔒 Type-Safe
+                    </div>
+                    <div class="card-body">
+                        <p class="text-gear">
+                            Rust's type system prevents entire classes of bugs at compile-time.
+                        </p>
+                    </div>
+                </div>
+                <div class="card-rust">
+                    <div class="card-header-rust">
+                        🧩 Modular
+                    </div>
+                    <div class="card-body">
+                        <p class="text-gear">
+                            Pick only the features you need. Tree-shaking for minimal bundle sizes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-rust mt-16">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-rust-400 font-bold mb-4">Documentation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="./docs/getting-started.html" class="footer-link">Getting Started</a></li>
+                        <li><a href="./docs/core-concepts.html" class="footer-link">Core Concepts</a></li>
+                        <li><a href="./docs/api-reference.html" class="footer-link">API Reference</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-rust-400 font-bold mb-4">Community</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://github.com/username/ferric" class="footer-link">GitHub</a></li>
+                        <li><a href="https://discord.gg/ferric" class="footer-link">Discord</a></li>
+                        <li><a href="https://twitter.com/ferric_rs" class="footer-link">Twitter</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-rust-400 font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="./benchmarks.html" class="footer-link">Benchmarks</a></li>
+                        <li><a href="./docs/examples.html" class="footer-link">Examples</a></li>
+                        <li><a href="./docs/blog.html" class="footer-link">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-rust-400 font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="./license.html" class="footer-link">License (MIT)</a></li>
+                        <li><a href="./privacy.html" class="footer-link">Privacy</a></li>
+                        <li><a href="./contributing.html" class="footer-link">Contributing</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gear pt-8 text-center text-rust-300">
+                <p>Built with 🦀 Rust and ❤️ by the Ferric community</p>
+                <p class="mt-2 text-sm">© 2024 Ferric Framework. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const docsGrid = document.getElementById('docsGrid');
+        const articles = docsGrid.querySelectorAll('article');
+        const categoryButtons = document.querySelectorAll('[data-category]');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            articles.forEach(article => {
+                const title = article.querySelector('h3').textContent.toLowerCase();
+                const description = article.querySelector('p').textContent.toLowerCase();
+                const matches = title.includes(searchTerm) || description.includes(searchTerm);
+                article.style.display = matches ? 'block' : 'none';
+            });
+        });
+
+        // Category filtering
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+
+                // Update active button
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('nav-item-active');
+                });
+                button.classList.add('nav-item-active');
+
+                // Filter articles
+                articles.forEach(article => {
+                    if (category === 'all' || article.dataset.category === category) {
+                        article.style.display = 'block';
+                    } else {
+                        article.style.display = 'none';
+                    }
+                });
+
+                // Clear search
+                searchInput.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
+

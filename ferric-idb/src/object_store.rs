@@ -366,7 +366,7 @@ impl<'a> ObjectStoreBuilder<'a> {
 
     /// Build and create the object store.
     pub fn build(self) -> IdbResult<ObjectStore> {
-        let mut params = IdbObjectStoreParameters::new();
+        let params = IdbObjectStoreParameters::new();
 
         if let Some(ref key_path) = self.key_path {
             let key_path_js: JsValue = key_path.into();
@@ -381,7 +381,7 @@ impl<'a> ObjectStoreBuilder<'a> {
 
         // Create indexes
         for (name, key_path, unique, multi_entry) in self.indexes {
-            let mut index_params = web_sys::IdbIndexParameters::new();
+            let index_params = web_sys::IdbIndexParameters::new();
             index_params.set_unique(unique);
             index_params.set_multi_entry(multi_entry);
 

@@ -109,7 +109,7 @@ struct ResourceInner<T, E> {
     /// The current state.
     state: Signal<ResourceState<T, E>>,
     /// The fetcher function.
-    fetcher: RefCell<Option<Box<dyn Fn() -> ()>>>,
+    fetcher: RefCell<Option<Box<dyn Fn()>>>,
     /// Version counter to track stale requests.
     version: RefCell<u64>,
 }
@@ -121,7 +121,7 @@ impl<T: Clone + 'static, E: Clone + 'static> Resource<T, E> {
     /// The `fetcher` is an async function that performs the actual fetch.
     pub fn new<S, F, Fut>(source: S, fetcher: F) -> Self
     where
-        S: Fn() -> () + 'static,
+        S: Fn() + 'static,
         F: Fn() -> Fut + 'static,
         Fut: Future<Output = Result<T, E>> + 'static,
     {
@@ -184,11 +184,10 @@ impl<T: Clone + 'static, E: Clone + 'static> Resource<T, E> {
         let inner_weak = Rc::downgrade(&inner);
         super::effect(move || {
             source(); // Track the source
-            if let Some(inner) = inner_weak.upgrade() {
-                if let Some(ref fetcher) = *inner.fetcher.borrow() {
+            if let Some(inner) = inner_weak.upgrade()
+                && let Some(ref fetcher) = *inner.fetcher.borrow() {
                     fetcher();
                 }
-            }
         });
 
         Resource { inner }

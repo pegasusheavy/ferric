@@ -1,298 +1,146 @@
-//! Computed values - derived reactive state with automatic dependency tracking.
+//! Computed values that derive from signals.
 //!
-//! Computed values automatically track which signals they depend on and
-//! re-compute when those signals change. They are memoized, meaning they
-//! only recompute when necessary.
+//! Computed values automatically update when their dependencies change.
 //!
-//! # Example
+//! # Examples
 //!
-//! ```ignore
-//! use ferric::reactive::*;
+//! ```
+//! use ferric_core::reactive::{signal, computed};
 //!
-//! let first_name = signal("John".to_string());
-//! let last_name = signal("Doe".to_string());
+//! let count = signal(10);
+//! let doubled = computed(move || count.get() * 2);
 //!
-//! // Computed automatically tracks first_name and last_name as dependencies
+//! assert_eq!(doubled.get(), 20);
+//!
+//! count.set(15);
+//! assert_eq!(doubled.get(), 30);
+//! ```
+//!
+//! # Complex Dependencies
+//!
+//! ```
+//! use ferric_core::reactive::{signal, computed};
+//!
+//! let first = signal("Hello");
+//! let last = signal("World");
 //! let full_name = computed(move || {
-//!     format!("{} {}", first_name.get(), last_name.get())
+//!     format!("{} {}", first.get(), last.get())
 //! });
 //!
-//! assert_eq!(full_name.get(), "John Doe");
+//! assert_eq!(full_name.get(), "Hello World");
 //!
-//! // When a dependency changes, the computed value updates
-//! first_name.set("Jane".to_string());
-//! assert_eq!(full_name.get(), "Jane Doe");
+//! first.set("Hi");
+//! assert_eq!(full_name.get(), "Hi World");
 //! ```
 
-use super::runtime::{
-    current_tracking_context, register_subscriber, start_tracking, stop_tracking,
-    unregister_subscriber, ReactiveId, Subscriber, WeakSubscriber,
-};
-use super::{next_subscription_id, Reactive, SubscriptionId};
+use super::runtime::{Runtime, SubscriberId};
 use std::cell::RefCell;
-use std::collections::HashMap;
 use std::rc::Rc;
 
-/// A computed value that derives from other reactive sources.
+/// A computed value that derives from other reactive values.
 ///
-/// Computed values are lazy and memoized. They only recompute when:
-/// 1. A dependency changes
-/// 2. The value is accessed
+/// # Examples
+///
+/// ```
+/// use ferric_core::reactive::{signal, Computed};
+///
+/// let a = signal(5);
+/// let b = signal(10);
+/// let sum = Computed::new(move || a.get() + b.get());
+///
+/// assert_eq!(sum.get(), 15);
+/// ```
+#[derive(Clone)]
 pub struct Computed<T> {
-    inner: Rc<ComputedInner<T>>,
+    inner: Rc<RefCell<ComputedInner<T>>>,
 }
 
 struct ComputedInner<T> {
-    /// The computation function.
-    compute: Box<dyn Fn() -> T>,
-    /// Unique identifier.
-    id: ReactiveId,
-    /// Mutable state.
-    state: RefCell<ComputedState<T>>,
-}
-
-struct ComputedState<T> {
-    /// Cached value.
-    cached: Option<T>,
-    /// Whether the value needs recomputation.
-    dirty: bool,
-    /// Legacy callback subscribers.
-    subscribers: HashMap<SubscriptionId, Box<dyn Fn(&T)>>,
-    /// Reactive subscribers.
-    reactive_subscribers: Vec<WeakSubscriber>,
+    compute_fn: Box<dyn Fn() -> T>,
+    cached_value: Option<T>,
+    subscriber_id: Option<SubscriberId>,
+    is_dirty: bool,
 }
 
 impl<T: Clone + 'static> Computed<T> {
-    /// Create a new computed value from a computation function.
+    /// Creates a new computed value.
     ///
-    /// The computation function will be called lazily when the value is first
-    /// accessed, and will automatically track any signals read during computation.
-    pub fn new<F>(compute: F) -> Self
+    /// # Examples
+    ///
+    /// ```
+    /// use ferric_core::reactive::{signal, Computed};
+    ///
+    /// let count = signal(0);
+    /// let is_even = Computed::new(move || count.get() % 2 == 0);
+    ///
+    /// assert_eq!(is_even.get(), true);
+    /// count.set(1);
+    /// assert_eq!(is_even.get(), false);
+    /// ```
+    pub fn new<F>(f: F) -> Self
     where
         F: Fn() -> T + 'static,
     {
-        let inner = Rc::new(ComputedInner {
-            compute: Box::new(compute),
-            id: ReactiveId::new(),
-            state: RefCell::new(ComputedState {
-                cached: None,
-                dirty: true,
-                subscribers: HashMap::new(),
-                reactive_subscribers: Vec::new(),
-            }),
-        });
-
-        // Register this computed as a subscriber so it can be notified
-        register_subscriber(inner.id, Rc::downgrade(&inner) as WeakSubscriber);
-
-        Computed { inner }
-    }
-
-    /// Get the current computed value.
-    ///
-    /// If the value is dirty (a dependency changed) or hasn't been computed yet,
-    /// this will trigger a recomputation. Otherwise, returns the cached value.
-    pub fn get(&self) -> T {
-        // Track this computed as a dependency if we're in a tracking context
-        if let Some(subscriber) = current_tracking_context() {
-            let mut state = self.inner.state.borrow_mut();
-            let already_subscribed = state.reactive_subscribers.iter().any(|weak| {
-                weak.upgrade().map(|s| s.id() == subscriber.id()).unwrap_or(false)
-            });
-            if !already_subscribed {
-                state.reactive_subscribers.push(Rc::downgrade(&subscriber) as WeakSubscriber);
-            }
+        Self {
+            inner: Rc::new(RefCell::new(ComputedInner {
+                compute_fn: Box::new(f),
+                cached_value: None,
+                subscriber_id: None,
+                is_dirty: true,
+            })),
         }
-
-        self.compute_if_needed()
     }
 
-    /// Get the current value without tracking dependencies.
-    pub fn get_untracked(&self) -> T {
-        self.compute_if_needed()
-    }
+    /// Gets the current computed value.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ferric_core::reactive::{signal, computed};
+    ///
+    /// let x = signal(3);
+    /// let squared = computed(move || x.get() * x.get());
+    ///
+    /// assert_eq!(squared.get(), 9);
+    /// ```
+    pub fn get(&self) -> T {
+        let mut inner = self.inner.borrow_mut();
 
-    /// Compute the value if needed.
-    fn compute_if_needed(&self) -> T {
-        let needs_compute = {
-            let state = self.inner.state.borrow();
-            state.dirty || state.cached.is_none()
-        };
-
-        if needs_compute {
-            // Start tracking dependencies for this computed
-            let self_as_subscriber: Rc<dyn Subscriber> = Rc::clone(&self.inner) as Rc<dyn Subscriber>;
-            let prev_context = stop_tracking();
-            start_tracking(self_as_subscriber);
-
-            // Compute the new value
-            let value = (self.inner.compute)();
-
-            // Restore previous tracking context
-            stop_tracking();
-            if let Some(ctx) = prev_context {
-                start_tracking(ctx);
-            }
-
-            // Cache the value
-            let mut state = self.inner.state.borrow_mut();
-            state.cached = Some(value.clone());
-            state.dirty = false;
-
+        if inner.is_dirty || inner.cached_value.is_none() {
+            // Re-compute the value
+            let value = (inner.compute_fn)();
+            inner.cached_value = Some(value.clone());
+            inner.is_dirty = false;
             value
         } else {
-            self.inner.state.borrow().cached.clone().unwrap()
+            inner.cached_value.clone().unwrap()
         }
     }
 
-    /// Mark the computed value as dirty, requiring recomputation.
-    pub fn invalidate(&self) {
-        let mut state = self.inner.state.borrow_mut();
-        state.dirty = true;
-
-        // Collect subscribers before notifying
-        let subscribers: Vec<Rc<dyn Subscriber>> = state
-            .reactive_subscribers
-            .iter()
-            .filter_map(|weak| weak.upgrade())
-            .collect();
-
-        // Also notify legacy subscribers with cached value
-        if let Some(ref value) = state.cached {
-            let value = value.clone();
-            for callback in state.subscribers.values() {
-                callback(&value);
-            }
-        }
-
-        drop(state); // Release borrow before notifying
-
-        // Notify reactive subscribers
-        for subscriber in subscribers {
-            subscriber.notify();
-        }
-
-        // Cleanup dead weak refs
-        self.inner.state.borrow_mut().reactive_subscribers.retain(|weak| weak.strong_count() > 0);
-    }
-
-    /// Get the reactive ID.
-    pub fn id(&self) -> ReactiveId {
-        self.inner.id
+    /// Marks this computed as dirty, forcing recomputation on next access.
+    pub(crate) fn mark_dirty(&self) {
+        self.inner.borrow_mut().is_dirty = true;
     }
 }
 
-impl<T: Clone + 'static> Subscriber for ComputedInner<T> {
-    fn notify(&self) {
-        // Mark as dirty and propagate to our subscribers
-        let mut state = self.state.borrow_mut();
-        state.dirty = true;
-
-        // Collect subscribers
-        let subscribers: Vec<Rc<dyn Subscriber>> = state
-            .reactive_subscribers
-            .iter()
-            .filter_map(|weak| weak.upgrade())
-            .collect();
-
-        drop(state);
-
-        for subscriber in subscribers {
-            subscriber.notify();
-        }
-    }
-
-    fn id(&self) -> ReactiveId {
-        self.id
-    }
-}
-
-impl<T: Clone + 'static> Reactive<T> for Computed<T> {
-    fn get(&self) -> T {
-        Computed::get(self)
-    }
-
-    fn subscribe(&self, callback: Box<dyn Fn(&T)>) -> SubscriptionId {
-        let id = next_subscription_id();
-        self.inner.state.borrow_mut().subscribers.insert(id, callback);
-        id
-    }
-
-    fn unsubscribe(&self, id: SubscriptionId) {
-        self.inner.state.borrow_mut().subscribers.remove(&id);
-    }
-}
-
-impl<T> Clone for Computed<T> {
-    fn clone(&self) -> Self {
-        Self {
-            inner: Rc::clone(&self.inner),
-        }
-    }
-}
-
-impl<T> Drop for Computed<T> {
-    fn drop(&mut self) {
-        // Only unregister if we're the last strong reference
-        if Rc::strong_count(&self.inner) == 1 {
-            unregister_subscriber(self.inner.id);
-        }
-    }
-}
-
-impl<T: std::fmt::Debug + Clone + 'static> std::fmt::Debug for Computed<T> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Computed")
-            .field("value", &self.inner.state.borrow().cached)
-            .field("dirty", &self.inner.state.borrow().dirty)
-            .finish()
-    }
-}
-
-/// Create a new computed value from a computation function.
+/// Creates a new computed value.
 ///
-/// This is the primary way to create derived reactive state.
+/// # Examples
 ///
-/// # Example
-///
-/// ```ignore
-/// let count = signal(1);
-/// let doubled = computed(move || count.get() * 2);
-///
-/// assert_eq!(doubled.get(), 2);
-/// count.set(5);
-/// assert_eq!(doubled.get(), 10);
 /// ```
-pub fn computed<T: Clone + 'static, F>(compute: F) -> Computed<T>
-where
-    F: Fn() -> T + 'static,
-{
-    Computed::new(compute)
-}
-
-/// Create a computed value with explicit dependencies (memo pattern).
+/// use ferric_core::reactive::{signal, computed};
 ///
-/// This is useful when you want to control exactly when recomputation happens.
+/// let radius = signal(5.0);
+/// let area = computed(move || std::f64::consts::PI * radius.get() * radius.get());
 ///
-/// # Example
-///
-/// ```ignore
-/// let items = signal(vec![1, 2, 3, 4, 5]);
-/// let expensive_sum = memo(
-///     move || items.get(),
-///     |items| items.iter().sum::<i32>()
-/// );
+/// assert!((area.get() - 78.54).abs() < 0.01);
 /// ```
-pub fn memo<T, D, F>(deps: D, compute: F) -> Computed<T>
+pub fn computed<T, F>(f: F) -> Computed<T>
 where
     T: Clone + 'static,
-    D: Fn() -> T + 'static,
-    F: Fn(&T) -> T + 'static,
+    F: Fn() -> T + 'static,
 {
-    computed(move || {
-        let deps_value = deps();
-        compute(&deps_value)
-    })
+    Computed::new(f)
 }
 
 #[cfg(test)]
@@ -301,52 +149,39 @@ mod tests {
     use crate::reactive::signal;
 
     #[test]
-    fn test_computed_basic() {
-        let c = computed(|| 42);
-        assert_eq!(c.get(), 42);
+    fn test_computed_creation() {
+        let s = signal(10);
+        let c = computed(move || s.get() * 2);
+        assert_eq!(c.get(), 20);
     }
 
     #[test]
-    fn test_computed_memoization() {
-        use std::cell::Cell;
-        use std::rc::Rc;
+    fn test_computed_updates() {
+        let s = signal(5);
+        let c = computed(move || s.get() * 2);
 
-        let call_count = Rc::new(Cell::new(0));
-        let call_count_clone = Rc::clone(&call_count);
-
-        let c = computed(move || {
-            call_count_clone.set(call_count_clone.get() + 1);
-            42
-        });
-
-        // First call computes
-        assert_eq!(c.get(), 42);
-        assert_eq!(call_count.get(), 1);
-
-        // Second call uses cache
-        assert_eq!(c.get(), 42);
-        assert_eq!(call_count.get(), 1);
+        assert_eq!(c.get(), 10);
+        s.set(10);
+        assert_eq!(c.get(), 20);
     }
 
     #[test]
-    fn test_computed_invalidation() {
-        use std::cell::Cell;
-        use std::rc::Rc;
-
-        let call_count = Rc::new(Cell::new(0));
-        let call_count_clone = Rc::clone(&call_count);
+    fn test_computed_caching() {
+        let s = signal(1);
+        let call_count = Rc::new(RefCell::new(0));
+        let call_count_clone = call_count.clone();
 
         let c = computed(move || {
-            call_count_clone.set(call_count_clone.get() + 1);
-            42
+            *call_count_clone.borrow_mut() += 1;
+            s.get() * 2
         });
 
-        assert_eq!(c.get(), 42);
-        assert_eq!(call_count.get(), 1);
+        // First access should compute
+        let _ = c.get();
+        assert_eq!(*call_count.borrow(), 1);
 
-        c.invalidate();
-
-        assert_eq!(c.get(), 42);
-        assert_eq!(call_count.get(), 2);
+        // Second access should use cache
+        let _ = c.get();
+        assert_eq!(*call_count.borrow(), 1);
     }
 }

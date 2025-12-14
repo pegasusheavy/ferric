@@ -21,11 +21,10 @@ pub fn query_selector_all(selector: &str) -> Vec<web_sys::Element> {
 
     let mut elements = Vec::new();
     for i in 0..node_list.length() {
-        if let Some(element) = node_list.item(i) {
-            if let Ok(el) = element.dyn_into::<web_sys::Element>() {
+        if let Some(element) = node_list.item(i)
+            && let Ok(el) = element.dyn_into::<web_sys::Element>() {
                 elements.push(el);
             }
-        }
     }
     elements
 }
@@ -39,11 +38,10 @@ pub fn query_selector_all_from(parent: &web_sys::Element, selector: &str) -> Vec
 
     let mut elements = Vec::new();
     for i in 0..node_list.length() {
-        if let Some(element) = node_list.item(i) {
-            if let Ok(el) = element.dyn_into::<web_sys::Element>() {
+        if let Some(element) = node_list.item(i)
+            && let Ok(el) = element.dyn_into::<web_sys::Element>() {
                 elements.push(el);
             }
-        }
     }
     elements
 }

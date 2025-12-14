@@ -76,7 +76,7 @@ pub struct SubscriptionId(pub(crate) u64);
 
 // Global subscription counter.
 thread_local! {
-    static NEXT_SUBSCRIPTION_ID: RefCell<u64> = RefCell::new(0);
+    static NEXT_SUBSCRIPTION_ID: RefCell<u64> = const { RefCell::new(0) };
 }
 
 // Generate a new unique subscription ID.

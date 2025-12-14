@@ -7,17 +7,27 @@ members = [
     "ferric-forms-macros",
     "ferric-http",
     "ferric-idb",
+    "ferric-markdown",
     "ferric-ssr",
+    "armature-ferric-ssr",
+    "axum-ferric-ssr",
+    "warp-ferric-ssr",
+    "rocket-ferric-ssr",
+    "poem-ferric-ssr",
     "examples/todo-app",
     "examples/reactivity-demo",
     "examples/ssr-demo",
+    "examples/markdown-demo",
+    "examples/file-transfer-demo",
     "benchmarks/todo-comparison/ferric-todo",
+    "benchmarks/todo-comparison/benchmark-runner",
+    "benchmarks/core-benchmarks",
 ]
 resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 authors = ["Joseph R Quinn"]
 license = "MIT"
 repository = "https://github.com/username/ferric"

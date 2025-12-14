@@ -1,0 +1,81 @@
+# Angular-Like Decorators in Ferric
+
+Ferric provides complete Angular-style decorator support.
+
+## All Available Decorators
+
+### Component & Module
+- `#[component]` - Define components with templates
+- `#[module]` - Organize application structure
+
+### Directives & Pipes
+- `#[directive]` - Add behavior to elements
+- `#[pipe]` - Transform data in templates
+
+### Dependency Injection
+- `#[injectable]` - Mark services as injectable
+- `#[derive(Injectable)]` - Auto-implement Injectable
+
+### Component I/O
+- `#[input]` - Receive data from parent
+- `#[output]` - Emit events to parent
+
+### Host Bindings
+- `#[host_listener]` - Listen to host events
+- `#[host_binding]` - Bind host properties
+
+### View Queries
+- `#[view_child]` - Query single child
+- `#[view_children]` - Query multiple children
+
+### Routing
+- `#[guard]` - Route guards (CanActivate, etc.)
+- `#[resolver]` - Pre-fetch route data
+
+### HTTP
+- `#[interceptor]` - Intercept HTTP requests
+
+## Usage Examples
+
+```rust
+// Complete Angular-like structure
+#[module]
+pub struct AppModule;
+
+#[injectable]
+pub struct UserService;
+
+#[guard]
+pub struct AuthGuard;
+
+#[resolver]
+pub struct UserResolver;
+
+#[interceptor]
+pub struct AuthInterceptor;
+
+#[pipe]
+pub struct UpperCasePipe;
+
+#[directive]
+pub struct HighlightDirective {
+    #[input]
+    color: String,
+}
+
+#[component(
+    selector = "app-user",
+    template = "<div>{{ name | uppercase }}</div>"
+)]
+pub struct UserComponent {
+    #[input]
+    name: String,
+    
+    #[output]
+    selected: EventEmitter<User>,
+    
+    user_service: Arc<UserService>,
+}
+```
+
+Always use these decorators for Angular-like patterns in Ferric.

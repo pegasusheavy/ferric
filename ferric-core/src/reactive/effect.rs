@@ -26,7 +26,6 @@ use super::runtime::{
     register_subscriber, start_tracking, stop_tracking, unregister_subscriber,
     ReactiveId, Subscriber, WeakSubscriber,
 };
-use super::SubscriptionId;
 use std::cell::RefCell;
 use std::rc::Rc;
 

@@ -6,7 +6,6 @@ use super::AbstractControl;
 use ferric_core::reactive::{Signal, signal};
 use std::any::Any;
 use std::cell::RefCell;
-use std::rc::Rc;
 
 /// A single form control with value, validation, and state tracking.
 pub struct FormControl<T: Clone + 'static> {

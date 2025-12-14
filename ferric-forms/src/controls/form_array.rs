@@ -176,7 +176,7 @@ impl AbstractControl for FormArray {
 }
 
 impl ControlContainer for FormArray {
-    fn get(&self, name: &str) -> Option<&dyn AbstractControl> {
+    fn get(&self, _name: &str) -> Option<&dyn AbstractControl> {
         // Parse index from name
         None
     }

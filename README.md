@@ -60,6 +60,20 @@ ferric/
 └── examples/               # Example applications
 ```
 
+## 📚 Documentation
+
+**🌐 [View Full Documentation Website](https://your-username.github.io/ferric/)**
+
+- [Quick Start Guide](docs/QUICK_START.md)
+- [Components Guide](docs/COMPONENTS_GUIDE.md)
+- [HTTP Client Guide](docs/HTTP_CLIENT_GUIDE.md)
+- [Async Support Guide](docs/ASYNC_SUPPORT_GUIDE.md)
+- [DI Architecture](docs/DI_ARCHITECTURE.md)
+- [File Transfer Guide](docs/FILE_TRANSFER_GUIDE.md)
+- [Macros Reference](docs/MACROS_QUICK_REFERENCE.md)
+- [Decorators Guide](docs/ANGULAR_DECORATORS_GUIDE.md)
+- [Benchmarking Guide](docs/BENCHMARKING_GUIDE.md)
+
 ## Getting Started
 
 ### Prerequisites
@@ -452,6 +466,31 @@ let routes = vec![
 let router = Router::new(routes);
 router.navigate("/users/123")?;
 ```
+
+## 🚀 Performance
+
+**⚡ [View Live Benchmarks](https://your-username.github.io/ferric/benchmarks.html)**
+
+Ferric demonstrates significant performance advantages over React:
+- **41.2% faster** on average for TodoMVC operations
+- Smaller bundle sizes with WebAssembly
+- Zero-cost abstractions from Rust
+- Fine-grained reactivity without VDOM overhead
+
+[Run benchmarks in your browser →](https://your-username.github.io/ferric/run-benchmarks.html)
+
+## Documentation
+
+**🌐 [View Full Documentation Website](https://your-username.github.io/ferric/docs.html)**
+
+Comprehensive guides and API documentation are available in the [`docs/`](./docs) directory:
+
+- [**Async Support Guide**](./docs/ASYNC_SUPPORT_GUIDE.md) - Promises, futures, and async patterns
+- [**Angular Decorators Guide**](./docs/ANGULAR_DECORATORS_GUIDE.md) - Using Angular-like decorators
+- [**Macros Quick Reference**](./docs/MACROS_QUICK_REFERENCE.md) - Quick reference for all macros
+- [**Macros Summary**](./docs/MACROS_SUMMARY.md) - Detailed macro documentation
+
+View the full documentation website at: **[https://pegasusheavy.github.io/ferric/](https://pegasusheavy.github.io/ferric/)**
 
 ## License
 

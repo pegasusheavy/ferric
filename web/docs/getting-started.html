@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Ferric</title>
+    <link rel="stylesheet" href="../styles/docs.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <a href="../docs.html">← Back to Docs</a>
+        <h3>Getting Started</h3>
+        <ul>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#first-app">Your First App</a></li>
+            <li><a href="#project-structure">Project Structure</a></li>
+            <li><a href="#next-steps">Next Steps</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <h1>🚀 Getting Started with Ferric</h1>
+
+        <section id="installation">
+            <h2>Installation</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Rust 1.75+ (<code>rustup update</code>)</li>
+                <li>wasm-pack (<code>cargo install wasm-pack</code>)</li>
+                <li>Node.js 18+ (for development server)</li>
+            </ul>
+
+            <h3>Install Ferric CLI</h3>
+            <pre><code>cargo install ferric-cli</code></pre>
+
+            <h3>Create a New Project</h3>
+            <pre><code>ferric new my-app
+cd my-app</code></pre>
+
+            <h3>Run Development Server</h3>
+            <pre><code>ferric serve</code></pre>
+
+            <p>Your app will be available at <code>http://localhost:8080</code></p>
+        </section>
+
+        <section id="first-app">
+            <h2>Your First App</h2>
+
+            <h3>Create a Component</h3>
+            <pre><code>use ferric::prelude::*;
+
+#[component(selector = "app-root")]
+struct AppComponent {
+    count: Signal&lt;i32&gt;,
+}
+
+impl Injectable for AppComponent {
+    fn create(_injector: &Injector) -> Self {
+        Self {
+            count: signal(0),
+        }
+    }
+}
+
+impl AppComponent {
+    fn increment(&self) {
+        self.count.update(|n| *n += 1);
+    }
+}
+
+impl Component for AppComponent {
+    fn template(&self) -> String {
+        html! {
+            &lt;div&gt;
+                &lt;h1&gt;Count: {self.count.get()}&lt;/h1&gt;
+                &lt;button (click)="increment()"&gt;Increment&lt;/button&gt;
+            &lt;/div&gt;
+        }
+    }
+}</code></pre>
+
+            <h3>Bootstrap the App</h3>
+            <pre><code>use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen(start)]
+pub fn main() {
+    let injector = Injector::root();
+    let app = injector.resolve::&lt;AppComponent&gt;().unwrap();
+    app.mount("#app");
+}</code></pre>
+        </section>
+
+        <section id="project-structure">
+            <h2>Project Structure</h2>
+
+            <pre><code>my-app/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs           # Entry point
+│   ├── app/
+│   │   ├── mod.rs       # App module
+│   │   └── component.rs # App component
+│   ├── components/      # Reusable components
+│   ├── services/        # Injectable services
+│   └── models/          # Data models
+├── public/
+│   ├── index.html
+│   └── assets/
+└── tests/</code></pre>
+        </section>
+
+        <section id="next-steps">
+            <h2>Next Steps</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>📚 Learn Core Concepts</h3>
+                    <p>Understand signals, components, and dependency injection</p>
+                    <a href="architecture.html">Read More →</a>
+                </div>
+
+                <div class="card">
+                    <h3>🎨 Build Components</h3>
+                    <p>Create reusable UI components with templates</p>
+                    <a href="components.html">Read More →</a>
+                </div>
+
+                <div class="card">
+                    <h3>🛣️ Add Routing</h3>
+                    <p>Set up client-side navigation</p>
+                    <a href="router.html">Read More →</a>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Create Forms</h3>
+                    <p>Build reactive forms with validation</p>
+                    <a href="forms.html">Read More →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2d3748;
+            color: white;
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            color: #90cdf4;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar a:hover {
+            color: #63b3ed;
+        }
+
+        .sidebar h3 {
+            margin: 1.5rem 0 1rem 0;
+            color: #e2e8f0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 3rem;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #4a5568;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        code {
+            background: #f7fafc;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: #e53e3e;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</body>
+</html>
+

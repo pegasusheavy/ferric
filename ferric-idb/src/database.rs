@@ -154,7 +154,7 @@ pub struct UpgradeContext {
 
 impl UpgradeContext {
     /// Create an object store builder.
-    pub fn create_object_store(&self, name: &str) -> ObjectStoreBuilder {
+    pub fn create_object_store(&self, name: &str) -> ObjectStoreBuilder<'_> {
         ObjectStoreBuilder::new(&self.db, name)
     }
 

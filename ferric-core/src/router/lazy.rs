@@ -88,8 +88,10 @@ pub type LazyLoadResult<T> = Result<T, LazyLoadError>;
 
 /// The current state of a lazy-loaded module.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Default)]
 pub enum LoadState {
     /// Module has not been loaded yet.
+    #[default]
     NotLoaded,
     /// Module is currently loading.
     Loading,
@@ -99,11 +101,6 @@ pub enum LoadState {
     Error(String),
 }
 
-impl Default for LoadState {
-    fn default() -> Self {
-        LoadState::NotLoaded
-    }
-}
 
 /// A handle to a lazily-loaded route module.
 #[derive(Clone)]
@@ -345,7 +342,7 @@ impl LazyRouteModule {
         // Parse children recursively
         let children = js_sys::Reflect::get(value, &JsValue::from_str("children"))
             .ok()
-            .filter(|v| js_sys::Array::is_array(v))
+            .filter(js_sys::Array::is_array)
             .map(|v| self.parse_routes_from_js(&v))
             .transpose()?
             .unwrap_or_default();
@@ -438,11 +435,10 @@ impl LazyModuleRegistry {
         let paths: Vec<String> = self.modules.borrow().keys().cloned().collect();
 
         for path in paths {
-            if let Some(module) = self.get(&path) {
-                if !module.is_loaded() && self.should_preload(&path) {
+            if let Some(module) = self.get(&path)
+                && !module.is_loaded() && self.should_preload(&path) {
                     results.push(module.load().await);
                 }
-            }
         }
 
         results

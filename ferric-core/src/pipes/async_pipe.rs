@@ -15,8 +15,10 @@ fn next_async_id() -> u64 {
 
 /// State of an async value.
 #[derive(Debug, Clone, PartialEq)]
+#[derive(Default)]
 pub enum AsyncState<T> {
     /// Initial state, no value yet.
+    #[default]
     Initial,
     /// Loading/pending state.
     Pending,
@@ -69,11 +71,6 @@ impl<T> AsyncState<T> {
     }
 }
 
-impl<T: Default> Default for AsyncState<T> {
-    fn default() -> Self {
-        AsyncState::Initial
-    }
-}
 
 impl<T: ToString> AsyncState<T> {
     /// Convert to a display string with optional loading text.
@@ -252,8 +249,8 @@ impl Pipe for AsyncPipe {
             return cached;
         }
 
-        if let Ok(state) = serde_json::from_str::<serde_json::Value>(value) {
-            if let Some(obj) = state.as_object() {
+        if let Ok(state) = serde_json::from_str::<serde_json::Value>(value)
+            && let Some(obj) = state.as_object() {
                 if let Some(state_type) = obj.get("state").and_then(|s| s.as_str()) {
                     match state_type {
                         "pending" | "loading" => return loading_text.to_string(),
@@ -300,7 +297,6 @@ impl Pipe for AsyncPipe {
                     };
                 }
             }
-        }
 
         value.to_string()
     }

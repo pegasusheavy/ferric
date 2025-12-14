@@ -5,8 +5,10 @@ use std::rc::Rc;
 
 /// Status of a form control.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum ControlStatus {
     /// The control is valid.
+    #[default]
     Valid,
     /// The control is invalid.
     Invalid,
@@ -16,11 +18,6 @@ pub enum ControlStatus {
     Disabled,
 }
 
-impl Default for ControlStatus {
-    fn default() -> Self {
-        Self::Valid
-    }
-}
 
 /// State tracking for form controls.
 #[derive(Debug, Clone)]

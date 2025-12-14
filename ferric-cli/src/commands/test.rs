@@ -44,14 +44,13 @@ async fn run_once(filter: Option<String>) -> Result<()> {
         .args(["test", "--headless", "--chrome"])
         .status();
 
-    if let Ok(status) = wasm_status {
-        if !status.success() {
+    if let Ok(status) = wasm_status
+        && !status.success() {
             println!(
                 "  {} WASM tests failed or wasm-pack not available",
                 style("!").yellow()
             );
         }
-    }
 
     println!(
         "{} Tests complete!",

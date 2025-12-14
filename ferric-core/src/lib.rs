@@ -44,6 +44,7 @@ pub mod devtools;
 pub mod di;
 pub mod directives;
 pub mod dom;
+pub mod framework_config;
 pub mod hydration;
 pub mod i18n;
 pub mod lifecycle;
@@ -54,6 +55,9 @@ pub mod router;
 pub mod template;
 pub mod testing;
 mod utils;
+
+// Async support
+pub mod async_support;
 
 // Re-export macros from ferric_macros
 pub use ferric_macros::{
@@ -92,6 +96,7 @@ pub use di::{
     // Resolution modifiers
     Optional, Self_, SkipSelf, Host, Resolve, ResolutionOptions,
 };
+pub use framework_config::{FrameworkConfig, CoreModule, tokens as config_tokens};
 pub use directives::{
     AttributeDirective, HostBinding, StructuralDirective,
     // Switch directive

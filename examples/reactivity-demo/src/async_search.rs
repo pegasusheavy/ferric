@@ -98,11 +98,10 @@ impl AsyncSearchDemo {
         if let Some(input) = container.query_selector("#search-input").ok().flatten() {
             let query = query.clone();
             let closure = Closure::wrap(Box::new(move |e: web_sys::Event| {
-                if let Some(target) = e.target() {
-                    if let Ok(input) = target.dyn_into::<web_sys::HtmlInputElement>() {
+                if let Some(target) = e.target()
+                    && let Ok(input) = target.dyn_into::<web_sys::HtmlInputElement>() {
                         query.set(input.value());
                     }
-                }
             }) as Box<dyn Fn(_)>);
 
             let _ = input.add_event_listener_with_callback("input", closure.as_ref().unchecked_ref());
@@ -119,11 +118,10 @@ impl AsyncSearchDemo {
         let debounce_effect = effect(move || {
             let q = query_for_debounce.get();
 
-            if let Some(id) = timeout_id_clone.borrow_mut().take() {
-                if let Some(window) = web_sys::window() {
+            if let Some(id) = timeout_id_clone.borrow_mut().take()
+                && let Some(window) = web_sys::window() {
                     window.clear_timeout_with_handle(id);
                 }
-            }
 
             if let Some(el) = container_for_debounce.query_selector("#debounce-indicator").ok().flatten() {
                 if !q.is_empty() {
@@ -146,14 +144,13 @@ impl AsyncSearchDemo {
                 }
             }) as Box<dyn FnOnce()>);
 
-            if let Some(window) = web_sys::window() {
-                if let Ok(id) = window.set_timeout_with_callback_and_timeout_and_arguments_0(
+            if let Some(window) = web_sys::window()
+                && let Ok(id) = window.set_timeout_with_callback_and_timeout_and_arguments_0(
                     closure.as_ref().unchecked_ref(),
                     300,
                 ) {
                     *timeout_id_clone.borrow_mut() = Some(id);
                 }
-            }
 
             closure.forget();
         });

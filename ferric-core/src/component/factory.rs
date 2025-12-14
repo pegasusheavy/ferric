@@ -234,7 +234,6 @@ impl Default for ComponentFactory {
     }
 }
 
-use std::sync::OnceLock;
 
 /// Global component factory instance (thread-local for WASM).
 thread_local! {

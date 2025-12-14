@@ -257,8 +257,8 @@ impl ShoppingCartDemo {
             let container = container.clone();
 
             let closure = Closure::wrap(Box::new(move |_: web_sys::Event| {
-                if let Some(input) = container.query_selector("#discount-input").ok().flatten() {
-                    if let Ok(input) = input.dyn_into::<web_sys::HtmlInputElement>() {
+                if let Some(input) = container.query_selector("#discount-input").ok().flatten()
+                    && let Ok(input) = input.dyn_into::<web_sys::HtmlInputElement>() {
                         let code = input.value().trim().to_string();
                         if code.is_empty() {
                             discount_code.set(None);
@@ -266,7 +266,6 @@ impl ShoppingCartDemo {
                             discount_code.set(Some(code));
                         }
                     }
-                }
             }) as Box<dyn Fn(_)>);
 
             let _ = button.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref());

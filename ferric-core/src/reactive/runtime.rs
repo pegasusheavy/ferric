@@ -118,7 +118,7 @@ pub fn start_batch() {
 /// End a batch and flush pending notifications.
 pub fn end_batch() {
     // Get pending notifications and subscribers while holding borrow
-    let (pending, subscribers_to_notify): (Vec<ReactiveId>, Vec<Rc<dyn Subscriber>>) = RUNTIME.with(|rt| {
+    let (_pending, subscribers_to_notify): (Vec<ReactiveId>, Vec<Rc<dyn Subscriber>>) = RUNTIME.with(|rt| {
         let mut rt = rt.borrow_mut();
         rt.batching = false;
 
@@ -129,12 +129,11 @@ pub fn end_batch() {
         let mut to_notify = Vec::new();
         for id in &pending {
             for (sub_id, weak_sub) in &rt.subscribers {
-                if *sub_id == *id {
-                    if let Some(subscriber) = weak_sub.upgrade() {
+                if *sub_id == *id
+                    && let Some(subscriber) = weak_sub.upgrade() {
                         to_notify.push(subscriber);
                         break;
                     }
-                }
             }
         }
 
@@ -160,13 +159,12 @@ pub fn queue_notification(id: ReactiveId) {
         } else {
             // Find and notify immediately
             for (sub_id, weak_sub) in &rt_ref.subscribers {
-                if *sub_id == id {
-                    if let Some(subscriber) = weak_sub.upgrade() {
+                if *sub_id == id
+                    && let Some(subscriber) = weak_sub.upgrade() {
                         drop(rt_ref);
                         subscriber.notify();
                         return;
                     }
-                }
             }
         }
     });

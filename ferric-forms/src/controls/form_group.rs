@@ -23,7 +23,7 @@
 use crate::state::{ControlStatus, FormState};
 use crate::validators::{ValidationErrors, CrossFieldValidatorTrait};
 use crate::binding::UpdateOn;
-use super::{AbstractControl, ControlContainer, FormControl, FormArray};
+use super::{AbstractControl, ControlContainer};
 use std::any::Any;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -104,10 +104,10 @@ impl FormGroup {
 
     /// Get the raw value as a HashMap of Any values.
     pub fn value(&self) -> HashMap<String, Box<dyn Any>> {
-        let values = HashMap::new();
+        
         // Note: This is a simplified implementation
         // A real implementation would extract typed values
-        values
+        HashMap::new()
     }
 
     /// Patch multiple values at once.
@@ -297,7 +297,7 @@ impl AbstractControl for FormGroup {
 }
 
 impl ControlContainer for FormGroup {
-    fn get(&self, name: &str) -> Option<&dyn AbstractControl> {
+    fn get(&self, _name: &str) -> Option<&dyn AbstractControl> {
         // Note: This is tricky due to RefCell - returning reference is complex
         // In practice, you'd use get_control() which returns Rc
         None

@@ -1,0 +1,100 @@
+# Update GitHub Pages with Documentation
+
+**When creating or updating documentation, update the GitHub Pages website.**
+
+## When Documentation Changes
+
+After creating or updating any documentation file in `docs/`, you must:
+
+1. **Check if the doc is linked** in the website navigation
+2. **Update the website content** if needed
+3. **Mention it to the user** so they can deploy updates
+
+## GitHub Pages Website Location
+
+The project uses GitHub Pages for documentation hosting:
+- Website source: `web/` directory (if Angular/React app exists)
+- Or: `docs/` may be served directly via GitHub Pages
+- Live site: `https://pegasusheavy.github.io/ferric/` (or similar)
+
+## What to Update
+
+### When Adding New Guides
+
+1. **Link from main docs page** - Add to index/navigation
+2. **Update navigation menu** - If website has custom nav
+3. **Add to README** - Link from main README.md
+4. **Create entry point** - Ensure discoverability
+
+### When Updating Existing Docs
+
+1. **Verify links still work** - Check internal references
+2. **Update TOC** - If table of contents exists
+3. **Check cross-references** - Other docs linking to this one
+
+## Deployment Process
+
+### If using `web/` directory (Angular app):
+
+```bash
+cd web
+pnpm install
+pnpm run build
+# Deploys to gh-pages branch automatically
+```
+
+### If using docs/ directly:
+
+```bash
+# GitHub Pages serves from docs/ folder
+# Commit and push changes:
+git add docs/
+git commit -m "docs: add/update documentation"
+git push origin main
+```
+
+## Reminder Template
+
+After creating/updating docs, tell the user:
+
+```
+📚 Documentation updated: docs/FILENAME.md
+
+To update the GitHub Pages website:
+- [If Angular app] Run: cd web && pnpm run build
+- [If direct docs/] Commit and push docs/ changes
+- Verify at: https://pegasusheavy.github.io/ferric/
+```
+
+## Documentation Checklist
+
+When adding new documentation:
+- [ ] File created in `docs/` folder
+- [ ] Linked from README.md or docs index
+- [ ] Added to website navigation (if applicable)
+- [ ] Cross-references updated
+- [ ] User informed about deployment
+
+## Examples
+
+### Good Practice
+```
+✅ Created docs/ASYNC_GUIDE.md
+✅ Added link to README.md
+✅ Updated web/src/app/docs/docs.component.ts navigation
+✅ Told user to rebuild website
+```
+
+### Missing Steps
+```
+❌ Created GUIDE.md (wrong location)
+❌ No link in README
+❌ User not informed about deployment
+```
+
+## Important
+
+- **Always inform the user** when documentation is added/updated
+- **Provide deployment instructions** specific to their setup
+- **Check for existing navigation structure** before updating
+- **Keep docs/ in sync with website** for consistency

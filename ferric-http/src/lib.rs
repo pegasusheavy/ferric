@@ -89,6 +89,7 @@
 
 mod body;
 mod client;
+mod di;
 mod error;
 mod headers;
 mod method;
@@ -97,9 +98,11 @@ mod response;
 
 // New modules
 mod cancel;
+mod download;
 mod interceptor;
 mod progress;
 mod retry;
+mod upload;
 
 // Platform-specific implementations
 #[cfg(target_arch = "wasm32")]
@@ -111,6 +114,7 @@ mod reqwest_impl;
 // Re-exports
 pub use body::Body;
 pub use client::{Client, ClientBuilder, RequestHandle};
+pub use di::{HttpClient, HttpClientFactory, HttpModule, provide_http_client, tokens as http_tokens};
 pub use error::{Error, Result};
 pub use headers::Headers;
 pub use method::Method;
@@ -130,6 +134,17 @@ pub use interceptor::{
 // Progress tracking
 pub use progress::{
     Progress, ProgressInfo, ProgressCallback, ProgressTracker, ProgressEvent,
+};
+
+// File uploads
+pub use upload::{
+    FileUpload, UploadProgress, UploadStage, UploadManager, UploadProgressCallback,
+};
+
+// File downloads
+pub use download::{
+    FileDownload, DownloadProgress, DownloadStage, DownloadManager,
+    DownloadStats, DownloadProgressCallback,
 };
 
 // Cancellation

@@ -369,7 +369,7 @@ pub struct ProviderOverride {
 
 impl ProviderOverride {
     /// Create a provider override with a value.
-    pub fn value<T: 'static>(value: T) -> Self {
+    pub fn value<T: 'static>(_value: T) -> Self {
         let type_id = TypeId::of::<T>();
         Self {
             type_id,

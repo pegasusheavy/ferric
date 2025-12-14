@@ -347,8 +347,7 @@ pub fn extract_params(pattern: &str, url: &str) -> Option<HashMap<String, String
     let mut params = HashMap::new();
 
     for (i, pattern_part) in pattern_parts.iter().enumerate() {
-        if pattern_part.starts_with(':') {
-            let param_name = &pattern_part[1..];
+        if let Some(param_name) = pattern_part.strip_prefix(':') {
             if let Some(value) = url_parts.get(i) {
                 params.insert(param_name.to_string(), url_decode(value));
             } else {

@@ -65,12 +65,11 @@ impl TimerDemo {
             let running = is_running_for_effect.get();
             let interval_ref = Rc::clone(&interval_id_clone);
 
-            if let Some(id) = interval_ref.borrow_mut().take() {
-                if let Some(window) = web_sys::window() {
+            if let Some(id) = interval_ref.borrow_mut().take()
+                && let Some(window) = web_sys::window() {
                     window.clear_interval_with_handle(id);
                     console::log_1(&"Counter interval cleared".into());
                 }
-            }
 
             if running {
                 let counter = counter_for_interval.clone();
@@ -80,15 +79,14 @@ impl TimerDemo {
                     counter.set(current + 1);
                 }) as Box<dyn Fn()>);
 
-                if let Some(window) = web_sys::window() {
-                    if let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
+                if let Some(window) = web_sys::window()
+                    && let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
                         closure.as_ref().unchecked_ref(),
                         1000,
                     ) {
                         *interval_ref.borrow_mut() = Some(id);
                         console::log_1(&"Counter interval started".into());
                     }
-                }
 
                 closure.forget();
             }
@@ -128,11 +126,10 @@ impl TimerDemo {
             let running = stopwatch_running_for_effect.get();
             let interval_ref = Rc::clone(&stopwatch_interval_clone);
 
-            if let Some(id) = interval_ref.borrow_mut().take() {
-                if let Some(window) = web_sys::window() {
+            if let Some(id) = interval_ref.borrow_mut().take()
+                && let Some(window) = web_sys::window() {
                     window.clear_interval_with_handle(id);
                 }
-            }
 
             if running {
                 let ms = stopwatch_ms_for_interval.clone();
@@ -142,14 +139,13 @@ impl TimerDemo {
                     ms.set(current + 10);
                 }) as Box<dyn Fn()>);
 
-                if let Some(window) = web_sys::window() {
-                    if let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
+                if let Some(window) = web_sys::window()
+                    && let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
                         closure.as_ref().unchecked_ref(),
                         10,
                     ) {
                         *interval_ref.borrow_mut() = Some(id);
                     }
-                }
 
                 closure.forget();
             }
@@ -240,11 +236,10 @@ impl TimerDemo {
             let running = countdown_running_for_effect.get();
             let interval_ref = Rc::clone(&countdown_interval_clone);
 
-            if let Some(id) = interval_ref.borrow_mut().take() {
-                if let Some(window) = web_sys::window() {
+            if let Some(id) = interval_ref.borrow_mut().take()
+                && let Some(window) = web_sys::window() {
                     window.clear_interval_with_handle(id);
                 }
-            }
 
             if running {
                 let cd = countdown_for_interval.clone();
@@ -260,14 +255,13 @@ impl TimerDemo {
                     }
                 }) as Box<dyn Fn()>);
 
-                if let Some(window) = web_sys::window() {
-                    if let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
+                if let Some(window) = web_sys::window()
+                    && let Ok(id) = window.set_interval_with_callback_and_timeout_and_arguments_0(
                         closure.as_ref().unchecked_ref(),
                         1000,
                     ) {
                         *interval_ref.borrow_mut() = Some(id);
                     }
-                }
 
                 closure.forget();
             }

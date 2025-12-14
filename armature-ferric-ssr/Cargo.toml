@@ -1,0 +1,40 @@
+[package]
+name = "armature-ferric-ssr"
+version = "0.1.0"
+edition = "2024"
+authors = ["Joseph R. Quinn <quinn.josephr@protonmail.com>"]
+license = "Apache-2.0"
+description = "Ferric SSR integration for Armature-style frameworks"
+keywords = ["ssr", "server-side-rendering", "ferric", "web", "hyper"]
+categories = ["web-programming", "web-programming::http-server"]
+repository = "https://github.com/pegasusheavy/armature"
+
+[dependencies]
+# Ferric SSR integration
+ferric-ssr = { path = "../ferric-ssr" }
+ferric-core = { path = "../ferric-core" }
+
+# HTTP server
+hyper = { version = "1.5", features = ["full"] }
+hyper-util = { version = "0.1", features = ["full"] }
+http-body-util = "0.1"
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async traits
+async-trait = "0.1"
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Utilities
+bytes = "1.8"
+futures = "0.3"
+
+[dev-dependencies]
+tokio-test = "0.4"
+

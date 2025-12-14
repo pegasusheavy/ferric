@@ -1,56 +1,56 @@
 [package]
-name = "ferric-docs"
+name = "ferric-docs-site"
 version = "0.1.0"
-edition = "2021"
-description = "Ferric Framework Documentation Website"
-authors = ["Ferric Contributors"]
+edition = "2024"
+authors = ["Joseph R Quinn"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 ferric-core = { path = "../ferric-core" }
-ferric_macros = { path = "../ferric-macros" }
+ferric-macros = { path = "../ferric-macros" }
+ferric-forms = { path = "../ferric-forms" }
+ferric-http = { path = "../ferric-http" }
+ferric-markdown = { path = "../ferric-markdown" }
+
+# Wasm bindings
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 web-sys = { version = "0.3", features = [
     "console",
-    "Document",
-    "Element",
-    "HtmlElement",
-    "HtmlAnchorElement",
-    "HtmlInputElement",
-    "HtmlTextAreaElement",
-    "HtmlStyleElement",
-    "HtmlHeadElement",
-    "HtmlButtonElement",
-    "Node",
-    "NodeList",
     "Window",
-    "Location",
-    "History",
+    "Document",
+    "HtmlElement",
+    "Element",
+    "Node",
+    "Text",
     "Event",
     "EventTarget",
     "MouseEvent",
     "KeyboardEvent",
     "InputEvent",
-    "ScrollBehavior",
-    "ScrollToOptions",
-    "DomTokenList",
-    "CssStyleDeclaration",
-    "MediaQueryList",
-    "Storage",
+    "HtmlInputElement",
+    "HtmlTextAreaElement",
+    "HtmlButtonElement",
+    "Location",
+    "History",
 ] }
 js-sys = "0.3"
-console_error_panic_hook = "0.1"
+
+# Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-gloo-timers = "0.3"
-gloo-utils = "0.2"
+serde-wasm-bindgen = "0.6"
+
+# Utilities
+console_error_panic_hook = "0.1"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
 
 [profile.release]
-opt-level = "s"
+opt-level = "z"
 lto = true
+codegen-units = 1
+panic = "abort"

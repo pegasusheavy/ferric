@@ -1,0 +1,41 @@
+[package]
+name = "ferric-markdown"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Client-side markdown to HTML compilation for Ferric framework"
+keywords = ["markdown", "wasm", "html", "parser"]
+categories = ["wasm", "web-programming", "text-processing"]
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+ferric-core = { path = "../ferric-core" }
+
+# Markdown parsing - works on WASM
+pulldown-cmark = "0.12"
+
+# HTML sanitization
+ammonia = "4.0"
+
+# Syntax highlighting support (optional)
+syntect = { version = "5.2", optional = true, default-features = false, features = ["parsing", "html"] }
+
+# WASM dependencies
+wasm-bindgen = { workspace = true }
+web-sys = { workspace = true, features = ["Document", "Element", "Node", "HtmlElement"] }
+
+# Serialization for configuration
+serde = { workspace = true, features = ["derive"] }
+
+[features]
+default = []
+syntax-highlighting = ["syntect"]
+unsafe-html = [] # Allow rendering unsafe HTML (not recommended)
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+

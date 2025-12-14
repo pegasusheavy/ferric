@@ -141,7 +141,7 @@ impl StyleEncapsulator {
                     result.push(c);
                     result.push(chars.next().unwrap());
                     let mut prev = ' ';
-                    while let Some(c) = chars.next() {
+                    for c in chars.by_ref() {
                         result.push(c);
                         if prev == '*' && c == '/' {
                             break;
@@ -159,11 +159,10 @@ impl StyleEncapsulator {
                         if c == quote {
                             break;
                         }
-                        if c == '\\' {
-                            if let Some(escaped) = chars.next() {
+                        if c == '\\'
+                            && let Some(escaped) = chars.next() {
                                 result.push(escaped);
                             }
-                        }
                     }
                 }
 
@@ -270,7 +269,7 @@ impl StyleEncapsulator {
         let mut chars = selector.chars().peekable();
         let mut in_brackets = 0;
 
-        while let Some(c) = chars.next() {
+        for c in chars {
             match c {
                 '[' => {
                     in_brackets += 1;
@@ -436,7 +435,7 @@ impl TemplateEncapsulator {
                     if skip_tags.contains(&tag_name.to_lowercase().as_str()) {
                         tag_content.push(c);
                         // Just pass through the rest
-                        while let Some(c) = chars.next() {
+                        for c in chars.by_ref() {
                             tag_content.push(c);
                             if c == '>' {
                                 break;

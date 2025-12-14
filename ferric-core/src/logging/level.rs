@@ -2,12 +2,14 @@
 
 /// Log level severity.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Default)]
 pub enum Level {
     /// Trace level - most verbose.
     Trace,
     /// Debug level.
     Debug,
     /// Info level.
+    #[default]
     Info,
     /// Warning level.
     Warn,
@@ -15,11 +17,6 @@ pub enum Level {
     Error,
 }
 
-impl Default for Level {
-    fn default() -> Self {
-        Level::Info
-    }
-}
 
 impl std::fmt::Display for Level {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

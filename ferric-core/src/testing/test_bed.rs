@@ -257,12 +257,12 @@ impl<T: 'static> ComponentFixture<T> {
     }
 
     /// Get a reference to the component instance.
-    pub fn component(&self) -> std::cell::Ref<Option<T>> {
+    pub fn component(&self) -> std::cell::Ref<'_, Option<T>> {
         self.component.borrow()
     }
 
     /// Get a mutable reference to the component instance.
-    pub fn component_mut(&self) -> std::cell::RefMut<Option<T>> {
+    pub fn component_mut(&self) -> std::cell::RefMut<'_, Option<T>> {
         self.component.borrow_mut()
     }
 
@@ -316,7 +316,7 @@ impl<T: 'static> ComponentFixture<T> {
     }
 
     /// Query for all elements matching a selector.
-    pub fn query_all(&self, selector: &str) -> Vec<QueryResult> {
+    pub fn query_all(&self, _selector: &str) -> Vec<QueryResult> {
         // In a real implementation, this would query the DOM
         Vec::new()
     }
@@ -472,7 +472,7 @@ impl DebugElement {
     }
 
     /// Query for all matching child elements.
-    pub fn query_all(&self, selector: &str) -> Vec<QueryResult> {
+    pub fn query_all(&self, _selector: &str) -> Vec<QueryResult> {
         Vec::new()
     }
 
@@ -545,7 +545,7 @@ impl QueryResult {
     }
 
     /// Set input value.
-    pub fn set_value(&self, value: &str) {
+    pub fn set_value(&self, _value: &str) {
         // Set input value and dispatch input event
     }
 
@@ -565,7 +565,7 @@ impl QueryResult {
     }
 
     /// Dispatch a custom event.
-    pub fn dispatch_event(&self, event_name: &str) {
+    pub fn dispatch_event(&self, _event_name: &str) {
         // Dispatch event
     }
 }

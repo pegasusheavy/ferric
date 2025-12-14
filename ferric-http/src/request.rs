@@ -229,11 +229,10 @@ impl RequestBuilder {
         };
 
         // Set Content-Type based on body if not already set
-        if let Some(ct) = request.body.content_type() {
-            if !request.headers.contains("content-type") {
+        if let Some(ct) = request.body.content_type()
+            && !request.headers.contains("content-type") {
                 request.headers.content_type(ct);
             }
-        }
 
         Ok(request)
     }

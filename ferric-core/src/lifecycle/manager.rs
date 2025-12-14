@@ -114,11 +114,10 @@ impl LifecycleManager {
         let component = ManagedComponent::new(id, parent);
 
         // Add as child to parent
-        if let Some(parent_id) = parent {
-            if let Some(parent_comp) = self.components.borrow_mut().get_mut(&parent_id) {
+        if let Some(parent_id) = parent
+            && let Some(parent_comp) = self.components.borrow_mut().get_mut(&parent_id) {
                 parent_comp.children.push(id);
             }
-        }
 
         self.components.borrow_mut().insert(id, component);
         self.init_queue.borrow_mut().push(id);
@@ -222,7 +221,7 @@ impl LifecycleManager {
         }
 
         // First destroy all children
-        let children: Vec<ComponentId> = self
+        let _children: Vec<ComponentId> = self
             .components
             .borrow()
             .get(&id)
@@ -245,11 +244,10 @@ impl LifecycleManager {
         self.transition(id, LifecycleState::Destroyed)?;
 
         // Remove from parent's children list
-        if let Some(parent_id) = self.components.borrow().get(&id).and_then(|c| c.parent) {
-            if let Some(parent) = self.components.borrow_mut().get_mut(&parent_id) {
+        if let Some(parent_id) = self.components.borrow().get(&id).and_then(|c| c.parent)
+            && let Some(parent) = self.components.borrow_mut().get_mut(&parent_id) {
                 parent.children.retain(|child_id| *child_id != id);
             }
-        }
 
         // Remove the component
         self.components.borrow_mut().remove(&id);

@@ -20,7 +20,7 @@
 //!     .await?;
 //! ```
 
-use crate::{Error, Request, Response, Result};
+use crate::{Error, Response};
 use std::fmt;
 use std::time::Duration;
 

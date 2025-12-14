@@ -358,7 +358,7 @@ fn parse_html(html: &str) -> DomNode {
 
         // Split tag name and attributes
         let parts: Vec<&str> = tag_content.split_whitespace().collect();
-        let tag = parts.first().map(|s| *s).unwrap_or("div");
+        let tag = parts.first().copied().unwrap_or("div");
 
         let mut node = DomNode::element(tag);
 

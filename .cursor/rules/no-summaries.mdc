@@ -1,0 +1,26 @@
+# No Summary Documents
+
+**Do NOT create summary documents unless explicitly requested.**
+
+## What NOT to Create
+
+- ❌ IMPLEMENTATION_SUMMARY.md
+- ❌ SUMMARY.md
+- ❌ *_SUMMARY.md files
+- ❌ CHANGELOG.md (unless specifically asked)
+- ❌ Post-implementation summaries
+- ❌ Achievement/statistics documents
+
+## What IS Okay
+
+- ✅ Technical documentation (guides, API docs)
+- ✅ README.md files for new modules/features
+- ✅ Architecture documentation
+- ✅ Usage examples and tutorials
+- ✅ Quick reference cards
+
+## Rule
+
+After completing a task, **respond with results only**. Do not create summary documents to recap what was done unless the user specifically requests a summary.
+
+If user says "don't create summaries" or similar, remember this preference and never create them.

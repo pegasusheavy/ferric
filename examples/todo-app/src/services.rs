@@ -25,11 +25,10 @@ impl TodoStorage {
 
     /// Save todos to localStorage.
     pub fn save(todos: &[Todo]) {
-        if let Some(storage) = Self::storage() {
-            if let Ok(json) = serde_json::to_string(todos) {
+        if let Some(storage) = Self::storage()
+            && let Ok(json) = serde_json::to_string(todos) {
                 let _ = storage.set_item(STORAGE_KEY, &json);
             }
-        }
     }
 
     /// Clear all todos from localStorage.

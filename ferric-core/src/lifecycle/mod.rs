@@ -73,6 +73,9 @@ mod hooks;
 mod manager;
 mod state;
 
+// Async lifecycle hooks
+pub mod async_hooks;
+
 pub use cleanup::{
     CleanupFn, CleanupGuard, CleanupHandle, CleanupRegistry, OnCleanup,
     clear_cleanup_context, on_cleanup, set_cleanup_context, with_cleanup_context,
@@ -87,6 +90,13 @@ pub use manager::{
     get_component_state, lifecycle_manager, register_component,
 };
 pub use state::LifecycleState;
+
+// Async lifecycle hooks
+pub use async_hooks::{
+    AsyncOnInit, AsyncAfterViewInit, AsyncOnDestroy,
+    AsyncDataLoader, AsyncValidator, AsyncComponent,
+    AsyncLifecycleRunner,
+};
 
 use std::collections::HashMap;
 

@@ -40,8 +40,10 @@ use std::cell::RefCell;
 
 /// The platform where code is executing.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Default)]
 pub enum Platform {
     /// Server-side rendering environment.
+    #[default]
     Server,
     /// Browser/client-side environment.
     Browser,
@@ -72,19 +74,6 @@ impl Platform {
     }
 }
 
-impl Default for Platform {
-    fn default() -> Self {
-        // Default based on compilation target
-        #[cfg(target_arch = "wasm32")]
-        {
-            Platform::Browser
-        }
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-            Platform::Server
-        }
-    }
-}
 
 impl std::fmt::Display for Platform {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

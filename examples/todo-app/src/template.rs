@@ -59,11 +59,10 @@ pub fn query_all(element: &Element, selector: &str) -> Vec<Element> {
 
     if let Some(list) = node_list {
         for i in 0..list.length() {
-            if let Some(node) = list.get(i) {
-                if let Ok(el) = node.dyn_into::<Element>() {
+            if let Some(node) = list.get(i)
+                && let Ok(el) = node.dyn_into::<Element>() {
                     elements.push(el);
                 }
-            }
         }
     }
 

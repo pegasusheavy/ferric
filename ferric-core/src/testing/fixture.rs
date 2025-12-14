@@ -3,7 +3,6 @@
 //! Fixtures provide a way to render and interact with components during tests.
 
 use crate::di::Injector;
-use crate::reactive::{Signal, signal};
 use std::any::Any;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -107,12 +106,12 @@ pub struct Fixture<T> {
 
 impl<T: 'static> Fixture<T> {
     /// Get a reference to the component instance.
-    pub fn instance(&self) -> std::cell::Ref<Option<T>> {
+    pub fn instance(&self) -> std::cell::Ref<'_, Option<T>> {
         self.component.borrow()
     }
 
     /// Get a mutable reference to the component instance.
-    pub fn instance_mut(&self) -> std::cell::RefMut<Option<T>> {
+    pub fn instance_mut(&self) -> std::cell::RefMut<'_, Option<T>> {
         self.component.borrow_mut()
     }
 
@@ -172,7 +171,7 @@ impl<T: 'static> Fixture<T> {
     }
 
     /// Query for all matching elements.
-    pub fn query_all(&self, selector: &str) -> Vec<ElementQuery> {
+    pub fn query_all(&self, _selector: &str) -> Vec<ElementQuery> {
         // In a real implementation, this would query all matching elements
         Vec::new()
     }

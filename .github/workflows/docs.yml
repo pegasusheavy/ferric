@@ -1,0 +1,32 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'web/**'
+      - 'scripts/generate-docs-html.sh'
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Documentation HTML
+        run: |
+          chmod +x scripts/generate-docs-html.sh
+          bash scripts/generate-docs-html.sh
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web
+          keep_files: true
+          enable_jekyll: false
+          cname: ferric.rs # Optional: your custom domain
+

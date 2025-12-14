@@ -18,9 +18,8 @@
 //! }));
 //! ```
 
-use super::{ValidationErrors, ValidationResult, validation_error};
+use super::{ValidationResult, validation_error};
 use crate::controls::FormGroup;
-use std::rc::Rc;
 
 /// A validator that operates on multiple form controls.
 pub trait CrossFieldValidatorTrait {
@@ -145,11 +144,10 @@ impl CrossFieldValidatorTrait for RequireOneOfValidator {
         use crate::controls::typed_group::TypedFormGroup;
 
         for field in &self.fields {
-            if let Some(value) = group.get_value::<String>(field) {
-                if !value.is_empty() {
+            if let Some(value) = group.get_value::<String>(field)
+                && !value.is_empty() {
                     return Ok(());
                 }
-            }
         }
 
         Err(validation_error(&self.error_key, &self.error_message))
@@ -184,11 +182,10 @@ impl CrossFieldValidatorTrait for AllOrNoneValidator {
         let total = self.fields.len();
 
         for field in &self.fields {
-            if let Some(value) = group.get_value::<String>(field) {
-                if !value.is_empty() {
+            if let Some(value) = group.get_value::<String>(field)
+                && !value.is_empty() {
                     has_value_count += 1;
                 }
-            }
         }
 
         if has_value_count == 0 || has_value_count == total {

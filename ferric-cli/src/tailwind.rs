@@ -94,11 +94,10 @@ impl TailwindOptions {
 /// Check if TailwindCSS is available in the project
 pub fn is_tailwind_available() -> bool {
     // Check if package.json exists and has tailwindcss
-    if let Ok(content) = std::fs::read_to_string("package.json") {
-        if content.contains("tailwindcss") {
+    if let Ok(content) = std::fs::read_to_string("package.json")
+        && content.contains("tailwindcss") {
             return true;
         }
-    }
 
     // Check for tailwind.config.js/ts/mjs
     Path::new("tailwind.config.js").exists()
@@ -330,11 +329,10 @@ pub fn compile_tailwind(options: &TailwindOptions) -> Result<()> {
         let stdout = String::from_utf8_lossy(&output.stdout);
 
         // Try to parse error from JSON output
-        if let Ok(result) = serde_json::from_str::<serde_json::Value>(&stdout) {
-            if let Some(error) = result.get("error").and_then(|e| e.as_str()) {
+        if let Ok(result) = serde_json::from_str::<serde_json::Value>(&stdout)
+            && let Some(error) = result.get("error").and_then(|e| e.as_str()) {
                 anyhow::bail!("PostCSS/Tailwind error: {}", error);
             }
-        }
 
         anyhow::bail!(
             "TailwindCSS compilation failed:\n{}\n{}",
@@ -377,11 +375,10 @@ pub fn compile_tailwind_verbose(options: &TailwindOptions) -> Result<CompileResu
         let stderr = String::from_utf8_lossy(&output.stderr);
 
         // Try to parse error from JSON output
-        if let Ok(result) = serde_json::from_str::<serde_json::Value>(&stdout) {
-            if let Some(error) = result.get("error").and_then(|e| e.as_str()) {
+        if let Ok(result) = serde_json::from_str::<serde_json::Value>(&stdout)
+            && let Some(error) = result.get("error").and_then(|e| e.as_str()) {
                 anyhow::bail!("PostCSS/Tailwind error: {}", error);
             }
-        }
 
         anyhow::bail!(
             "TailwindCSS compilation failed:\n{}\n{}",

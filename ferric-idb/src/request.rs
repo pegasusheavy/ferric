@@ -43,8 +43,8 @@ where
     if upgrade_cell.borrow().is_some() {
         let request_clone = request.clone();
         let on_upgrade_needed = Closure::once(Box::new(move |event: web_sys::IdbVersionChangeEvent| {
-            if let Some(upgrade_fn) = upgrade_cell.borrow_mut().take() {
-                if let Ok(Some(db)) = request_clone.result().map(|r| r.dyn_into::<web_sys::IdbDatabase>().ok()) {
+            if let Some(upgrade_fn) = upgrade_cell.borrow_mut().take()
+                && let Ok(Some(db)) = request_clone.result().map(|r| r.dyn_into::<web_sys::IdbDatabase>().ok()) {
                     let old_version = event.old_version() as u32;
                     let new_version = event.new_version().unwrap_or(0.0) as u32;
 
@@ -52,7 +52,6 @@ where
                         web_sys::console::error_1(&format!("Upgrade error: {:?}", e).into());
                     }
                 }
-            }
         }) as Box<dyn FnOnce(_)>);
 
         request.set_onupgradeneeded(Some(on_upgrade_needed.as_ref().unchecked_ref()));

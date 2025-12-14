@@ -264,15 +264,13 @@ async fn handle_request(
     let response = match static_server.serve(&armature_req).await {
         Ok(mut resp) => {
             // Inject HMR script into HTML responses
-            if let Some(ref hmr) = hmr_manager {
-                if let Some(content_type) = resp.headers.get("Content-Type") {
-                    if content_type.contains("text/html") {
+            if let Some(ref hmr) = hmr_manager
+                && let Some(content_type) = resp.headers.get("Content-Type")
+                    && content_type.contains("text/html") {
                         let html = String::from_utf8_lossy(&resp.body).to_string();
                         let injected = armature::inject_hmr_script(html, hmr).await;
                         resp.body = injected.into_bytes();
                     }
-                }
-            }
             resp
         }
         Err(e) => {

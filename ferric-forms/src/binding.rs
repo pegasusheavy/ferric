@@ -140,11 +140,10 @@ impl FormBinding<i32> for FormControl<i32> {
 
         let control = self.clone();
         let input_handler = Closure::wrap(Box::new(move |event: Event| {
-            if let Some(input) = event.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()) {
-                if let Ok(value) = input.value().parse::<i32>() {
+            if let Some(input) = event.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok())
+                && let Ok(value) = input.value().parse::<i32>() {
                     control.set_value(value);
                 }
-            }
         }) as Box<dyn Fn(Event)>);
 
         element.add_event_listener_with_callback(
@@ -169,11 +168,10 @@ impl FormBinding<f64> for FormControl<f64> {
 
         let control = self.clone();
         let input_handler = Closure::wrap(Box::new(move |event: Event| {
-            if let Some(input) = event.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok()) {
-                if let Ok(value) = input.value().parse::<f64>() {
+            if let Some(input) = event.target().and_then(|t| t.dyn_into::<HtmlInputElement>().ok())
+                && let Ok(value) = input.value().parse::<f64>() {
                     control.set_value(value);
                 }
-            }
         }) as Box<dyn Fn(Event)>);
 
         element.add_event_listener_with_callback(

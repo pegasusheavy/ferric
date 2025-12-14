@@ -110,11 +110,10 @@ fn find_slot_end(tag_content: &str) -> Option<usize> {
     // Self-closing: <fe-content ... />
     if let Some(pos) = tag_content.find("/>") {
         // Make sure there's no closing tag before this
-        if let Some(close_pos) = tag_content.find("</fe-content>") {
-            if close_pos < pos {
+        if let Some(close_pos) = tag_content.find("</fe-content>")
+            && close_pos < pos {
                 return Some(close_pos + "</fe-content>".len());
             }
-        }
         return Some(pos + 2);
     }
 

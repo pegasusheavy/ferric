@@ -1,0 +1,16 @@
+[package]
+name = "macro-showcase"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ferric-core = { path = "../../ferric-core" }
+ferric-macros = { path = "../../ferric-macros" }
+ferric-forms = { path = "../../ferric-forms" }
+ferric-forms-macros = { path = "../../ferric-forms-macros" }
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["console"] }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+

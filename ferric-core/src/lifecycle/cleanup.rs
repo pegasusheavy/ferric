@@ -126,7 +126,7 @@ pub trait OnCleanup {
 
 /// Thread-local cleanup context for the current component.
 thread_local! {
-    static CLEANUP_CONTEXT: RefCell<Option<Rc<CleanupRegistry>>> = RefCell::new(None);
+    static CLEANUP_CONTEXT: RefCell<Option<Rc<CleanupRegistry>>> = const { RefCell::new(None) };
 }
 
 /// Set the cleanup context for the current component.

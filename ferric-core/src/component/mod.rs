@@ -65,7 +65,7 @@ pub trait Component: Lifecycle {
         let template = self.template();
         let styles = self.styles().unwrap_or("");
 
-        let (encapsulated_template, encapsulated_styles) = encapsulator.encapsulate(template, styles);
+        let (_encapsulated_template, encapsulated_styles) = encapsulator.encapsulate(template, styles);
 
         // Store the encapsulated template for rendering
         // The actual DOM creation happens in the render method

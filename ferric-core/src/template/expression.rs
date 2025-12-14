@@ -325,14 +325,13 @@ impl<'a> ExpressionEvaluator<'a> {
                 let right_val = self.evaluate(right);
 
                 // String concatenation for +
-                if op == "+" {
-                    if matches!(&left_val, ExprValue::String(_)) ||
-                       matches!(&right_val, ExprValue::String(_)) {
+                if op == "+"
+                    && (matches!(&left_val, ExprValue::String(_)) ||
+                       matches!(&right_val, ExprValue::String(_))) {
                         return Some(ExprValue::String(
                             format!("{}{}", left_val.to_string(), right_val.to_string())
                         ));
                     }
-                }
 
                 let result = match op {
                     "+" => left_val.to_number() + right_val.to_number(),
@@ -375,26 +374,22 @@ impl<'a> ExpressionEvaluator<'a> {
 
             // Special case for built-in properties
             let obj_val = self.evaluate(obj_expr);
-            match prop {
-                "length" => {
-                    match &obj_val {
-                        ExprValue::String(s) => return ExprValue::Number(s.len() as f64),
-                        ExprValue::Array(arr) => return ExprValue::Number(arr.len() as f64),
-                        _ => {}
-                    }
+            if prop == "length" {
+                match &obj_val {
+                    ExprValue::String(s) => return ExprValue::Number(s.len() as f64),
+                    ExprValue::Array(arr) => return ExprValue::Number(arr.len() as f64),
+                    _ => {}
                 }
-                _ => {}
             }
         }
 
         // Handle array access (e.g., "items[0]")
-        if let Some(bracket_pos) = expr.find('[') {
-            if expr.ends_with(']') {
+        if let Some(bracket_pos) = expr.find('[')
+            && expr.ends_with(']') {
                 let _array_expr = &expr[..bracket_pos];
                 let _index_expr = &expr[bracket_pos + 1..expr.len() - 1];
                 // TODO: Implement array indexing
             }
-        }
 
         // Simple variable lookup - try to preserve the original type
         if let Some(ctx_ref) = self.context.get(expr) {

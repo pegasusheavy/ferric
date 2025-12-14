@@ -39,9 +39,8 @@ pub use detector::{ChangeDetectorRef, ChangeDetectorStatus, DetectorTree};
 pub use scheduler::{Scheduler, SchedulerConfig, schedule, schedule_on_stable};
 
 use crate::component::ChangeDetectionStrategy;
-use crate::reactive::{Effect, Signal, signal};
+use crate::reactive::{Signal, signal};
 use std::cell::RefCell;
-use std::rc::Rc;
 
 /// A unique identifier for a change detector.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -65,7 +64,7 @@ impl Default for DetectorId {
 }
 
 thread_local! {
-    static NEXT_DETECTOR_ID: RefCell<u64> = RefCell::new(0);
+    static NEXT_DETECTOR_ID: RefCell<u64> = const { RefCell::new(0) };
 }
 
 /// Represents the result of a change detection cycle.

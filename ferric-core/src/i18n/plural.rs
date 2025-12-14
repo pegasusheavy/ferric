@@ -72,7 +72,7 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
 
         // French, Brazilian Portuguese: 0 and 1 are singular
         "fr" => {
-            if n >= 0.0 && n < 2.0 {
+            if (0.0..2.0).contains(&n) {
                 PluralCategory::One
             } else {
                 PluralCategory::Other
@@ -84,7 +84,7 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
             let n_mod10 = (n as i64) % 10;
             let n_mod100 = (n as i64) % 100;
 
-            if n_mod10 == 0 || (n_mod100 >= 11 && n_mod100 <= 19) {
+            if n_mod10 == 0 || (11..=19).contains(&n_mod100) {
                 PluralCategory::Zero
             } else if n_mod10 == 1 && n_mod100 != 11 {
                 PluralCategory::One
@@ -101,9 +101,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
 
             if n_mod10 == 1 && n_mod100 != 11 {
                 PluralCategory::One
-            } else if n_mod10 >= 2 && n_mod10 <= 4 && !(n_mod100 >= 12 && n_mod100 <= 14) {
+            } else if (2..=4).contains(&n_mod10) && !(12..=14).contains(&n_mod100) {
                 PluralCategory::Few
-            } else if n_mod10 == 0 || (n_mod10 >= 5 && n_mod10 <= 9) || (n_mod100 >= 11 && n_mod100 <= 14) {
+            } else if n_mod10 == 0 || (5..=9).contains(&n_mod10) || (11..=14).contains(&n_mod100) {
                 PluralCategory::Many
             } else {
                 PluralCategory::Other
@@ -118,9 +118,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
 
             if n_i == 1 {
                 PluralCategory::One
-            } else if n_mod10 >= 2 && n_mod10 <= 4 && !(n_mod100 >= 12 && n_mod100 <= 14) {
+            } else if (2..=4).contains(&n_mod10) && !(12..=14).contains(&n_mod100) {
                 PluralCategory::Few
-            } else if n_i != 1 && (n_mod10 == 0 || n_mod10 == 1) || (n_mod10 >= 5 && n_mod10 <= 9) || (n_mod100 >= 12 && n_mod100 <= 14) {
+            } else if n_i != 1 && (n_mod10 == 0 || n_mod10 == 1) || (5..=9).contains(&n_mod10) || (12..=14).contains(&n_mod100) {
                 PluralCategory::Many
             } else {
                 PluralCategory::Other
@@ -132,7 +132,7 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
             let n_i = n as i64;
             if n_i == 1 {
                 PluralCategory::One
-            } else if n_i >= 2 && n_i <= 4 {
+            } else if (2..=4).contains(&n_i) {
                 PluralCategory::Few
             } else {
                 PluralCategory::Other
@@ -150,9 +150,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
                 PluralCategory::One
             } else if n_i == 2 {
                 PluralCategory::Two
-            } else if n_mod100 >= 3 && n_mod100 <= 10 {
+            } else if (3..=10).contains(&n_mod100) {
                 PluralCategory::Few
-            } else if n_mod100 >= 11 && n_mod100 <= 99 {
+            } else if (11..=99).contains(&n_mod100) {
                 PluralCategory::Many
             } else {
                 PluralCategory::Other
@@ -184,9 +184,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
                 PluralCategory::One
             } else if n_i == 2 {
                 PluralCategory::Two
-            } else if n_i >= 3 && n_i <= 6 {
+            } else if (3..=6).contains(&n_i) {
                 PluralCategory::Few
-            } else if n_i >= 7 && n_i <= 10 {
+            } else if (7..=10).contains(&n_i) {
                 PluralCategory::Many
             } else {
                 PluralCategory::Other
@@ -199,9 +199,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
             let n_mod10 = n_i % 10;
             let n_mod100 = n_i % 100;
 
-            if n_mod10 == 1 && !(n_mod100 >= 11 && n_mod100 <= 19) {
+            if n_mod10 == 1 && !(11..=19).contains(&n_mod100) {
                 PluralCategory::One
-            } else if n_mod10 >= 2 && n_mod10 <= 9 && !(n_mod100 >= 11 && n_mod100 <= 19) {
+            } else if (2..=9).contains(&n_mod10) && !(11..=19).contains(&n_mod100) {
                 PluralCategory::Few
             } else {
                 PluralCategory::Other
@@ -217,7 +217,7 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
                 PluralCategory::One
             } else if n_mod100 == 2 {
                 PluralCategory::Two
-            } else if n_mod100 >= 3 && n_mod100 <= 4 {
+            } else if (3..=4).contains(&n_mod100) {
                 PluralCategory::Few
             } else {
                 PluralCategory::Other
@@ -231,9 +231,9 @@ pub fn get_plural_category(language: &str, n: f64) -> PluralCategory {
 
             if n_i == 1 {
                 PluralCategory::One
-            } else if n_i == 0 || (n_mod100 >= 2 && n_mod100 <= 10) {
+            } else if n_i == 0 || (2..=10).contains(&n_mod100) {
                 PluralCategory::Few
-            } else if n_mod100 >= 11 && n_mod100 <= 19 {
+            } else if (11..=19).contains(&n_mod100) {
                 PluralCategory::Many
             } else {
                 PluralCategory::Other

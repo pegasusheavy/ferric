@@ -2,8 +2,10 @@
 
 /// Request body types
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub enum Body {
     /// Empty body
+    #[default]
     Empty,
     /// Raw bytes
     Bytes(Vec<u8>),
@@ -81,11 +83,6 @@ impl Body {
     }
 }
 
-impl Default for Body {
-    fn default() -> Self {
-        Body::Empty
-    }
-}
 
 impl From<Vec<u8>> for Body {
     fn from(data: Vec<u8>) -> Self {

@@ -403,21 +403,19 @@ fn format_argument(
 
             // First, try exact matches
             for case in &plural_arg.cases {
-                if let PluralSelector::Exact(exact) = case.selector {
-                    if (n - exact).abs() < f64::EPSILON {
+                if let PluralSelector::Exact(exact) = case.selector
+                    && (n - exact).abs() < f64::EPSILON {
                         return case.message.format_with_pound(all_args, locale, Some(effective_n));
                     }
-                }
             }
 
             // Then, try category matches
             let category = get_plural_category(locale, effective_n);
             for case in &plural_arg.cases {
-                if let PluralSelector::Category(cat) = case.selector {
-                    if cat == category {
+                if let PluralSelector::Category(cat) = case.selector
+                    && cat == category {
                         return case.message.format_with_pound(all_args, locale, Some(effective_n));
                     }
-                }
             }
 
             // Fall back to "other"
@@ -436,21 +434,19 @@ fn format_argument(
 
             // First, try exact matches
             for case in &plural_arg.cases {
-                if let PluralSelector::Exact(exact) = case.selector {
-                    if (n - exact).abs() < f64::EPSILON {
+                if let PluralSelector::Exact(exact) = case.selector
+                    && (n - exact).abs() < f64::EPSILON {
                         return case.message.format_with_pound(all_args, locale, Some(effective_n));
                     }
-                }
             }
 
             // Then, try ordinal category matches
             let category = get_ordinal_category(locale, effective_n);
             for case in &plural_arg.cases {
-                if let PluralSelector::Category(cat) = case.selector {
-                    if cat == category {
+                if let PluralSelector::Category(cat) = case.selector
+                    && cat == category {
                         return case.message.format_with_pound(all_args, locale, Some(effective_n));
                     }
-                }
             }
 
             // Fall back to "other"

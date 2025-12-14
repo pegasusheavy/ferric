@@ -18,11 +18,10 @@
 //! 12. `ActivationEnd` - Route activation ends
 //! 13. `NavigationEnd` - Navigation complete (or `NavigationCancel`/`NavigationError`)
 
-use super::{ActivatedRoute, Route};
-use crate::reactive::{signal, Signal};
+use super::Route;
+use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// Unique ID for navigation events.
 pub type NavigationId = u64;

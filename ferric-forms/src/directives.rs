@@ -24,7 +24,7 @@
 //! </form>
 //! ```
 
-use crate::controls::{AbstractControl, FormArray, FormControl, FormGroup};
+use crate::controls::{AbstractControl, FormControl, FormGroup};
 use crate::binding::UpdateOn;
 use std::cell::RefCell;
 use std::collections::HashMap;

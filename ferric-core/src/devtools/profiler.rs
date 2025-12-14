@@ -562,7 +562,7 @@ thread_local! {
 
 /// Get the global profiler.
 pub fn profiler() -> Profiler {
-    PROFILER.with(|p| {
+    PROFILER.with(|_p| {
         // Return a reference-like by creating new instance
         // In real code, we'd use Rc or similar
         Profiler::new()

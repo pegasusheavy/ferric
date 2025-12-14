@@ -288,8 +288,7 @@ impl Pipe for PadStartPipe {
             return value.to_string();
         }
 
-        let padding: String = std::iter::repeat(pad_char)
-            .take(length - value.len())
+        let padding: String = std::iter::repeat_n(pad_char, length - value.len())
             .collect();
         format!("{}{}", padding, value)
     }
@@ -313,8 +312,7 @@ impl Pipe for PadEndPipe {
             return value.to_string();
         }
 
-        let padding: String = std::iter::repeat(pad_char)
-            .take(length - value.len())
+        let padding: String = std::iter::repeat_n(pad_char, length - value.len())
             .collect();
         format!("{}{}", value, padding)
     }

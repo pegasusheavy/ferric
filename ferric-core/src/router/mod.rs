@@ -48,6 +48,7 @@
 //! ```
 
 mod config;
+mod di;
 mod events;
 mod guard;
 mod lazy;
@@ -57,6 +58,7 @@ mod resolver;
 mod service;
 
 pub use config::*;
+pub use di::{InjectableRouter, RouterModule, create_router_from_injector, tokens as router_tokens};
 pub use events::*;
 pub use guard::*;
 pub use lazy::*;
@@ -75,12 +77,11 @@ pub fn init_router() -> Result<(), JsValue> {
     // Listen for popstate events (back/forward navigation)
     let closure = Closure::wrap(Box::new(move |_event: web_sys::PopStateEvent| {
         // Handle navigation
-        if let Some(window) = web_sys::window() {
-            if let Ok(pathname) = window.location().pathname() {
+        if let Some(window) = web_sys::window()
+            && let Ok(pathname) = window.location().pathname() {
                 // TODO: Trigger route change
                 web_sys::console::log_1(&format!("Navigation to: {}", pathname).into());
             }
-        }
     }) as Box<dyn FnMut(_)>);
 
     window.add_event_listener_with_callback("popstate", closure.as_ref().unchecked_ref())?;

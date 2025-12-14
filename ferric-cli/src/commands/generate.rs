@@ -54,7 +54,7 @@ pub async fn component(name: &str, inline_template: bool, inline_style: bool) ->
 pub async fn service(name: &str) -> Result<()> {
     let pascal_name = to_pascal_case(name);
     let snake_name = to_snake_case(name);
-    let kebab_name = to_kebab_case(name);
+    let _kebab_name = to_kebab_case(name);
 
     let services_dir = Path::new("src/services");
     fs::create_dir_all(services_dir)?;

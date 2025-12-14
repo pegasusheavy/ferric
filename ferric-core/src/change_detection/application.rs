@@ -280,7 +280,7 @@ impl Default for ApplicationRef {
 
 // Global application reference
 thread_local! {
-    static GLOBAL_APP: RefCell<Option<ApplicationRef>> = RefCell::new(None);
+    static GLOBAL_APP: RefCell<Option<ApplicationRef>> = const { RefCell::new(None) };
 }
 
 /// Get or create the global application reference.

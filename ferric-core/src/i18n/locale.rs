@@ -120,18 +120,16 @@ impl Locale {
         }
 
         // If other specifies a script, it must match
-        if let Some(ref other_script) = other.script {
-            if self.script.as_ref() != Some(other_script) {
+        if let Some(ref other_script) = other.script
+            && self.script.as_ref() != Some(other_script) {
                 return false;
             }
-        }
 
         // If other specifies a region, it must match
-        if let Some(ref other_region) = other.region {
-            if self.region.as_ref() != Some(other_region) {
+        if let Some(ref other_region) = other.region
+            && self.region.as_ref() != Some(other_region) {
                 return false;
             }
-        }
 
         true
     }
@@ -164,18 +162,15 @@ pub struct LocaleInfo {
 
 /// Text direction for a locale.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum TextDirection {
     /// Left-to-right (most languages).
+    #[default]
     Ltr,
     /// Right-to-left (Arabic, Hebrew, etc.).
     Rtl,
 }
 
-impl Default for TextDirection {
-    fn default() -> Self {
-        TextDirection::Ltr
-    }
-}
 
 /// Parse a locale string into a `Locale` struct.
 ///

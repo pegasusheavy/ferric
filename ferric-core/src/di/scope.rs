@@ -29,12 +29,14 @@ impl Default for Scope {
 ///
 /// This is similar to Angular's `providedIn` option.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Default)]
 pub enum ProvidedIn {
     /// Provide in the root injector (application-wide singleton).
     Root,
     /// Provide in any injector that imports the module.
     Any,
     /// Don't provide automatically (must be explicitly provided).
+    #[default]
     None,
     /// Provide in a specific module (not yet implemented).
     Module,
@@ -42,11 +44,6 @@ pub enum ProvidedIn {
     Platform,
 }
 
-impl Default for ProvidedIn {
-    fn default() -> Self {
-        ProvidedIn::None
-    }
-}
 
 /// Configuration for automatic service provision.
 #[derive(Debug, Clone, Default)]

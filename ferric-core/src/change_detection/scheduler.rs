@@ -15,8 +15,6 @@
 
 use std::cell::RefCell;
 use std::rc::Rc;
-use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
 
 /// Configuration for the scheduler.
 #[derive(Debug, Clone)]
@@ -196,7 +194,7 @@ impl Default for Scheduler {
 
 // Global scheduler instance
 thread_local! {
-    static GLOBAL_SCHEDULER: RefCell<Option<Scheduler>> = RefCell::new(None);
+    static GLOBAL_SCHEDULER: RefCell<Option<Scheduler>> = const { RefCell::new(None) };
 }
 
 /// Get or create the global scheduler.

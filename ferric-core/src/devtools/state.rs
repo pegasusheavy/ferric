@@ -5,7 +5,7 @@
 
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 /// State change event for history tracking.
 #[derive(Debug, Clone)]
@@ -523,7 +523,7 @@ fn uuid_v4() -> String {
         (timestamp >> 16) as u16,
         (count >> 48) as u16 & 0x0fff,
         ((count >> 32) as u16 & 0x3fff) | 0x8000,
-        count as u64 & 0xffffffffffff
+        count & 0xffffffffffff
     )
 }
 

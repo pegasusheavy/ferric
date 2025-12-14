@@ -60,6 +60,7 @@
 
 mod async_pipe;
 mod builtin;
+mod di;
 mod registry;
 mod transform;
 
@@ -68,6 +69,7 @@ pub use async_pipe::{
     async_pending, async_resolved, async_error,
 };
 pub use builtin::*;
+pub use di::{PipesModule, InjectablePipeRegistry, PIPES as DI_PIPES};
 pub use registry::{PipeRegistry, register_pipe, get_pipe, register_builtin_pipes};
 pub use transform::{
     Pipe, PipeArgs, PipeValue, ParsedPipe,

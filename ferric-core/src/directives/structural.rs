@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 use wasm_bindgen::JsCast;
-use web_sys::{Document, Element, Node};
+use web_sys::Element;
 
 /// The *if directive - conditionally renders content.
 pub struct IfDirective {
@@ -70,11 +70,10 @@ impl IfDirective {
 
     /// Clear all views.
     pub fn clear(&mut self) {
-        if let Some(ref view) = self.current_view {
-            if let Some(parent) = view.parent_node() {
+        if let Some(ref view) = self.current_view
+            && let Some(parent) = view.parent_node() {
                 let _ = parent.remove_child(view);
             }
-        }
         self.current_view = None;
     }
 }
@@ -118,8 +117,8 @@ impl<T> ForContext<T> {
             count,
             first: index == 0,
             last: index == count - 1,
-            even: index % 2 == 0,
-            odd: index % 2 != 0,
+            even: index.is_multiple_of(2),
+            odd: !index.is_multiple_of(2),
         }
     }
 }
@@ -305,7 +304,7 @@ impl<T: Clone> ForDirective<T> {
     /// Create a view for an item by cloning the template.
     fn create_view(&self, template: &Element, _context: &ForContext<T>) -> Element {
         // Clone the template
-        let view = clone_node(template);
+        
 
         // In a full implementation, you would:
         // 1. Set up bindings for the context variables ($implicit, index, etc.)
@@ -313,7 +312,7 @@ impl<T: Clone> ForDirective<T> {
         // 3. Attach event listeners
 
         // For now, just return the cloned template
-        view
+        clone_node(template)
     }
 
     /// Clear all views.
@@ -440,11 +439,10 @@ impl<T: PartialEq + Clone> SwitchDirective<T> {
     }
 
     fn clear_active_view(&mut self) {
-        if let Some(ref active) = self.active_view {
-            if let Some(parent) = active.parent_node() {
+        if let Some(ref active) = self.active_view
+            && let Some(parent) = active.parent_node() {
                 let _ = parent.remove_child(active);
             }
-        }
         self.active_view = None;
     }
 

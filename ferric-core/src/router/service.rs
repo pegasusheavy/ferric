@@ -35,13 +35,13 @@
 //! ```
 
 use super::events::*;
-use super::guard::{CanActivate, CanDeactivate, CanLoad, GuardResult, GuardRegistry, RouterStateSnapshot};
-use super::lazy::{LazyModuleRegistry, LazyLoadError, LazyRouteModule, PreloadConfig};
+use super::guard::{CanActivate, GuardResult, GuardRegistry, RouterStateSnapshot};
+use super::lazy::{LazyModuleRegistry, LazyLoadError, PreloadConfig};
 use super::params::{Params, QueryParams, ParsedUrl, extract_params};
-use super::resolver::{Resolve, ResolverRegistry, ResolveResult};
+use super::resolver::{Resolve, ResolverRegistry};
 use super::{Route, Routes, PathMatch};
 use crate::di::{Injectable, Injector};
-use crate::reactive::{signal, Signal, computed, Computed};
+use crate::reactive::{signal, Signal};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -175,7 +175,7 @@ impl Router {
         let base = base.trim_end_matches('/');
 
         // If url starts with base, remove it
-        if url.starts_with(&base) {
+        if url.starts_with(base) {
             let without_base = &url[base.len()..];
             if without_base.is_empty() {
                 "/".to_string()
@@ -430,13 +430,11 @@ impl Router {
         }
 
         // Update document title if set
-        if let Some(title) = &route.title {
-            if let Some(window) = web_sys::window() {
-                if let Some(document) = window.document() {
+        if let Some(title) = &route.title
+            && let Some(window) = web_sys::window()
+                && let Some(document) = window.document() {
                     document.set_title(title);
                 }
-            }
-        }
 
         self.events.emit(Event::ActivationEnd(ActivationEnd {
             id: nav_id,
@@ -707,13 +705,11 @@ impl Router {
         history.push_state_with_url(&JsValue::NULL, "", Some(full_url))?;
 
         // Update document title if set
-        if let Some(title) = &route.title {
-            if let Some(window) = web_sys::window() {
-                if let Some(document) = window.document() {
+        if let Some(title) = &route.title
+            && let Some(window) = web_sys::window()
+                && let Some(document) = window.document() {
                     document.set_title(title);
                 }
-            }
-        }
 
         self.events.emit(Event::ActivationEnd(ActivationEnd {
             id: nav_id,
@@ -739,11 +735,10 @@ impl Router {
 
         spawn_local(async move {
             let matched = router.match_route_tree(&path);
-            if let Some((route, _)) = matched {
-                if route.needs_loading() {
+            if let Some((route, _)) = matched
+                && route.needs_loading() {
                     let _ = router.load_lazy_children(&route, 0, &path).await;
                 }
-            }
         });
     }
 
@@ -773,12 +768,11 @@ impl Router {
             };
 
             // Check for redirect
-            if let Some(ref redirect) = route.redirect_to {
-                if self.path_matches(&full_pattern, path, route.path_match) {
+            if let Some(ref redirect) = route.redirect_to
+                && self.path_matches(&full_pattern, path, route.path_match) {
                     // Handle redirect - return the redirect target
                     return self.match_routes_recursive(routes, redirect, "");
                 }
-            }
 
             // Try to match this route
             if let Some(params) = extract_params(&full_pattern, path) {
@@ -790,13 +784,12 @@ impl Router {
 
                 if matches {
                     // If this route has children, try to match them
-                    if !route.children.is_empty() {
-                        if let Some(child_match) =
+                    if !route.children.is_empty()
+                        && let Some(child_match) =
                             self.match_routes_recursive(&route.children, path, &full_pattern)
                         {
                             return Some(child_match);
                         }
-                    }
 
                     // Return this route if it has a component
                     if route.component.is_some() {
@@ -972,14 +965,13 @@ impl Router {
         let router = self.clone();
 
         let closure = Closure::wrap(Box::new(move |_event: web_sys::PopStateEvent| {
-            if let Some(window) = web_sys::window() {
-                if let Ok(pathname) = window.location().pathname() {
+            if let Some(window) = web_sys::window()
+                && let Ok(pathname) = window.location().pathname() {
                     let search = window.location().search().unwrap_or_default();
                     let hash = window.location().hash().unwrap_or_default();
                     let full_url = format!("{}{}{}", pathname, search, hash);
                     let _ = router.navigate_internal(&full_url, NavigationTrigger::PopState, None);
                 }
-            }
         }) as Box<dyn FnMut(_)>);
 
         window.add_event_listener_with_callback("popstate", closure.as_ref().unchecked_ref())?;

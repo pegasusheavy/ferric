@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Ferric Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .nav-buttons a {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-buttons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 4px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .doc-links {
+            list-style: none;
+        }
+
+        .doc-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .doc-links a:hover {
+            color: #764ba2;
+            transform: translateX(5px);
+        }
+
+        .doc-links a::before {
+            content: "📄";
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge-new {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-guide {
+            background: #2196f3;
+            color: white;
+        }
+
+        .badge-api {
+            background: #ff9800;
+            color: white;
+        }
+
+        .quick-links {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-links h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-link {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .quick-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Documentation</h1>
+        <p>Complete guide to building with Ferric</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <a href="index.html">🏠 Home</a>
+            <a href="benchmarks.html">⚡ Benchmarks</a>
+            <a href="run-benchmarks.html">🏃 Run Tests</a>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="search" placeholder="🔍 Search documentation...">
+        </div>
+
+        <div class="quick-links">
+            <h3>🚀 Quick Start</h3>
+            <div class="quick-links-grid">
+                <a href="#getting-started" class="quick-link">Getting Started</a>
+                <a href="#core-concepts" class="quick-link">Core Concepts</a>
+                <a href="#examples" class="quick-link">Examples</a>
+                <a href="#api-reference" class="quick-link">API Reference</a>
+            </div>
+        </div>
+
+        <div class="docs-grid">
+            <!-- Core Concepts -->
+            <div class="section" id="core-concepts">
+                <div class="section-icon">🎯</div>
+                <h2>Core Concepts</h2>
+                <p>Fundamental concepts and architecture of the Ferric framework.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/getting-started.html">Getting Started</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/architecture.html">Framework Architecture</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/DI_ARCHITECTURE.md">Dependency Injection</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/components.html">Components</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/modules.html">Modules</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Reactivity -->
+            <div class="section">
+                <div class="section-icon">⚡</div>
+                <h2>Reactivity</h2>
+                <p>Signals, computed values, effects, and reactive programming.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/signals.html">Signals</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/computed.html">Computed Values</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/effects.html">Effects</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/ASYNC_SUPPORT_GUIDE.md">Async Support</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Templates & Directives -->
+            <div class="section">
+                <div class="section-icon">🎨</div>
+                <h2>Templates & Directives</h2>
+                <p>Template syntax, structural directives, and attribute directives.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/templates.html">Template Syntax</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/directives.html">Directives</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/pipes.html">Pipes</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/data-binding.html">Data Binding</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Routing -->
+            <div class="section">
+                <div class="section-icon">🛣️</div>
+                <h2>Routing</h2>
+                <p>Client-side navigation, route guards, and lazy loading.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/router.html">Router Basics</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/route-guards.html">Route Guards</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/lazy-loading.html">Lazy Loading</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/route-resolvers.html">Route Resolvers</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Forms -->
+            <div class="section">
+                <div class="section-icon">📝</div>
+                <h2>Forms</h2>
+                <p>Reactive forms, validation, and form controls.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/forms.html">Forms Basics</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/form-validation.html">Form Validation</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/typed-forms.html">Typed Forms</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/custom-validators.html">Custom Validators</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- HTTP & Data -->
+            <div class="section">
+                <div class="section-icon">🌐</div>
+                <h2>HTTP & Data</h2>
+                <p>HTTP client, interceptors, and data management.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/http-client.html">HTTP Client</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/FILE_TRANSFER_GUIDE.md">File Transfers</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/interceptors.html">Interceptors</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/indexeddb.html">IndexedDB</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Advanced Features -->
+            <div class="section">
+                <div class="section-icon">🚀</div>
+                <h2>Advanced Features</h2>
+                <p>SSR, hydration, testing, and advanced patterns.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/ssr.html">Server-Side Rendering</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/hydration.html">Hydration</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/testing.html">Testing</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/dynamic-components.html">Dynamic Components</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Developer Tools -->
+            <div class="section">
+                <div class="section-icon">🛠️</div>
+                <h2>Developer Tools</h2>
+                <p>Macros, decorators, CLI, and development utilities.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/MACROS_QUICK_REFERENCE.md">Macros Reference</a><span class="badge badge-api">API</span></li>
+                    <li><a href="docs/ANGULAR_DECORATORS_GUIDE.md">Decorators Guide</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/cli.html">CLI Tools</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/devtools.html">DevTools</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Performance -->
+            <div class="section">
+                <div class="section-icon">⚡</div>
+                <h2>Performance</h2>
+                <p>Optimization, benchmarking, and best practices.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/BENCHMARKING_GUIDE.md">Benchmarking</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/optimization.html">Optimization</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/change-detection.html">Change Detection</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="benchmarks.html">Live Benchmarks</a><span class="badge badge-new">New</span></li>
+                </ul>
+            </div>
+
+            <!-- Integration -->
+            <div class="section">
+                <div class="section-icon">🔌</div>
+                <h2>Integration</h2>
+                <p>Markdown, i18n, and external integrations.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/markdown.html">Markdown Support</a><span class="badge badge-new">New</span></li>
+                    <li><a href="docs/i18n.html">Internationalization</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/web-components.html">Web Components</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/external-libs.html">External Libraries</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- Examples & Tutorials -->
+            <div class="section" id="examples">
+                <div class="section-icon">💡</div>
+                <h2>Examples & Tutorials</h2>
+                <p>Learn by example with real-world applications.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/tutorial-todo.html">Tutorial: Todo App</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/tutorial-forms.html">Tutorial: Forms</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/tutorial-ssr.html">Tutorial: SSR</a><span class="badge badge-guide">Guide</span></li>
+                    <li><a href="docs/examples.html">All Examples</a><span class="badge badge-guide">Guide</span></li>
+                </ul>
+            </div>
+
+            <!-- API Reference -->
+            <div class="section" id="api-reference">
+                <div class="section-icon">📖</div>
+                <h2>API Reference</h2>
+                <p>Complete API documentation for all modules.</p>
+                <ul class="doc-links">
+                    <li><a href="docs/api/ferric-core.html">ferric-core</a><span class="badge badge-api">API</span></li>
+                    <li><a href="docs/api/ferric-forms.html">ferric-forms</a><span class="badge badge-api">API</span></li>
+                    <li><a href="docs/api/ferric-http.html">ferric-http</a><span class="badge badge-api">API</span></li>
+                    <li><a href="docs/api/ferric-router.html">ferric-router</a><span class="badge badge-api">API</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3>📚 Featured Guides</h3>
+            <div class="quick-links-grid">
+                <a href="docs/quick-start.html" class="quick-link">⚡ Quick Start</a>
+                <a href="docs/migration.html" class="quick-link">🔄 Migration from Angular</a>
+                <a href="docs/best-practices.html" class="quick-link">✨ Best Practices</a>
+                <a href="docs/troubleshooting.html" class="quick-link">🔧 Troubleshooting</a>
+                <a href="docs/faq.html" class="quick-link">❓ FAQ</a>
+                <a href="docs/contributing.html" class="quick-link">🤝 Contributing</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with ❤️ using Ferric Framework</p>
+        <p><a href="https://github.com/pegasusheavy/ferric">View on GitHub</a></p>
+    </footer>
+
+    <script>
+        // Simple search functionality
+        const searchBox = document.getElementById('search');
+        const sections = document.querySelectorAll('.section');
+
+        searchBox.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query) || query === '') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

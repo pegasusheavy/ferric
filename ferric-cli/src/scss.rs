@@ -222,8 +222,8 @@ pub async fn watch_and_compile(
         match rx.recv() {
             Ok(event) => {
                 for path in event.paths {
-                    if let Some(ext) = path.extension() {
-                        if ext == "scss" || ext == "sass" {
+                    if let Some(ext) = path.extension()
+                        && (ext == "scss" || ext == "sass") {
                             println!(
                                 "{} {}",
                                 style("Changed:").yellow(),
@@ -249,7 +249,6 @@ pub async fn watch_and_compile(
                                 style("Done:").green().bold()
                             );
                         }
-                    }
                 }
             }
             Err(e) => {

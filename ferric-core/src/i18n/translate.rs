@@ -202,11 +202,10 @@ pub fn t(key: &str, params: &[(&str, &str)]) -> String {
             let store = store.borrow();
             let locale = locale.borrow();
 
-            if let Some(value) = store.get_with_fallback(&locale, key) {
-                if let Some(s) = value.as_string() {
+            if let Some(value) = store.get_with_fallback(&locale, key)
+                && let Some(s) = value.as_string() {
                     return interpolate(s, params);
                 }
-            }
 
             // Return key if not found
             format!("{{{{ {} }}}}", key)
@@ -228,8 +227,8 @@ pub fn tp(key: &str, count: f64, params: &[(&str, &str)]) -> String {
             let store = store.borrow();
             let locale = locale.borrow();
 
-            if let Some(value) = store.get_with_fallback(&locale, key) {
-                if let Some(plurals) = value.as_plural() {
+            if let Some(value) = store.get_with_fallback(&locale, key)
+                && let Some(plurals) = value.as_plural() {
                     let category = get_plural_category(&locale.language, count);
 
                     // Try the specific category, then fall back to "other"
@@ -241,7 +240,6 @@ pub fn tp(key: &str, count: f64, params: &[(&str, &str)]) -> String {
 
                     return interpolate(template, params);
                 }
-            }
 
             // Return key if not found
             format!("{{{{ {} }}}}", key)

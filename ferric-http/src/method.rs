@@ -4,8 +4,10 @@ use std::fmt;
 
 /// HTTP request methods
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Default)]
 pub enum Method {
     /// GET method - retrieve a resource
+    #[default]
     Get,
     /// POST method - create a resource
     Post,
@@ -53,11 +55,6 @@ impl fmt::Display for Method {
     }
 }
 
-impl Default for Method {
-    fn default() -> Self {
-        Method::Get
-    }
-}
 
 impl From<Method> for http::Method {
     fn from(method: Method) -> Self {

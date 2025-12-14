@@ -31,8 +31,6 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::future::Future;
 use std::pin::Pin;
-use std::rc::Rc;
-use std::time::Duration;
 
 /// Trait for asynchronous validators.
 pub trait AsyncValidator<T> {
@@ -201,12 +199,11 @@ where
         let cache_key = value.to_string();
 
         // Check cache first
-        if self.cache_enabled {
-            if let Some(result) = self.cache.borrow().get(&cache_key) {
+        if self.cache_enabled
+            && let Some(result) = self.cache.borrow().get(&cache_key) {
                 let result = result.clone();
                 return Box::pin(async move { result });
             }
-        }
 
         Box::pin(async move {
             // Note: Actual debouncing would require wasm-bindgen-futures

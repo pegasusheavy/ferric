@@ -5,7 +5,7 @@
 use crate::models::{Todo, TodoFilter, TodoStats};
 use crate::services::TodoStorage;
 use ferric_core::reactive::{
-    batch, computed, effect, signal, watch, Computed, Effect, Signal,
+    batch, computed, effect, signal, Computed, Effect, Signal,
 };
 use std::rc::Rc;
 

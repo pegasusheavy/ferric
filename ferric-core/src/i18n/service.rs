@@ -122,11 +122,10 @@ impl I18nService {
         let inner = self.inner.borrow();
         let locale = &inner.locale;
 
-        if let Some(value) = inner.store.get_with_fallback(locale, key) {
-            if let Some(s) = value.as_string() {
+        if let Some(value) = inner.store.get_with_fallback(locale, key)
+            && let Some(s) = value.as_string() {
                 return interpolate(s, params);
             }
-        }
 
         // Fallback to global store
         drop(inner);
@@ -138,15 +137,14 @@ impl I18nService {
         let inner = self.inner.borrow();
         let locale = &inner.locale;
 
-        if let Some(value) = inner.store.get_with_fallback(locale, key) {
-            if let Some(plurals) = value.as_plural() {
+        if let Some(value) = inner.store.get_with_fallback(locale, key)
+            && let Some(plurals) = value.as_plural() {
                 let category = get_plural_category(&locale.language, count);
 
                 if let Some(template) = plurals.get(&category).or_else(|| plurals.get(&super::plural::PluralCategory::Other)) {
                     return interpolate(template, params);
                 }
             }
-        }
 
         // Fallback to global store
         drop(inner);

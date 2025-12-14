@@ -43,3 +43,4 @@ pnpm-lock.yaml
 
 pkg/
 
+coverage/

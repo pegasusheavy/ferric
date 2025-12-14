@@ -309,18 +309,15 @@ impl TemplateRenderer {
         let target = &binding.target;
 
         // Check for special prefixes
-        if target.starts_with("attr.") {
-            let attr = &target[5..];
+        if let Some(attr) = target.strip_prefix("attr.") {
             return self.process_attribute_binding_with_name(element, attr, &binding.expression);
         }
 
-        if target.starts_with("class.") {
-            let class_name = &target[6..];
+        if let Some(class_name) = target.strip_prefix("class.") {
             return self.process_class_binding_with_name(element, class_name, &binding.expression);
         }
 
-        if target.starts_with("style.") {
-            let style_prop = &target[6..];
+        if let Some(style_prop) = target.strip_prefix("style.") {
             return self.process_style_binding_with_name(element, style_prop, &binding.expression);
         }
 

@@ -18,8 +18,6 @@
 //! ```
 
 use super::{FormControl, FormGroup, FormArray, AbstractControl};
-use std::any::Any;
-use std::cell::Ref;
 use std::rc::Rc;
 
 /// Extension trait for type-safe FormGroup access.

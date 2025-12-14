@@ -1,0 +1,56 @@
+# Documentation Location
+
+**All documentation markdown files must be placed in the `docs/` folder.**
+
+## Documentation File Locations
+
+### ✅ Correct Locations
+
+- `docs/GUIDE_NAME.md` - Guides and tutorials
+- `docs/API_REFERENCE.md` - API documentation
+- `docs/ARCHITECTURE.md` - Architecture docs
+- `docs/CONTRIBUTING.md` - Contribution guidelines
+- `docs/feature-name/` - Feature-specific docs
+- Module-specific: `module-name/docs/` or `module-name/README.md`
+
+### ❌ Incorrect Locations (Don't Use)
+
+- `GUIDE_NAME.md` (root level)
+- `SOME_DOCUMENTATION.md` (root level)
+- Random markdown files scattered in root
+
+## Root Level Exceptions
+
+Only these files are allowed in the project root:
+- `README.md` - Project overview
+- `LICENSE` - License file
+- `CONTRIBUTING.md` - If not in docs/
+- `TODO.md` - Task tracking
+- `Cargo.toml`, `package.json`, etc. - Config files
+
+## When Creating Documentation
+
+1. **Check if `docs/` folder exists** - Create it if needed
+2. **Place all guides in `docs/`** - Keep root clean
+3. **Organize by topic** - Use subdirectories for complex topics
+4. **Link from README** - Main README should link to docs/
+
+## Examples
+
+```
+✅ Good:
+docs/ASYNC_SUPPORT_GUIDE.md
+docs/MACROS_GUIDE.md
+docs/forms/VALIDATION_GUIDE.md
+ferric-http/README.md
+
+❌ Bad:
+ASYNC_SUPPORT_GUIDE.md (in root)
+HTTP_GUIDE.md (in root)
+GUIDE.md (in root)
+```
+
+## Rule
+
+Always ask yourself: "Should this be in docs/ ?"
+If it's a guide, tutorial, or documentation → **Yes, put it in docs/**

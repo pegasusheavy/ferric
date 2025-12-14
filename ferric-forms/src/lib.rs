@@ -38,6 +38,7 @@
 //! ```
 
 pub mod controls;
+pub mod di;
 pub mod validators;
 pub mod state;
 pub mod binding;
@@ -66,6 +67,9 @@ pub use controls::{
     FormValueResult,
     FormPath,
 };
+
+// DI integration
+pub use di::{FormBuilder, FormsModule, tokens as form_tokens};
 
 pub use validators::{
     Validator,

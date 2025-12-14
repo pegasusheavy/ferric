@@ -408,11 +408,10 @@ fn find_element_end(html: &str) -> Option<usize> {
     let tag_end = html[1..].find(|c: char| c.is_whitespace() || c == '>' || c == '/')?;
     let tag_name = &html[1..1 + tag_end];
 
-    if let Some(close) = html.find("/>") {
-        if html[..close].find('>').map_or(true, |g| g > close) {
+    if let Some(close) = html.find("/>")
+        && html[..close].find('>').is_none_or(|g| g > close) {
             return Some(close + 2);
         }
-    }
 
     let open_end = html.find('>')?;
 

@@ -230,7 +230,7 @@ impl<'a> IndexBuilder<'a> {
 
     /// Build and create the index.
     pub fn build(self) -> IdbResult<Index> {
-        let mut params = web_sys::IdbIndexParameters::new();
+        let params = web_sys::IdbIndexParameters::new();
         params.set_unique(self.unique);
         params.set_multi_entry(self.multi_entry);
 

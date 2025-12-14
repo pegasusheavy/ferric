@@ -2,7 +2,7 @@
 
 use crate::models::TodoFilter;
 use crate::store::TodoStore;
-use crate::template::{create_element, document, html, inject_styles, on_event, query, set_text};
+use crate::template::{document, html, inject_styles, on_event, query, set_text};
 use ferric_core::reactive::{effect, Effect};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
@@ -146,11 +146,10 @@ impl TodoApp {
             let store_for_effect = Rc::clone(&store);
             let fx = effect(move || {
                 let text = store_for_effect.new_todo_text.get();
-                if let Ok(input) = input_clone.clone().dyn_into::<HtmlInputElement>() {
-                    if input.value() != text {
+                if let Ok(input) = input_clone.clone().dyn_into::<HtmlInputElement>()
+                    && input.value() != text {
                         input.set_value(&text);
                     }
-                }
             });
             self._effects.push(fx);
         }
@@ -270,16 +269,14 @@ impl TodoApp {
                         setup_todo_item_handlers(&item, todo.id, &store);
 
                         // Focus edit input if editing
-                        if is_editing {
-                            if let Some(edit_input) = query(&item, ".edit") {
-                                if let Ok(input) = edit_input.dyn_into::<HtmlInputElement>() {
+                        if is_editing
+                            && let Some(edit_input) = query(&item, ".edit")
+                                && let Ok(input) = edit_input.dyn_into::<HtmlInputElement>() {
                                     input.set_value(&store.edit_text.get());
                                     let _ = input.focus();
                                     let len = input.value().len() as u32;
                                     let _ = input.set_selection_range(len, len);
                                 }
-                            }
-                        }
 
                         let _ = list_clone.append_child(&item);
                     }

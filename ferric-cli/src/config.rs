@@ -6,6 +6,7 @@ use std::path::Path;
 
 /// Main project configuration loaded from ferric.toml
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct FerricConfig {
     /// Project metadata
     #[serde(default)]
@@ -32,18 +33,6 @@ pub struct FerricConfig {
     pub assets: AssetConfig,
 }
 
-impl Default for FerricConfig {
-    fn default() -> Self {
-        Self {
-            project: ProjectConfig::default(),
-            build: BuildConfig::default(),
-            ssr: SsrConfig::default(),
-            styles: StyleConfig::default(),
-            serve: ServeConfig::default(),
-            assets: AssetConfig::default(),
-        }
-    }
-}
 
 impl FerricConfig {
     /// Load configuration from ferric.toml in the current directory

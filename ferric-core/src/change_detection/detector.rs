@@ -128,15 +128,14 @@ impl ChangeDetectorRef {
         inner.status = ChangeDetectorStatus::CheckOnce;
 
         // Mark ancestors
-        if let Some(ref parent_weak) = inner.parent {
-            if let Some(parent) = parent_weak.upgrade() {
+        if let Some(ref parent_weak) = inner.parent
+            && let Some(parent) = parent_weak.upgrade() {
                 drop(inner); // Release borrow before recursing
                 let parent_ref = ChangeDetectorRef {
                     inner: parent,
                 };
                 parent_ref.mark_for_check();
             }
-        }
     }
 
     /// Immediately run change detection on this component and its children.
@@ -364,12 +363,11 @@ impl DetectorTree {
     pub fn remove(&mut self, id: DetectorId) {
         if let Some(detector) = self.detectors.remove(&id) {
             // Remove from parent's children
-            if let Some(parent_weak) = detector.inner.borrow().parent.as_ref() {
-                if let Some(parent) = parent_weak.upgrade() {
+            if let Some(parent_weak) = detector.inner.borrow().parent.as_ref()
+                && let Some(parent) = parent_weak.upgrade() {
                     let parent_ref = ChangeDetectorRef { inner: parent };
                     parent_ref.remove_child(&detector);
                 }
-            }
         }
     }
 

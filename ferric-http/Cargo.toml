@@ -14,6 +14,7 @@ json = ["serde", "serde_json"]
 multipart = []
 
 [dependencies]
+ferric-core = { path = "../ferric-core", default-features = false }
 thiserror = "2.0"
 url = "2.5"
 http = "1.2"

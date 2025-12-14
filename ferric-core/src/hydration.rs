@@ -6,7 +6,6 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{Document, Element, Window};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// Hydration context for the client-side.
@@ -78,11 +77,10 @@ impl HydrationContext {
         let mut targets = Vec::new();
 
         for i in 0..elements.length() {
-            if let Some(el) = elements.item(i) {
-                if let Some(element) = el.dyn_ref::<Element>() {
+            if let Some(el) = elements.item(i)
+                && let Some(element) = el.dyn_ref::<Element>() {
                     targets.push(element.clone());
                 }
-            }
         }
 
         Ok(targets)
@@ -95,11 +93,10 @@ impl HydrationContext {
         let mut targets = Vec::new();
 
         for i in 0..elements.length() {
-            if let Some(el) = elements.item(i) {
-                if let Some(element) = el.dyn_ref::<Element>() {
+            if let Some(el) = elements.item(i)
+                && let Some(element) = el.dyn_ref::<Element>() {
                     targets.push(element.clone());
                 }
-            }
         }
 
         Ok(targets)

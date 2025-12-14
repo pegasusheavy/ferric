@@ -362,11 +362,10 @@ impl FormValidationDemo {
                 });
 
                 for selector in ["#username", "#email", "#password", "#confirm-password"] {
-                    if let Some(input) = container.query_selector(selector).ok().flatten() {
-                        if let Ok(input) = input.dyn_into::<HtmlInputElement>() {
+                    if let Some(input) = container.query_selector(selector).ok().flatten()
+                        && let Ok(input) = input.dyn_into::<HtmlInputElement>() {
                             input.set_value("");
                         }
-                    }
                 }
             }) as Box<dyn Fn(_)>);
 
@@ -405,14 +404,13 @@ impl FormValidationDemo {
         if let Some(input) = container.query_selector(selector).ok().flatten() {
             let field_for_input = field.clone();
             let input_closure = Closure::wrap(Box::new(move |e: web_sys::Event| {
-                if let Some(target) = e.target() {
-                    if let Ok(input) = target.dyn_into::<HtmlInputElement>() {
+                if let Some(target) = e.target()
+                    && let Ok(input) = target.dyn_into::<HtmlInputElement>() {
                         field_for_input.mutate(|state| {
                             state.value = input.value();
                             state.dirty = true;
                         });
                     }
-                }
             }) as Box<dyn Fn(_)>);
             let _ = input.add_event_listener_with_callback("input", input_closure.as_ref().unchecked_ref());
             input_closure.forget();

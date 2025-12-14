@@ -111,13 +111,12 @@ fn parse_selector(selector: &str) -> SelectorKind {
     }
 
     // Tag with class: tag.class
-    if let Some(dot_pos) = selector.find('.') {
-        if !selector.contains('[') {
+    if let Some(dot_pos) = selector.find('.')
+        && !selector.contains('[') {
             let tag = selector[..dot_pos].to_string();
             let class = selector[dot_pos + 1..].to_string();
             return SelectorKind::TagClass(tag, class);
         }
-    }
 
     // Tag with attribute: tag[attr]
     if let Some(bracket_pos) = selector.find('[') {
@@ -155,7 +154,7 @@ pub fn matches_selector(
 
         SelectorKind::AttributeValue(attr, value) => {
             attributes.iter().any(|(name, val)| {
-                *name == attr && val.map_or(false, |v| v == value)
+                *name == attr && val.is_some_and(|v| v == value)
             })
         }
 

@@ -10,7 +10,7 @@ use std::sync::Arc;
 /// Thread-local pipe registry.
 thread_local! {
     static PIPE_REGISTRY: RefCell<HashMap<String, Arc<dyn Pipe>>> = RefCell::new(HashMap::new());
-    static INITIALIZED: RefCell<bool> = RefCell::new(false);
+    static INITIALIZED: RefCell<bool> = const { RefCell::new(false) };
 }
 
 /// Pipe registry for managing available pipes.

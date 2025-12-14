@@ -3,7 +3,6 @@
 //! This module provides both sync and async variants of lifecycle hooks,
 //! as well as utilities for hook execution.
 
-use super::Changes;
 use std::future::Future;
 use std::pin::Pin;
 

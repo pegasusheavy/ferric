@@ -403,11 +403,10 @@ fn parse_single_element(html: &str) -> Option<ProjectedContent> {
         };
 
         // Handle class attribute specially
-        if attr_name == "class" {
-            if let Some(ref class_str) = attr_value {
+        if attr_name == "class"
+            && let Some(ref class_str) = attr_value {
                 classes.extend(class_str.split_whitespace().map(|s| s.to_string()));
             }
-        }
 
         attributes.push((attr_name, attr_value));
     }

@@ -4,8 +4,10 @@ use std::fmt;
 
 /// The current lifecycle state of a component.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Default)]
 pub enum LifecycleState {
     /// Component has been created but not initialized.
+    #[default]
     Created,
     /// Component is currently initializing.
     Initializing,
@@ -110,11 +112,6 @@ impl LifecycleState {
     }
 }
 
-impl Default for LifecycleState {
-    fn default() -> Self {
-        LifecycleState::Created
-    }
-}
 
 impl fmt::Display for LifecycleState {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

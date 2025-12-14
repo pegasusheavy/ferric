@@ -45,7 +45,7 @@ pub fn component_impl(args: TokenStream, input: TokenStream) -> syn::Result<Toke
     let args = ComponentArgs::from_list(&attr_args)?;
 
     // Parse the struct
-    let mut item: ItemStruct = parse2(input)?;
+    let item: ItemStruct = parse2(input)?;
 
     // Validate: must have either template or template_url
     if args.template.is_none() && args.template_url.is_none() {
@@ -109,7 +109,7 @@ pub fn component_impl(args: TokenStream, input: TokenStream) -> syn::Result<Toke
     let style_url_lits: Vec<_> = args.style_urls.iter().map(|url| utils::lit_str(url)).collect();
 
     // Add a hidden field to store component metadata
-    let metadata_field = quote! {
+    let _metadata_field = quote! {
         #[doc(hidden)]
         __ferric_metadata: ::std::marker::PhantomData<()>,
     };
@@ -237,7 +237,10 @@ pub fn derive_component_impl(input: TokenStream) -> syn::Result<TokenStream> {
 }
 
 /// Collect input and output fields from struct fields.
-fn collect_io_fields(fields: &Fields) -> syn::Result<(Vec<(String, Ident, Type)>, Vec<(String, Ident)>)> {
+type InputFields = Vec<(String, Ident, Type)>;
+type OutputFields = Vec<(String, Ident)>;
+
+fn collect_io_fields(fields: &Fields) -> syn::Result<(InputFields, OutputFields)> {
     let mut inputs = Vec::new();
     let mut outputs = Vec::new();
 
@@ -248,11 +251,11 @@ fn collect_io_fields(fields: &Fields) -> syn::Result<(Vec<(String, Ident, Type)>
             for attr in &field.attrs {
                 if attr.path().is_ident("input") {
                     // Check for alias
-                    let alias = extract_alias(&attr)?;
+                    let alias = extract_alias(attr)?;
                     let name = alias.unwrap_or_else(|| field_name.to_string());
                     inputs.push((name, field_name.clone(), field.ty.clone()));
                 } else if attr.path().is_ident("output") {
-                    let alias = extract_alias(&attr)?;
+                    let alias = extract_alias(attr)?;
                     let name = alias.unwrap_or_else(|| field_name.to_string());
                     outputs.push((name, field_name.clone()));
                 }
@@ -276,13 +279,11 @@ fn extract_alias(attr: &syn::Attribute) -> syn::Result<Option<String>> {
             list.parse_args_with(syn::punctuated::Punctuated::parse_terminated)?;
 
         for meta in nested {
-            if let syn::Meta::NameValue(nv) = meta {
-                if nv.path.is_ident("alias") {
-                    if let syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Str(s), .. }) = nv.value {
+            if let syn::Meta::NameValue(nv) = meta
+                && nv.path.is_ident("alias")
+                    && let syn::Expr::Lit(syn::ExprLit { lit: syn::Lit::Str(s), .. }) = nv.value {
                         return Ok(Some(s.value()));
                     }
-                }
-            }
         }
     }
 
