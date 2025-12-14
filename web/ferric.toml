@@ -16,6 +16,21 @@ wasm_opt = "s"
 browser = true
 server = false
 
+# Cache busting configuration for production builds
+[build.cache_busting]
+# Enable cache busting (adds content hash to filenames)
+enabled = true
+# Hash strategy: "md5" (fast), "sha256" (secure), or "timestamp"
+strategy = "md5"
+# Length of hash to append to filename
+hash_length = 8
+# Apply to CSS files (styles.css -> styles.a1b2c3d4.css)
+css = true
+# Apply to JS/Wasm files (pkg files)
+js = true
+# Apply to assets (images, fonts, etc)
+assets = false
+
 [ssr]
 enabled = false
 
@@ -36,4 +51,3 @@ open = true
 dir = "assets"
 copy = ["favicon.svg"]
 hash = false
-

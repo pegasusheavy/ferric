@@ -6,6 +6,7 @@ use clap::{Parser, Subcommand};
 use console::style;
 use std::process::ExitCode;
 
+mod cache_busting;
 mod commands;
 mod config;
 mod scss;

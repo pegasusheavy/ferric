@@ -108,7 +108,75 @@ async fn build_browser(config: &FerricConfig, release: bool, watch: bool) -> Res
         )?;
     }
 
+    // Apply cache busting if enabled
+    if config.build.cache_busting.enabled && release {
+        println!("  {} Applying cache busting...", style("→").cyan());
+        apply_cache_busting(config)?;
+    }
+
     println!("    {} Browser build complete", style("✓").green());
+    Ok(())
+}
+
+/// Apply cache busting to build artifacts
+fn apply_cache_busting(config: &FerricConfig) -> Result<()> {
+    use crate::cache_busting::{process_directory, Strategy, update_html_references};
+    use std::path::Path;
+
+    let cb_config = &config.build.cache_busting;
+    let strategy = Strategy::from_str(&cb_config.strategy);
+    let out_dir = Path::new(&config.build.out_dir);
+
+    // Process pkg directory (wasm + js files)
+    let pkg_dir = out_dir.join("pkg");
+    let mut mappings = process_directory(
+        &pkg_dir,
+        strategy,
+        cb_config.hash_length,
+        cb_config.css,
+        cb_config.js,
+        cb_config.assets,
+    )?;
+
+    // Process styles directory
+    let styles_dir = out_dir.join("styles");
+    if styles_dir.exists() {
+        let style_mappings = process_directory(
+            &styles_dir,
+            strategy,
+            cb_config.hash_length,
+            cb_config.css,
+            false, // Don't reprocess js in styles dir
+            cb_config.assets,
+        )?;
+        mappings.extend(style_mappings);
+    }
+
+    // Process dist directory
+    let dist_styles = out_dir.join("dist");
+    if dist_styles.exists() {
+        let dist_mappings = process_directory(
+            &dist_styles,
+            strategy,
+            cb_config.hash_length,
+            cb_config.css,
+            false,
+            cb_config.assets,
+        )?;
+        mappings.extend(dist_mappings);
+    }
+
+    // Update HTML file references
+    let html_path = out_dir.join("index.html");
+    if html_path.exists() && !mappings.is_empty() {
+        update_html_references(&html_path, &mappings)?;
+        println!(
+            "    {} Updated {} file references in index.html",
+            style("✓").green(),
+            mappings.len()
+        );
+    }
+
     Ok(())
 }
 

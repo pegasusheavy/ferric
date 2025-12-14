@@ -287,6 +287,46 @@ pub struct BuildConfig {
     /// Build targets
     #[serde(default)]
     pub targets: BuildTargets,
+
+    /// Cache busting configuration
+    #[serde(default)]
+    pub cache_busting: CacheBustingConfig,
+}
+
+/// Cache busting configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CacheBustingConfig {
+    /// Enable cache busting
+    #[serde(default = "default_true")]
+    pub enabled: bool,
+
+    /// Hash strategy: "md5", "sha256", or "timestamp"
+    #[serde(default = "default_hash_strategy")]
+    pub strategy: String,
+
+    /// Hash length for content-based strategies
+    #[serde(default = "default_hash_length")]
+    pub hash_length: usize,
+
+    /// Apply to CSS files
+    #[serde(default = "default_true")]
+    pub css: bool,
+
+    /// Apply to JS/Wasm files
+    #[serde(default = "default_true")]
+    pub js: bool,
+
+    /// Apply to assets
+    #[serde(default)]
+    pub assets: bool,
+}
+
+fn default_hash_strategy() -> String {
+    "md5".to_string()
+}
+
+fn default_hash_length() -> usize {
+    8
 }
 
 fn default_out_dir() -> String {
@@ -318,6 +358,20 @@ impl Default for BuildConfig {
             source_maps: true,
             wasm_opt: default_wasm_opt(),
             targets: BuildTargets::default(),
+            cache_busting: CacheBustingConfig::default(),
+        }
+    }
+}
+
+impl Default for CacheBustingConfig {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            strategy: default_hash_strategy(),
+            hash_length: default_hash_length(),
+            css: true,
+            js: true,
+            assets: false,
         }
     }
 }
