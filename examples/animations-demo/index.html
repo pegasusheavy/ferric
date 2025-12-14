@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferric Animations Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .demo-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .demo-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .demo-box {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-box:hover {
+            transform: scale(1.05);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        #console {
+            background: #1a202c;
+            color: #48bb78;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Ferric Animations</h1>
+
+        <div class="info-section">
+            <h2>About</h2>
+            <p>
+                Ferric Animations is an Angular-inspired animation system for the Ferric framework.
+                It provides a declarative API for creating smooth, performant animations using the Web Animations API.
+            </p>
+            <ul class="feature-list">
+                <li>Animation Triggers with named states</li>
+                <li>Smooth transitions with timing functions</li>
+                <li>Keyframe animations for complex sequences</li>
+                <li>Stagger animations for lists</li>
+                <li>Route animations</li>
+                <li>Builder API for fluent construction</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h2>Console Output</h2>
+            <p>Open your browser's developer console to see animation details and examples.</p>
+            <div id="console"></div>
+        </div>
+
+        <div class="demo-grid">
+            <div class="demo-card">
+                <h2>Fade Animation</h2>
+                <p>Simple opacity transition from hidden to visible state.</p>
+                <div class="demo-box" id="fade-box">Fade</div>
+                <div class="controls">
+                    <button onclick="animateFade('hidden')">Hide</button>
+                    <button onclick="animateFade('visible')">Show</button>
+                </div>
+            </div>
+
+            <div class="demo-card">
+                <h2>Slide Animation</h2>
+                <p>Translate transform with cubic-bezier easing.</p>
+                <div class="demo-box" id="slide-box">Slide</div>
+                <div class="controls">
+                    <button onclick="animateSlide('left')">Left</button>
+                    <button onclick="animateSlide('center')">Center</button>
+                    <button onclick="animateSlide('right')">Right</button>
+                </div>
+            </div>
+
+            <div class="demo-card">
+                <h2>Bounce Animation</h2>
+                <p>Multi-step keyframe animation.</p>
+                <div class="demo-box" id="bounce-box">Bounce</div>
+                <div class="controls">
+                    <button onclick="animateBounce()">Bounce!</button>
+                </div>
+            </div>
+
+            <div class="demo-card">
+                <h2>Stagger Animation</h2>
+                <p>Progressive delay for list items.</p>
+                <div id="stagger-container"></div>
+                <div class="controls">
+                    <button onclick="animateStagger()">Stagger</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section" style="margin-top: 40px;">
+            <h2>Code Examples</h2>
+            <div class="code-block">
+// Create a fade animation trigger
+let fade = trigger("fade", vec![
+    state("hidden", vec![("opacity", "0")]),
+    state("visible", vec![("opacity", "1")]),
+    transition("hidden => visible", "600ms ease-in"),
+]);
+
+// Use the builder API
+let slide = AnimationBuilder::new("slide")
+    .state("left", vec![("transform", "translateX(-100%)")])
+    .state("center", vec![("transform", "translateX(0)")])
+    .transition("left => center", "400ms ease-out")
+    .build();
+
+// Create stagger configuration
+let stagger = StaggerBuilder::new(300, 50)
+    .max_items(10)
+    .reverse()
+    .build();
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import init, { log_example_animations } from './pkg/animations_demo.js';
+
+        // Redirect console.log to our custom console
+        const consoleEl = document.getElementById('console');
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.textContent = args.join(' ');
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        };
+
+        async function run() {
+            await init();
+            console.log('✨ Ferric Animations Demo Ready!');
+            console.log('');
+            log_example_animations();
+        }
+
+        run();
+
+        // Placeholder animation functions (would use actual Ferric animations in real app)
+        window.animateFade = function(state) {
+            const box = document.getElementById('fade-box');
+            box.style.transition = 'opacity 600ms ease';
+            box.style.opacity = state === 'hidden' ? '0' : '1';
+            console.log(`Fade animation: ${state}`);
+        };
+
+        window.animateSlide = function(state) {
+            const box = document.getElementById('slide-box');
+            box.style.transition = 'transform 400ms cubic-bezier(0.35, 0, 0.25, 1)';
+            const transforms = {
+                left: 'translateX(-100%)',
+                center: 'translateX(0)',
+                right: 'translateX(100%)'
+            };
+            box.style.transform = transforms[state];
+            console.log(`Slide animation: ${state}`);
+        };
+
+        window.animateBounce = function() {
+            const box = document.getElementById('bounce-box');
+            box.style.animation = 'none';
+            setTimeout(() => {
+                box.style.animation = 'bounce 600ms ease';
+            }, 10);
+            console.log('Bounce animation triggered');
+        };
+
+        window.animateStagger = function() {
+            console.log('Stagger animation triggered');
+            // Implementation would use actual stagger config
+        };
+
+        // CSS animation for bounce
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0% { transform: translateY(0); }
+                20% { transform: translateY(-30px); }
+                40% { transform: translateY(0); }
+                50% { transform: translateY(-15px); }
+                60% { transform: translateY(0); }
+                100% { transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+

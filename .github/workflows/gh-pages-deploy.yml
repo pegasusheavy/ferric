@@ -64,7 +64,7 @@ jobs:
       - name: Prepare deployment directory
         run: |
           mkdir -p deploy
-          
+
           # Copy web assets
           cp -r web/index.html deploy/
           cp -r web/docs.html deploy/ || true
@@ -75,10 +75,10 @@ jobs:
           cp -r web/styles deploy/
           cp -r web/assets deploy/ || true
           cp -r web/docs deploy/ || true
-          
+
           # Create .nojekyll to disable Jekyll processing
           touch deploy/.nojekyll
-          
+
           # Create CNAME if needed (update with your domain)
           # echo "ferric.rs" > deploy/CNAME
 

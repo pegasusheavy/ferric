@@ -98,7 +98,7 @@ This branch contains the built documentation site for the Ferric Framework.
 
 ## About Ferric
 
-Ferric is a modern web framework for Rust with Angular-inspired architecture, 
+Ferric is a modern web framework for Rust with Angular-inspired architecture,
 reactive programming, and WebAssembly performance.
 
 ## Local Development
@@ -119,7 +119,7 @@ python3 -m http.server 8080
 
 ## Contributing
 
-Please make changes in the `develop` branch, not in `gh-pages`. 
+Please make changes in the `develop` branch, not in `gh-pages`.
 The `gh-pages` branch is automatically built and deployed by GitHub Actions.
 
 ---

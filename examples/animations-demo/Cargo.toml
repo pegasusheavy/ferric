@@ -1,0 +1,21 @@
+[package]
+name = "animations-demo"
+version = "0.1.0"
+edition = "2024"
+authors = ["Joseph R. Quinn <quinn.josephr@protonmail.com>"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+ferric-animations = { path = "../../ferric-animations" }
+
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = [
+    "Document",
+    "Element",
+    "HtmlElement",
+    "Window",
+    "console",
+] }
+

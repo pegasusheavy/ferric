@@ -235,9 +235,9 @@ Consider using:
 Add to `web/index.html`:
 
 ```html
-<meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' 'wasm-unsafe-eval'; 
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'wasm-unsafe-eval';
                style-src 'self' 'unsafe-inline' fonts.googleapis.com;
                font-src 'self' fonts.gstatic.com;">
 ```
