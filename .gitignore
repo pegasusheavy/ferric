@@ -1,46 +1,56 @@
-# Rust / Cargo
-/target/
+# Rust
+target/
+**/*.rs.bk
+*.pdb
 Cargo.lock
+!Cargo.lock.example
 
-# WASM build outputs
-/pkg/
-/out/
-ferric/pkg/
+# Wasm
+**/pkg/
+**/*.wasm
 
-# Node modules
+# Node
 node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
 
-# Build outputs
-/dist/
-tools/dist/
+# Build artifacts
+dist/
+build/
+deploy/
+*.out
 
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+*.profraw
+*.profdata
+tarpaulin-report.html
+cobertura.xml
+
+# Temporary files
+*.tmp
+*.temp
+.ferric-*
+*.log
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Environment
-.env
-.env.local
+# Documentation build artifacts
+web/pkg/
+web/styles/dist/*.css
+!web/styles/dist/.gitkeep
 
-# Test coverage
-*.profraw
-*.profdata
-
-# Documentation build
-/doc/
-
-# Logs
-*.log
-
-# pnpm
-pnpm-lock.yaml
-
-pkg/
-
-coverage/
+# Deployment
+deploy/
+gh-pages-temp/
