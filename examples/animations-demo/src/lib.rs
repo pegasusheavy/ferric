@@ -133,7 +133,7 @@ pub fn example_animations() -> Vec<AnimationTrigger> {
             transition("void => *", "300ms ease-in"),
             transition("* => void", "300ms ease-out"),
         ]),
-        
+
         // Expand/collapse
         trigger("expandCollapse", vec![
             state("collapsed", vec![
@@ -146,14 +146,14 @@ pub fn example_animations() -> Vec<AnimationTrigger> {
             ]),
             transition("collapsed <=> expanded", "400ms ease-in-out"),
         ]),
-        
+
         // Rotate
         trigger("rotate", vec![
             state("default", vec![("transform", "rotate(0deg)")]),
             state("rotated", vec![("transform", "rotate(180deg)")]),
             transition("default <=> rotated", "300ms ease-in-out"),
         ]),
-        
+
         // Scale
         trigger("scale", vec![
             state("small", vec![("transform", "scale(0.8)")]),
@@ -168,7 +168,7 @@ pub fn example_animations() -> Vec<AnimationTrigger> {
 pub fn log_example_animations() {
     let animations = example_animations();
     web_sys::console::log_1(&format!("📦 Loaded {} example animations", animations.len()).into());
-    
+
     for animation in animations {
         web_sys::console::log_1(&format!(
             "  - {} ({} states, {} transitions)",

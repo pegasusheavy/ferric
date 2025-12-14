@@ -1,12 +1,12 @@
 //! Animation player and execution
 //!
-//! Manages the execution of animations using the Web Animations API.
+//! Manages the execution of animations using CSS transitions.
 
 use crate::{AnimationState, AnimationTrigger, Transition};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-use web_sys::{Element, KeyframeEffect};
+use web_sys::Element;
 
 /// Animation player
 pub struct AnimationPlayer {
@@ -59,101 +59,44 @@ impl AnimationPlayer {
         Ok(())
     }
 
-    /// Apply a transition
+    /// Apply a transition using CSS
     fn apply_transition(
         &self,
         from: &str,
         to: &str,
         transition: &Transition,
     ) -> Result<(), JsValue> {
-        // Get from and to states
-        let from_state = self.trigger.get_state(from);
-        let to_state = self.trigger.get_state(to);
+        let html_element = self
+            .element
+            .dyn_ref::<web_sys::HtmlElement>()
+            .ok_or_else(|| JsValue::from_str("Element is not an HtmlElement"))?;
 
-        if from_state.is_none() && to_state.is_none() {
-            return Ok(());
+        let style = html_element.style();
+
+        // Apply from state first
+        if let Some(state) = self.trigger.get_state(from) {
+            for (property, value) in &state.styles {
+                style.set_property(property, value)?;
+            }
         }
 
-        // Create keyframes
-        let keyframes = js_sys::Array::new();
+        // Set up CSS transition
+        let transition_value = format!(
+            "all {}ms {} {}ms",
+            transition.timing.duration,
+            transition.timing.easing.to_css(),
+            transition.timing.delay
+        );
+        style.set_property("transition", &transition_value)?;
 
-        // From keyframe
-        if let Some(state) = from_state {
-            keyframes.push(&Self::state_to_keyframe(state, 0.0)?);
+        // Apply to state
+        if let Some(state) = self.trigger.get_state(to) {
+            for (property, value) in &state.styles {
+                style.set_property(property, value)?;
+            }
         }
-
-        // To keyframe
-        if let Some(state) = to_state {
-            keyframes.push(&Self::state_to_keyframe(state, 1.0)?);
-        }
-
-        // Create animation options
-        let options = js_sys::Object::new();
-        js_sys::Reflect::set(
-            &options,
-            &JsValue::from_str("duration"),
-            &JsValue::from_f64(transition.timing.duration as f64),
-        )?;
-        js_sys::Reflect::set(
-            &options,
-            &JsValue::from_str("delay"),
-            &JsValue::from_f64(transition.timing.delay as f64),
-        )?;
-        js_sys::Reflect::set(
-            &options,
-            &JsValue::from_str("easing"),
-            &JsValue::from_str(&transition.timing.easing.to_css()),
-        )?;
-        js_sys::Reflect::set(
-            &options,
-            &JsValue::from_str("fill"),
-            &JsValue::from_str("forwards"),
-        )?;
-
-        // Create and play animation
-        let animation = self.element.animate_with_keyframes_and_keyframe_animation_options(
-            Some(&keyframes),
-            &options,
-        )?;
-
-        animation.play()?;
 
         Ok(())
-    }
-
-    fn state_to_keyframe(state: &AnimationState, offset: f32) -> Result<JsValue, JsValue> {
-        let keyframe = js_sys::Object::new();
-
-        // Set offset
-        js_sys::Reflect::set(
-            &keyframe,
-            &JsValue::from_str("offset"),
-            &JsValue::from_f64(offset as f64),
-        )?;
-
-        // Set styles
-        for (property, value) in &state.styles {
-            // Convert CSS property names (e.g., "background-color" to "backgroundColor")
-            let camel_case = property
-                .split('-')
-                .enumerate()
-                .map(|(i, part)| {
-                    if i == 0 {
-                        part.to_string()
-                    } else {
-                        let mut chars = part.chars();
-                        match chars.next() {
-                            None => String::new(),
-                            Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
-                        }
-                    }
-                })
-                .collect::<String>();
-
-            js_sys::Reflect::set(&keyframe, &JsValue::from_str(&camel_case), &JsValue::from_str(value))?;
-        }
-
-        Ok(keyframe.into())
     }
 
     /// Get the current state

@@ -6,7 +6,6 @@ use crate::{
     AnimationState, AnimationTrigger, KeyframeSequence, StaggerConfig, Transition,
     TransitionMatcher,
 };
-use std::collections::HashMap;
 
 /// Builder for creating animation triggers
 pub struct AnimationBuilder {

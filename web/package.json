@@ -1,14 +1,14 @@
 {
   "name": "ferric-docs",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "private": true,
   "description": "Ferric Framework Documentation Website",
   "scripts": {
     "build:css": "tailwindcss -i ./styles/rust-theme.css -o ./styles/dist/rust-theme.min.css --minify",
-    "watch:css": "tailwindcss -i ./styles/rust-theme.css -o ./styles/dist/rust-theme.min.css --watch",
-    "dev": "npm run watch:css"
+    "watch:css": "tailwindcss -i ./styles/rust-theme.css -o ./styles/dist/rust-theme.min.css --watch"
   },
-  "devDependencies": {
-    "tailwindcss": "^4.0.0",
-    "@tailwindcss/typography": "^0.6.0"
-  }
+  "dependencies": {
+    "@tailwindcss/cli": "next"
+  },
+  "devDependencies": {}
 }

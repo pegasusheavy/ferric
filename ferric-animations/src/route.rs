@@ -2,7 +2,7 @@
 //!
 //! Animations triggered by route changes.
 
-use crate::{AnimationTrigger, TransitionMatcher};
+use crate::AnimationTrigger;
 use serde::{Deserialize, Serialize};
 
 /// Route animation configuration
