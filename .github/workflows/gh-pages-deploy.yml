@@ -24,14 +24,12 @@ jobs:
           ref: develop
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: wasm32-unknown-unknown
-          override: true
+          targets: wasm32-unknown-unknown
 
       - name: Cache Rust dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -65,7 +63,7 @@ jobs:
       - name: Install Node dependencies
         run: |
           cd web
-          npm ci
+          npm install
 
       - name: Build CSS with ferric-cli
         run: |
