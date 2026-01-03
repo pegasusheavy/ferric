@@ -1,6 +1,7 @@
 //! Benchmarks for DOM operations.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 
 // Note: These are placeholder benchmarks as we can't run actual DOM operations in a benchmark context
 // In a real scenario, you'd use wasm-bindgen-test with a headless browser

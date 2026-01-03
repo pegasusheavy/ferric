@@ -2,7 +2,8 @@
 //!
 //! Run with: cargo bench -p ferric
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+use std::hint::black_box;
 use ferric_core::reactive::{batch, computed, signal};
 
 /// Benchmark signal creation

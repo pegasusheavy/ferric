@@ -1,6 +1,7 @@
 //! Benchmarks for pipes operations.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 use ferric_core::pipes::{Pipe, PipeArgs, PipeRegistry};
 
 fn bench_pipe_registry(c: &mut Criterion) {

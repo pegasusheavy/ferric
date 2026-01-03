@@ -1,6 +1,7 @@
 //! Benchmarks for component operations.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 use ferric_core::component::{ComponentMetadata, ComponentContext, ViewEncapsulation, ChangeDetectionStrategy};
 use ferric_core::reactive::signal;
 use ferric_core::di::Injector;

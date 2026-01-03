@@ -1,6 +1,7 @@
 //! Benchmarks for the reactivity system.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 use ferric_core::reactive::{signal, computed, effect, batch};
 
 fn bench_signal_creation(c: &mut Criterion) {

@@ -1,6 +1,7 @@
 //! Benchmarks for forms operations.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 use ferric_forms::controls::{FormControl, FormGroup, FormArray};
 use std::rc::Rc;
 

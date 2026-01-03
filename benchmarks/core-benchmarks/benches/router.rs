@@ -1,6 +1,7 @@
 //! Benchmarks for router operations.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use std::hint::black_box;
 use ferric_core::router::{Router, Route, PathMatch};
 use ferric_core::reactive::signal;
 
