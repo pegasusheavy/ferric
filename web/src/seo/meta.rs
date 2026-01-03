@@ -9,31 +9,31 @@ use serde::{Deserialize, Serialize};
 pub struct SeoMetadata {
     /// Page title
     pub title: String,
-    
+
     /// Meta description
     pub description: String,
-    
+
     /// Keywords
     pub keywords: Vec<String>,
-    
+
     /// Canonical URL
     pub canonical_url: String,
-    
+
     /// Open Graph metadata
     pub og: OpenGraphMetadata,
-    
+
     /// Twitter Card metadata
     pub twitter: TwitterCardMetadata,
-    
+
     /// Structured data (JSON-LD)
     pub structured_data: Vec<StructuredData>,
-    
+
     /// Robots directives
     pub robots: RobotsDirectives,
-    
+
     /// Language code
     pub language: String,
-    
+
     /// AI-specific metadata
     pub ai: AiMetadata,
 }
@@ -79,22 +79,22 @@ pub struct RobotsDirectives {
 pub struct AiMetadata {
     /// Content for AI training/indexing
     pub ai_content_summary: String,
-    
+
     /// Key topics for AI understanding
     pub ai_topics: Vec<String>,
-    
+
     /// Content type for AI
     pub ai_content_type: String, // "documentation", "tutorial", "api-reference"
-    
+
     /// Difficulty level
     pub ai_difficulty: String, // "beginner", "intermediate", "advanced"
-    
+
     /// Expected reading time (minutes)
     pub ai_reading_time: usize,
-    
+
     /// Related topics
     pub ai_related_topics: Vec<String>,
-    
+
     /// Prerequisites
     pub ai_prerequisites: Vec<String>,
 }
@@ -257,7 +257,7 @@ impl SeoMetadata {
     pub fn documentation(title: &str, description: &str, path: &str, keywords: Vec<String>) -> Self {
         let full_title = format!("{} | Ferric Framework", title);
         let url = format!("https://pegasusheavy.github.io/ferric/{}", path);
-        
+
         Self {
             title: full_title.clone(),
             description: description.to_string(),
@@ -325,14 +325,14 @@ impl SeoMetadata {
     /// Generate HTML meta tags
     pub fn to_html_meta_tags(&self) -> String {
         let mut tags = String::new();
-        
+
         // Basic meta tags
         tags.push_str(&format!(r#"<title>{}</title>"#, html_escape(&self.title)));
         tags.push_str(&format!(r#"<meta name="description" content="{}">"#, html_escape(&self.description)));
         tags.push_str(&format!(r#"<meta name="keywords" content="{}">"#, self.keywords.join(", ")));
         tags.push_str(&format!(r#"<link rel="canonical" href="{}">"#, self.canonical_url));
         tags.push_str(&format!(r#"<html lang="{}">"#, self.language));
-        
+
         // Robots
         let robots = format!(
             "{}, {}",
@@ -340,15 +340,15 @@ impl SeoMetadata {
             if self.robots.follow { "follow" } else { "nofollow" }
         );
         tags.push_str(&format!(r#"<meta name="robots" content="{}">"#, robots));
-        
+
         if let Some(max) = self.robots.max_snippet {
             tags.push_str(&format!(r#"<meta name="robots" content="max-snippet:{}">"#, max));
         }
-        
+
         if let Some(ref preview) = self.robots.max_image_preview {
             tags.push_str(&format!(r#"<meta name="robots" content="max-image-preview:{}">"#, preview));
         }
-        
+
         // Open Graph
         tags.push_str(&format!(r#"<meta property="og:title" content="{}">"#, html_escape(&self.og.title)));
         tags.push_str(&format!(r#"<meta property="og:description" content="{}">"#, html_escape(&self.og.description)));
@@ -358,7 +358,7 @@ impl SeoMetadata {
         tags.push_str(&format!(r#"<meta property="og:site_name" content="{}">"#, html_escape(&self.og.site_name)));
         tags.push_str(&format!(r#"<meta property="og:type" content="{}">"#, self.og.og_type));
         tags.push_str(&format!(r#"<meta property="og:locale" content="{}">"#, self.og.locale));
-        
+
         // Twitter Card
         tags.push_str(&format!(r#"<meta name="twitter:card" content="{}">"#, self.twitter.card));
         tags.push_str(&format!(r#"<meta name="twitter:site" content="{}">"#, self.twitter.site));
@@ -367,22 +367,22 @@ impl SeoMetadata {
         tags.push_str(&format!(r#"<meta name="twitter:description" content="{}">"#, html_escape(&self.twitter.description)));
         tags.push_str(&format!(r#"<meta name="twitter:image" content="{}">"#, self.twitter.image));
         tags.push_str(&format!(r#"<meta name="twitter:image:alt" content="{}">"#, html_escape(&self.twitter.image_alt)));
-        
+
         // AI-specific meta tags
         tags.push_str(&format!(r#"<meta name="ai:content_summary" content="{}">"#, html_escape(&self.ai.ai_content_summary)));
         tags.push_str(&format!(r#"<meta name="ai:topics" content="{}">"#, self.ai.ai_topics.join(", ")));
         tags.push_str(&format!(r#"<meta name="ai:content_type" content="{}">"#, self.ai.ai_content_type));
         tags.push_str(&format!(r#"<meta name="ai:difficulty" content="{}">"#, self.ai.ai_difficulty));
         tags.push_str(&format!(r#"<meta name="ai:reading_time" content="{}">"#, self.ai.ai_reading_time));
-        
+
         if !self.ai.ai_related_topics.is_empty() {
             tags.push_str(&format!(r#"<meta name="ai:related_topics" content="{}">"#, self.ai.ai_related_topics.join(", ")));
         }
-        
+
         if !self.ai.ai_prerequisites.is_empty() {
             tags.push_str(&format!(r#"<meta name="ai:prerequisites" content="{}">"#, self.ai.ai_prerequisites.join(", ")));
         }
-        
+
         tags
     }
 
